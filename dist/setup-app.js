@@ -15,7 +15,7 @@ const setupApp = (app) => {
     app.get('/hometask_01/api/videos/:id', (req, res) => {
         const video = videos_1.db.videos.find((video) => video.id === +req.params.id);
         if (!video) {
-            return res.status(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404).send("No video found.");
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
         }
         res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(video);
     });
@@ -50,9 +50,7 @@ const setupApp = (app) => {
             minAgeRestriction: null,
             createdAt: "2025-10-10T11:01:46.525Z",
             publicationDate: "2025-10-10T11:01:46.525Z",
-            availableResolutions: [
-                "P144"
-            ]
+            availableResolutions: req.body.availableResolutions
         };
         videos_1.db.videos.push(newVideo);
         res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(newVideo);

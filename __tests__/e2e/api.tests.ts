@@ -18,7 +18,9 @@ describe("/hometask_01/api/videos", () => {
     ]
   };
   beforeAll(async () => {
-    await request(app).delete('/__tests__/data')
+    await request(app)
+          .delete('/__tests__/data')
+          .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 
   it('should return 200 and empty array', async () => {
@@ -69,7 +71,6 @@ describe("/hometask_01/api/videos", () => {
       .get('/hometask_01/api/videos')
       .expect(HTTP_STATUSES.OK_200, [createdVideo])
   })
-
 
   it(`should'nt update video with incorrect input data`, async () => {
     await request(app)

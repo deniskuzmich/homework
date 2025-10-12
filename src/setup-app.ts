@@ -3,6 +3,7 @@ import {db} from "./db/videos";
 import {HTTP_STATUSES} from "./http_statuses/http_statuses";
 
 
+
 export const setupApp = (app: Express) => {
   app.use(express.json()); // middleware для парсинга JSON в теле запроса
 
@@ -13,7 +14,7 @@ export const setupApp = (app: Express) => {
   app.get('/hometask_01/api/videos/:id', (req, res) => {
     const video = db.videos.find((video: any) => video.id === +req.params.id);
     if (!video) {
-      return res.status(HTTP_STATUSES.NOT_FOUND_404).send("No video found.");
+      return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
     res.status(HTTP_STATUSES.OK_200).send(video);
   })
@@ -40,7 +41,7 @@ export const setupApp = (app: Express) => {
 
   app.post("/hometask_01/api/videos", (req, res) => {
     if (!req.body.title) {
-      res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+      res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
       return
     }
     const newVideo = {
@@ -51,9 +52,7 @@ export const setupApp = (app: Express) => {
       minAgeRestriction: null,
       createdAt: "2025-10-10T11:01:46.525Z",
       publicationDate: "2025-10-10T11:01:46.525Z",
-      availableResolutions: [
-        "P144"
-      ]
+      availableResolutions: req.body.availableResolutions
     }
     db.videos.push(newVideo);
     res.status(HTTP_STATUSES.CREATED_201).send(newVideo);
