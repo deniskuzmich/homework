@@ -7,7 +7,7 @@ describe("/hometask_01/api/videos", () => {
 
   beforeAll(async () => {
     await request(app)
-      .delete('/hometask_01/api/testing/all-data')
+      .delete('/testing/all-data')
       .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 
@@ -25,19 +25,19 @@ describe("/hometask_01/api/videos", () => {
   };
   it('should return 200 and empty array', async () => {
     await request(app)
-      .get('/hometask_01/api/videos')
+      .get('/videos')
       .expect(HTTP_STATUSES.OK_200, [])
   })
 
   it('should return 404 for not existing video', async () => {
     await request(app)
-      .get('/hometask_01/api/videos/1')
+      .get('/videos/1')
       .expect(HTTP_STATUSES.NOT_FOUND_404)
   })
 
   it(`should'nt create video with incorrect input data`, async () => {
     await request(app)
-      .post('/hometask_01/api/videos')
+      .post('/videos')
       .send({
         ...testVideoData,
         title: "",
@@ -47,14 +47,14 @@ describe("/hometask_01/api/videos", () => {
       .expect(HTTP_STATUSES.BAD_REQUEST_400)
 
     await request(app)
-      .get('/hometask_01/api/videos')
+      .get('/videos')
       .expect(HTTP_STATUSES.OK_200, [])
   })
 
   let createdVideo: any = null
   it(`should create video with correct input data`, async () => {
     const createResponse = await request(app)
-      .post('/hometask_01/api/videos')
+      .post('/videos')
       .send({
         ...testVideoData,
         title: "string",
@@ -68,13 +68,13 @@ describe("/hometask_01/api/videos", () => {
     createdVideo = createResponse.body
 
     await request(app)
-      .get('/hometask_01/api/videos')
+      .get('/videos')
       .expect(HTTP_STATUSES.OK_200, [createdVideo])
   })
 
   it(`should'nt update video with incorrect input data`, async () => {
     await request(app)
-      .put('/hometask_01/api/videos/' + createdVideo.id)
+      .put('/videos/' + createdVideo.id)
       .send({
         ...testVideoData,
         title: "",
@@ -86,13 +86,13 @@ describe("/hometask_01/api/videos", () => {
       .expect(HTTP_STATUSES.BAD_REQUEST_400)
 
     await request(app)
-      .get('/hometask_01/api/videos/' + createdVideo.id)
+      .get('/videos/' + createdVideo.id)
       .expect(HTTP_STATUSES.OK_200, createdVideo)
   })
 
   it(`should'nt update video that not exist`, async () => {
     await request(app)
-      .put('/hometask_01/api/videos/' + 2)
+      .put('/videos/' + 2)
       .send({
         ...testVideoData,
         title: "string",
@@ -106,7 +106,7 @@ describe("/hometask_01/api/videos", () => {
 
   it(`should update video with correct input data`, async () => {
     await request(app)
-      .put('/hometask_01/api/videos/' + createdVideo.id)
+      .put('/videos/' + createdVideo.id)
       .send({
         ...testVideoData,
         title: "string",
@@ -120,15 +120,15 @@ describe("/hometask_01/api/videos", () => {
 
   it(`should delete video`, async () => {
     await request(app)
-      .delete('/hometask_01/api/videos/' + createdVideo.id)
+      .delete('/videos/' + createdVideo.id)
       .expect(HTTP_STATUSES.NO_CONTENT_204)
 
     await request(app)
-      .get('/hometask_01/api/videos/' + createdVideo.id)
+      .get('/videos/' + createdVideo.id)
       .expect(HTTP_STATUSES.NOT_FOUND_404)
 
     await request(app)
-      .get('/hometask_01/api/videos')
+      .get('/videos')
       .expect(HTTP_STATUSES.OK_200, [])
   })
 })

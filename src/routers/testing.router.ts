@@ -4,7 +4,7 @@ import {Router} from "express";
 
 export const testingRouter = Router();
 
-testingRouter.delete('', (req, res) => {
+testingRouter.delete('/all-data', (req, res) => {
   db.videos = [];
   res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
 })

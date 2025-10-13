@@ -11,7 +11,7 @@ describe("Video API body validation check", () => {
 
   beforeAll(async () => {
     await request(app)
-      .delete('/hometask_01/api/testing/all-data')
+      .delete('/testing/all-data')
       .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 
@@ -28,7 +28,7 @@ describe("Video API body validation check", () => {
 
   it(`should'nt create a video with incorrect body data`, async () => {
     const invalidVideoData = await request(app)
-      .post('/hometask_01/api/videos')
+      .post('/videos')
       .send({
         ...testBodyVideoData,
         title: "",
@@ -39,13 +39,13 @@ describe("Video API body validation check", () => {
 
     expect(invalidVideoData.body.errorsMessages).toHaveLength(3) //Waiting for 3 mistakes
 
-    const videoListResponse = await request(app).get(`/hometask_01/api/videos`);
+    const videoListResponse = await request(app).get(`/videos`);
     expect(videoListResponse.body).toHaveLength(0)
   })
 
   it(`should'nt create a video with incorrect body length`, async () => {
     const invalidDataLength = await request(app)
-      .post('/hometask_01/api/videos')
+      .post('/videos')
       .send({
         ...testBodyVideoData,
         title: "qwertyuioplkjhgfdsaqwefgbgergjcmhcfiuewhf",
@@ -56,13 +56,13 @@ describe("Video API body validation check", () => {
 
     expect(invalidDataLength.body.errorsMessages).toHaveLength(3)
 
-    const videoListResponse = await request(app).get(`/hometask_01/api/videos`);
+    const videoListResponse = await request(app).get(`/videos`);
     expect(videoListResponse.body).toHaveLength(0)
   })
 
   it(`should'nt create a video with incorrect body types`, async () => {
     const invalidDataNumbers= await request(app)
-      .post('/hometask_01/api/videos')
+      .post('/videos')
       .send({
         ...testBodyVideoData,
         title: "",
@@ -74,7 +74,7 @@ describe("Video API body validation check", () => {
     expect(invalidDataNumbers.body.errorsMessages).toHaveLength(3)
 
 
-    const videoListResponse = await request(app).get(`/hometask_01/api/videos`);
+    const videoListResponse = await request(app).get(`/videos`);
     expect(videoListResponse.body).toHaveLength(0)
   })
 
