@@ -8,10 +8,7 @@ const express_1 = __importDefault(require("express"));
 const setup_app_1 = require("./setup-app");
 exports.app = (0, express_1.default)();
 (0, setup_app_1.setupApp)(exports.app);
-if (process.env.VERCEL !== '1') {
-    const PORT = process.env.PORT || 3000;
-    exports.app.listen(PORT, () => {
-        console.log(`Example app listening on port ${PORT}`);
-    });
-}
-exports.default = exports.app;
+const PORT = process.env.PORT || 3000;
+exports.app.listen(PORT, () => {
+    console.log(`Example app listening on port ${PORT}`);
+});
