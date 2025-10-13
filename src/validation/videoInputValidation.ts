@@ -1,13 +1,9 @@
 import {VideoInputDto} from "../video-input-types/video.input-dto";
-import {ValidationError} from "../error-messages/validationError";
+import {ValidationError} from "../errors-messages/validationError";
 import {availableResolution} from "../types/video-types";
 
 export const videoInputValidation = (data: VideoInputDto): ValidationError[] => {
   const errors: ValidationError[] = [];
-
-  if (!data.id) {
-    errors.push({message: 'id error', field: 'id'})
-  }
 
   if (
     !data.title ||
@@ -25,11 +21,14 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
   }
 
   if (
-    !data.minAgeRestriction ||
-    data.minAgeRestriction > 18 ||
-    data.minAgeRestriction < 1
+    data.minAgeRestriction !== null &&
+    (
+      typeof data.minAgeRestriction !== 'number' ||
+      data.minAgeRestriction > 18 ||
+      data.minAgeRestriction < 1
+    )
   ) {
-    errors.push({message: 'invalid age registration', field: 'minAgeRestriction'})
+    errors.push({message: 'invalid age restriction', field: 'minAgeRestriction'});
   }
 
   if (
@@ -56,17 +55,14 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
     ) {
       errors.push({message: 'invalid available resolutions', field: 'availableResolutions'})
     }
-
     for (const resolution of data.availableResolutions) {
       if (!existingResolutions.includes(resolution)) {
         errors.push({message: 'invalid available resolution' + resolution, field: 'availableResolutions'})
       }
       break;
     }
+
   }
-
-
-
 
     return errors
 }

@@ -1,6 +1,8 @@
 import express, {Express} from "express";
 import {db} from "./db/videos";
 import {HTTP_STATUSES} from "./http_statuses/http_statuses";
+import {videoInputValidation} from "./validation/videoInputValidation";
+import {createErrorMessages} from "./utils/error.utils";
 
 
 
@@ -40,8 +42,15 @@ export const setupApp = (app: Express) => {
   })
 
   app.post("/hometask_01/api/videos", (req, res) => {
+    const errors = videoInputValidation(req.body)
+
+    if (errors.length > 0) {
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createErrorMessages(errors));
+      return
+    }
+
     if (!req.body.title) {
-      res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400)
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createErrorMessages(errors));
       return
     }
     const newVideo = {

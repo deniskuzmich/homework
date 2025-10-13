@@ -5,8 +5,14 @@ import {HTTP_STATUSES} from "../../src/http_statuses/http_statuses";
 
 describe("/hometask_01/api/videos", () => {
 
+  beforeAll(async () => {
+    await request(app)
+      .delete('/__tests__/data')
+      .expect(HTTP_STATUSES.NO_CONTENT_204)
+  })
+
   const testVideoData = {
-    id: 0,
+    id: 3,
     title: "string",
     author: "string",
     canBeDownloaded: true,
@@ -17,12 +23,6 @@ describe("/hometask_01/api/videos", () => {
       "P144"
     ]
   };
-  beforeAll(async () => {
-    await request(app)
-          .delete('/__tests__/data')
-          .expect(HTTP_STATUSES.NO_CONTENT_204)
-  })
-
   it('should return 200 and empty array', async () => {
     await request(app)
       .get('/hometask_01/api/videos')

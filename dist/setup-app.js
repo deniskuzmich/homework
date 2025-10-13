@@ -7,6 +7,8 @@ exports.setupApp = void 0;
 const express_1 = __importDefault(require("express"));
 const videos_1 = require("./db/videos");
 const http_statuses_1 = require("./http_statuses/http_statuses");
+const videoInputValidation_1 = require("./validation/videoInputValidation");
+const error_utils_1 = require("./utils/error.utils");
 const setupApp = (app) => {
     app.use(express_1.default.json()); // middleware для парсинга JSON в теле запроса
     app.get("/hometask_01/api/videos", (req, res) => {
@@ -38,8 +40,13 @@ const setupApp = (app) => {
         res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(video);
     });
     app.post("/hometask_01/api/videos", (req, res) => {
+        const errors = (0, videoInputValidation_1.videoInputValidation)(req.body);
+        if (errors.length > 0) {
+            res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send((0, error_utils_1.createErrorMessages)(errors));
+            return;
+        }
         if (!req.body.title) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
+            res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send((0, error_utils_1.createErrorMessages)(errors));
             return;
         }
         const newVideo = {
