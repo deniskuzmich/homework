@@ -13,7 +13,7 @@ const videoInputValidation = (data) => {
         data.author.trim().length > 20) {
         errors.push({ message: 'invalid author', field: 'author' });
     }
-    if (data.minAgeRestriction !== null &&
+    if (data.minAgeRestriction != null &&
         (typeof data.minAgeRestriction !== 'number' ||
             data.minAgeRestriction > 18 ||
             data.minAgeRestriction < 1)) {
@@ -32,7 +32,7 @@ const videoInputValidation = (data) => {
             if (!existingResolutions.includes(resolution)) {
                 errors.push({ message: 'invalid available resolution' + resolution, field: 'availableResolutions' });
             }
-            break;
+            // break;
         }
     }
     return errors;

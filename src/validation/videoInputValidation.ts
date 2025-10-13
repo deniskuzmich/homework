@@ -13,23 +13,21 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
     errors.push({message: 'invalid title', field: 'title'})
   }
 
-  if(
+  if (
     !data.author ||
     data.author.trim().length > 20
   ) {
     errors.push({message: 'invalid author', field: 'author'})
   }
 
-  if (
-    data.minAgeRestriction !== null &&
-    (
-      typeof data.minAgeRestriction !== 'number' ||
+  if (data.minAgeRestriction != null &&
+    (typeof data.minAgeRestriction !== 'number' ||
       data.minAgeRestriction > 18 ||
-      data.minAgeRestriction < 1
-    )
-  ) {
+      data.minAgeRestriction < 1)) {
     errors.push({message: 'invalid age restriction', field: 'minAgeRestriction'});
   }
+
+
   if (!Array.isArray(data.availableResolutions)) {
     errors.push({message: 'invalid resolutions', field: 'availableResolutions'})
   } else if (data.availableResolutions.length) {
@@ -44,10 +42,10 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
       if (!existingResolutions.includes(resolution)) {
         errors.push({message: 'invalid available resolution' + resolution, field: 'availableResolutions'})
       }
-      break;
+      // break;
     }
 
   }
 
-    return errors
+  return errors
 }
