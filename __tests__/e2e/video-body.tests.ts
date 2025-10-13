@@ -11,7 +11,7 @@ describe("Video API body validation check", () => {
 
   beforeAll(async () => {
     await request(app)
-      .delete('/__tests__/data')
+      .delete('/hometask_01/api/testing/all-data')
       .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 

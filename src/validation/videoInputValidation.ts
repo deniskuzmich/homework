@@ -3,7 +3,7 @@ import {ValidationError} from "../errors-messages/validationError";
 import {availableResolution} from "../types/video-types";
 
 export const videoInputValidation = (data: VideoInputDto): ValidationError[] => {
-  const errors: ValidationError[] = [];
+  const errors = [];
 
   if (
     !data.title ||

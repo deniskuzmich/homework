@@ -7,7 +7,7 @@ describe("/hometask_01/api/videos", () => {
 
   beforeAll(async () => {
     await request(app)
-      .delete('/__tests__/data')
+      .delete('/hometask_01/api/testing/all-data')
       .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 
