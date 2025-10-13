@@ -5,10 +5,6 @@ import {testingRouter} from "./routers/testing.router";
 export const setupApp = (app: Express) => {
   app.use(express.json()); // middleware для парсинга JSON в теле запроса
 
-  // app.use('/hometask_01/api/videos', videoRouter);
-  // app.use('/hometask_01/api/testing/all-data', testingRouter);
-
-
   app.use('/videos', videoRouter);
   app.use('/testing', testingRouter);
   return app;

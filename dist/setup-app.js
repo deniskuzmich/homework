@@ -9,8 +9,6 @@ const video_router_1 = require("./routers/video.router");
 const testing_router_1 = require("./routers/testing.router");
 const setupApp = (app) => {
     app.use(express_1.default.json()); // middleware для парсинга JSON в теле запроса
-    // app.use('/hometask_01/api/videos', videoRouter);
-    // app.use('/hometask_01/api/testing/all-data', testingRouter);
     app.use('/videos', video_router_1.videoRouter);
     app.use('/testing', testing_router_1.testingRouter);
     return app;
