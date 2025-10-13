@@ -30,21 +30,6 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
   ) {
     errors.push({message: 'invalid age restriction', field: 'minAgeRestriction'});
   }
-
-  if (
-    !data.createdAt ||
-    typeof data.createdAt !== 'string'
-  ) {
-    errors.push({message: 'invalid data of create', field: 'createdAt'})
-  }
-
-  if(
-    !data.publicationDate ||
-    typeof data.publicationDate !== 'string'
-  ) {
-    errors.push({message: 'invalid data of create', field: 'publicationDate'})
-  }
-
   if (!Array.isArray(data.availableResolutions)) {
     errors.push({message: 'invalid resolutions', field: 'availableResolutions'})
   } else if (data.availableResolutions.length) {

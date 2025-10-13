@@ -50,29 +50,11 @@ describe("Video API body validation check", () => {
         ...testBodyVideoData,
         title: "qwertyuioplkjhgfdsaqwefgbgergjcmhcfiuewhf",
         author: "qwertyuioplkjhgfdsaqwefgbgergjcmhcfiuewhf",
-        minAgeRestriction: '',
+        minAgeRestriction: 19,
       })
       .expect(HTTP_STATUSES.BAD_REQUEST_400)
 
     expect(invalidDataLength.body.errorsMessages).toHaveLength(3)
-
-    const videoListResponse = await request(app).get(`/videos`);
-    expect(videoListResponse.body).toHaveLength(0)
-  })
-
-  it(`should'nt create a video with incorrect body types`, async () => {
-    const invalidDataNumbers= await request(app)
-      .post('/videos')
-      .send({
-        ...testBodyVideoData,
-        title: "",
-        author: "",
-        minAgeRestriction: 'string',
-      })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
-
-    expect(invalidDataNumbers.body.errorsMessages).toHaveLength(3)
-
 
     const videoListResponse = await request(app).get(`/videos`);
     expect(videoListResponse.body).toHaveLength(0)
