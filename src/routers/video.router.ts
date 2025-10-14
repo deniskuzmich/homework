@@ -26,7 +26,7 @@ export const videoRouter = Router();
     }
     const video = db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404).send(createErrorMessages(errors));
+      res.status(HTTP_STATUSES.NOT_FOUND_404).send(createErrorMessages(errors));
       return
     }
     video.title = req.body.title,
