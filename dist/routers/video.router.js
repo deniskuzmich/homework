@@ -25,7 +25,7 @@ exports.videoRouter.put('/:id', (req, res) => {
     }
     const video = videos_1.db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-        res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404).send((0, error_utils_1.createErrorMessages)(errors));
+        res.status(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404).send((0, error_utils_1.createErrorMessages)(errors));
         return;
     }
     video.title = req.body.title,
