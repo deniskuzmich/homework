@@ -27,18 +27,18 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
     errors.push({message: 'invalid age restriction', field: 'minAgeRestriction'});
   }
 
-  // if (data.canBeDownloaded != null &&
-  //   typeof data.canBeDownloaded !== "boolean"
-  // ) {
-  //   errors.push({ message: "invalid canBeDownloaded", field: "canBeDownloaded" });
-  // }
-
-  if (
-    !data.publicationDate ||
-    isNaN(Date.parse(data.publicationDate))
+  if (data.canBeDownloaded != null &&
+    typeof data.canBeDownloaded !== "boolean"
   ) {
-    errors.push({ message: "invalid publicationDate", field: "publicationDate" });
+    errors.push({ message: "invalid canBeDownloaded", field: "canBeDownloaded" });
   }
+
+  // if (
+  //   !data.publicationDate ||
+  //   isNaN(Date.parse(data.publicationDate))
+  // ) {
+  //   errors.push({ message: "invalid publicationDate", field: "publicationDate" });
+  // }
 
   if (!Array.isArray(data.availableResolutions)) {
     errors.push({message: 'invalid resolutions', field: 'availableResolutions'})
