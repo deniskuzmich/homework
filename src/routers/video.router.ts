@@ -20,13 +20,15 @@ export const videoRouter = Router();
 
   videoRouter.put('/:id', (req, res) => {
     const errors = videoInputValidation(req.body)
-    if (!req.body.title) {
+
+    if (errors.length > 0) {
       res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createErrorMessages(errors));
       return
     }
+
     const video = db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-      res.status(HTTP_STATUSES.NOT_FOUND_404).send(createErrorMessages(errors));
+      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
       return
     }
     video.title = req.body.title,

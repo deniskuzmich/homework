@@ -19,13 +19,13 @@ exports.videoRouter.get('/:id', (req, res) => {
 });
 exports.videoRouter.put('/:id', (req, res) => {
     const errors = (0, videoInputValidation_1.videoInputValidation)(req.body);
-    if (!req.body.title) {
+    if (errors.length > 0) {
         res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send((0, error_utils_1.createErrorMessages)(errors));
         return;
     }
     const video = videos_1.db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-        res.status(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404).send((0, error_utils_1.createErrorMessages)(errors));
+        res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
         return;
     }
     video.title = req.body.title,
