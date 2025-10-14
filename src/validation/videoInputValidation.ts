@@ -27,7 +27,7 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
     errors.push({message: 'invalid age restriction', field: 'minAgeRestriction'});
   }
 
-  if (data.canBeDownloaded !== undefined &&
+  if (data.canBeDownloaded != null &&
     typeof data.canBeDownloaded !== "boolean"
   ) {
     errors.push({ message: "invalid canBeDownloaded", field: "canBeDownloaded" });
