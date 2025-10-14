@@ -23,8 +23,11 @@ const videoInputValidation = (data) => {
         typeof data.canBeDownloaded !== "boolean") {
         errors.push({ message: "invalid canBeDownloaded", field: "canBeDownloaded" });
     }
-    if (data.publicationDate.length < 24) {
-        errors.push({ message: "invalid publicationDate", field: "publicationDate" });
+    if (data.publicationDate !== undefined) {
+        if (typeof data.publicationDate !== "string" ||
+            isNaN(Date.parse(data.publicationDate))) {
+            errors.push({ message: "invalid publicationDate", field: "publicationDate" });
+        }
     }
     if (!Array.isArray(data.availableResolutions)) {
         errors.push({ message: 'invalid resolutions', field: 'availableResolutions' });
