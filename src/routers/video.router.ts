@@ -19,13 +19,14 @@ export const videoRouter = Router();
   })
 
   videoRouter.put('/:id', (req, res) => {
+    const errors = videoInputValidation(req.body)
     if (!req.body.title) {
-      res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+      res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createErrorMessages(errors));
       return
     }
     const video = db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404).send(createErrorMessages(errors));
       return
     }
     video.title = req.body.title,
@@ -35,7 +36,7 @@ export const videoRouter = Router();
       video.publicationDate = req.body.publicationDate,
       video.availableResolutions = req.body.availableResolutions
 
-    res.status(HTTP_STATUSES.NO_CONTENT_204).send(video);
+    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
   })
 
   videoRouter.post("", (req, res) => {

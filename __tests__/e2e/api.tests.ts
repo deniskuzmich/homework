@@ -115,7 +115,7 @@ describe("/hometask_01/api/videos", () => {
           "P144"
         ]
       })
-      .expect(HTTP_STATUSES.OK_200)
+      .expect(HTTP_STATUSES.NO_CONTENT_204)
   })
 
   it(`should delete video`, async () => {

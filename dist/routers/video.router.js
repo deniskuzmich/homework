@@ -18,13 +18,14 @@ exports.videoRouter.get('/:id', (req, res) => {
     res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(video);
 });
 exports.videoRouter.put('/:id', (req, res) => {
+    const errors = (0, videoInputValidation_1.videoInputValidation)(req.body);
     if (!req.body.title) {
-        res.sendStatus(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
+        res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send((0, error_utils_1.createErrorMessages)(errors));
         return;
     }
     const video = videos_1.db.videos.find(video => video.id === +req.params.id);
     if (!video) {
-        res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
+        res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404).send((0, error_utils_1.createErrorMessages)(errors));
         return;
     }
     video.title = req.body.title,
@@ -33,7 +34,7 @@ exports.videoRouter.put('/:id', (req, res) => {
         video.minAgeRestriction = req.body.minAgeRestriction,
         video.publicationDate = req.body.publicationDate,
         video.availableResolutions = req.body.availableResolutions;
-    res.status(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204).send(video);
+    res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
 });
 exports.videoRouter.post("", (req, res) => {
     const errors = (0, videoInputValidation_1.videoInputValidation)(req.body);
