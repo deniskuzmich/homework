@@ -31,7 +31,7 @@ export const videoRouter = Router();
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
       return
     }
-    video.title = req.body.title,
+      video.title = req.body.title,
       video.author = req.body.author,
       video.canBeDownloaded = req.body.canBeDownloaded,
       video.minAgeRestriction = req.body.minAgeRestriction,

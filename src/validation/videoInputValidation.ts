@@ -33,12 +33,12 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
     errors.push({ message: "invalid canBeDownloaded", field: "canBeDownloaded" });
   }
 
-  // if (
-  //   !data.publicationDate ||
-  //   isNaN(Date.parse(data.publicationDate))
-  // ) {
-  //   errors.push({ message: "invalid publicationDate", field: "publicationDate" });
-  // }
+  if (
+    !data.publicationDate ||
+    isNaN(Date.parse(data.publicationDate))
+  ) {
+    errors.push({ message: "invalid publicationDate", field: "publicationDate" });
+  }
 
   if (!Array.isArray(data.availableResolutions)) {
     errors.push({message: 'invalid resolutions', field: 'availableResolutions'})
