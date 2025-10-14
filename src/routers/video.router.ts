@@ -35,7 +35,7 @@ export const videoRouter = Router();
       video.publicationDate = req.body.publicationDate,
       video.availableResolutions = req.body.availableResolutions
 
-    res.status(HTTP_STATUSES.OK_200).send(video);
+    res.status(HTTP_STATUSES.NO_CONTENT_204).send(video);
   })
 
   videoRouter.post("", (req, res) => {
@@ -52,7 +52,7 @@ export const videoRouter = Router();
       id: db.videos.length ? db.videos[db.videos.length - 1].id + 1 : 1,
       title: req.body.title,
       author: req.body.author,
-      canBeDownloaded: true,
+      canBeDownloaded: false,
       minAgeRestriction: null,
       createdAt: new Date().toISOString(),
       publicationDate: nextDay.toISOString(),

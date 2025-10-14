@@ -33,7 +33,7 @@ exports.videoRouter.put('/:id', (req, res) => {
         video.minAgeRestriction = req.body.minAgeRestriction,
         video.publicationDate = req.body.publicationDate,
         video.availableResolutions = req.body.availableResolutions;
-    res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(video);
+    res.status(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204).send(video);
 });
 exports.videoRouter.post("", (req, res) => {
     const errors = (0, videoInputValidation_1.videoInputValidation)(req.body);
@@ -47,7 +47,7 @@ exports.videoRouter.post("", (req, res) => {
         id: videos_1.db.videos.length ? videos_1.db.videos[videos_1.db.videos.length - 1].id + 1 : 1,
         title: req.body.title,
         author: req.body.author,
-        canBeDownloaded: true,
+        canBeDownloaded: false,
         minAgeRestriction: null,
         createdAt: new Date().toISOString(),
         publicationDate: nextDay.toISOString(),
