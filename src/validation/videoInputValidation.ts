@@ -34,6 +34,7 @@ export const videoInputValidation = (data: VideoInputDto): ValidationError[] => 
   }
 
   if (
+    !data.publicationDate ||
     isNaN(Date.parse(data.publicationDate))
   ) {
     errors.push({ message: "invalid publicationDate", field: "publicationDate" });
