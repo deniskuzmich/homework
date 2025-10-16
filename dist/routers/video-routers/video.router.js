@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.videoRouter = void 0;
 const express_1 = require("express");
-const in_memory_db_1 = require("../db/in-memory.db.");
-const http_statuses_1 = require("../http_statuses/http_statuses");
-const error_utils_1 = require("../utils/error.utils");
-const videoInputValidation_1 = require("../validation/videoInputValidation");
+const in_memory_db_1 = require("../../db/in-memory.db.");
+const http_statuses_1 = require("../../http_statuses/http_statuses");
+const error_utils_1 = require("../../utils/error.utils");
+const videoInputValidation_1 = require("../../validation/videoInputValidation");
 exports.videoRouter = (0, express_1.Router)();
 exports.videoRouter.get("", (req, res) => {
     res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(in_memory_db_1.db.videos);

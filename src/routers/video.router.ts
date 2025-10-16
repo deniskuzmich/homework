@@ -1,16 +1,16 @@
-import {Router} from "express";
-import {db} from "../db/videos";
+import {Request, Response, Router} from "express";
+import {db} from "../db/in-memory.db.";
 import {HTTP_STATUSES} from "../http_statuses/http_statuses";
 import {createErrorMessages} from "../utils/error.utils";
 import {videoInputValidation} from "../validation/videoInputValidation";
 
 export const videoRouter = Router();
 
-  videoRouter.get("", (req, res) => {
+  videoRouter.get("", (req: Request, res: Response) => {
     res.status(HTTP_STATUSES.OK_200).send(db.videos);
   });
 
-  videoRouter.get('/:id', (req, res) => {
+  videoRouter.get('/:id', (req: Request, res: Response) => {
     const video = db.videos.find((video: any) => video.id === +req.params.id);
     if (!video) {
       return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
@@ -18,7 +18,7 @@ export const videoRouter = Router();
     res.status(HTTP_STATUSES.OK_200).send(video);
   })
 
-  videoRouter.put('/:id', (req, res) => {
+  videoRouter.put('/:id', (req: Request, res: Response) => {
     const errors = videoInputValidation(req.body)
 
     if (errors.length > 0) {
@@ -41,7 +41,7 @@ export const videoRouter = Router();
     res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
   })
 
-  videoRouter.post("", (req, res) => {
+  videoRouter.post("", (req: Request, res: Response) => {
     const errors = videoInputValidation(req.body)
 
     if (errors.length > 0) {
@@ -65,7 +65,7 @@ export const videoRouter = Router();
     res.status(HTTP_STATUSES.CREATED_201).send(newVideo);
   })
 
-  videoRouter.delete('/:id', (req, res) => {
+  videoRouter.delete('/:id', (req: Request, res: Response) => {
     for (let i = 0; i < db.videos.length; i++) {
       if (db.videos[i].id === +req.params.id) {
         db.videos.splice(i, 1);
