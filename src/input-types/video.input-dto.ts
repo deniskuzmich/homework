@@ -1,4 +1,3 @@
-"use strict";
 // import {availableResolution} from "../core/types/video-types";
 //
 // export type VideoInputDto = {

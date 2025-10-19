@@ -1,5 +1,5 @@
 {
-  "name": "firstsprint",
+  "name": "homework1_2",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
@@ -13,11 +13,11 @@
   "dependencies": {
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "^24.7.0",
+    "@types/node": "^24.8.1",
     "@types/supertest": "^6.0.3",
-    "@typescript-eslint/eslint-plugin": "^8.45.0",
-    "@typescript-eslint/parser": "^8.45.0",
-    "eslint": "^9.37.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.1",
+    "@typescript-eslint/parser": "^8.46.1",
+    "eslint": "^9.38.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "express": "^5.1.0",
@@ -26,10 +26,6 @@
     "prettier": "^3.6.2",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
-    "tsc": "^2.0.4"
-  },
-  "devDependencies": {
     "typescript": "^5.9.3"
-  },
-  "private": true
+  }
 }

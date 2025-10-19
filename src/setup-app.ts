@@ -1,16 +1,20 @@
-import express, {Express} from "express";
-import {videoRouter} from "./routers/video.router";
+import express, { Express } from 'express';
 import {testingRouter} from "./routers/testing-router/testing.router";
 import {blogRouter} from "./routers/blog.router";
 import {postRouter} from "./routers/post.router";
+import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "./core/paths/paths";
+
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
 
-  app.use('/testing', testingRouter);
-  app.use('/videos', videoRouter);
-  app.use('/blogs', blogRouter);
-  app.use('/posts', postRouter);
+  app.get('/', (req, res) => {
+    res.status(200).send('Blogs and Posts');
+  });
+
+  app.use(TESTING_PATH, testingRouter);
+  app.use(BLOGS_PATH, blogRouter);
+  app.use(POSTS_PATH, postRouter);
 
   return app;
 };
