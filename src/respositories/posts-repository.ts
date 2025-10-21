@@ -29,8 +29,8 @@ export const postsRepository = {
     return post;
   },
   createPost(data: Post) {
-    const blog = db.blogs.find((post) => post.id === data.id);
-    if (!blog) return null
+    const blog = db.blogs.find((b) => b.id === data.blogId);
+    if (!blog) return null;
 
     const newPost = {
       id: (db.posts.length ? db.posts[db.posts.length - 1].id + 1 : 1).toString(),
