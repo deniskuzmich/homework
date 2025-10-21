@@ -4,5 +4,8 @@ import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 
 export function postPostsHandler(req: Request, res: Response) {
   const newPost = postsRepository.createPost(req.body);
+  if (!newPost) {
+    return res.sendStatus(HTTP_STATUSES.BAD_REQUEST_400);
+  }
   res.status(HTTP_STATUSES.CREATED_201).send(newPost);
 }
