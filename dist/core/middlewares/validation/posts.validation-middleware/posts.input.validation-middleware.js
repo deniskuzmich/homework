@@ -20,15 +20,15 @@ const contentValidation = (0, express_validator_1.body)('content')
     .trim()
     .isLength({ min: 1, max: 1000 })
     .withMessage('content length is not correct');
-const blogerIdValidation = (0, express_validator_1.body)('blogerId')
+const blogIdValidation = (0, express_validator_1.body)('blogId')
     .exists()
-    .withMessage('blogerId is required')
+    .withMessage('blogId is required')
+    .trim()
     .isString()
-    .withMessage('blogerId must be a string')
-    .trim();
+    .withMessage('blogId must be a string');
 exports.postInputValidation = [
     titleValidation,
     shortDescriptionValidation,
-    contentValidation, ,
-    blogerIdValidation
+    contentValidation,
+    blogIdValidation
 ];

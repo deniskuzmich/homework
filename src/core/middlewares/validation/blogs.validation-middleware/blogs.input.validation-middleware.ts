@@ -19,7 +19,7 @@ const websiteUrlValidation = body('websiteUrl')
   .withMessage('websiteUrl is not correct')
   .isLength({min: 1, max: 100})
   .withMessage('websiteUrl length is not correct')
-  .isURL()
+  .matches(`^https://([a-zA-Z0-9_-]+\\.)+[a-zA-Z0-9_-]+(\\/[a-zA-Z0-9_-]+)*\\/?$`)
   .withMessage('websiteUrl address is not correct')
 
 export const blogsInputValidation = [

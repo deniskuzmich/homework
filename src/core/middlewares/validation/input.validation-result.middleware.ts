@@ -23,7 +23,7 @@ export const inputValidationResultMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  const errors = validationResult(req).formatWith(formatErrors).array();
+  const errors = validationResult(req).formatWith(formatErrors).array({ onlyFirstError: true });
 
   if (errors.length) {
     return res.status(HTTP_STATUSES.BAD_REQUEST_400).json({ errorsMessages: errors });

@@ -7,7 +7,6 @@ import {createErrorMessages} from "../../core/middlewares/validation/input.valid
 export function updateBlogHandler(req: Request, res: Response) {
   const blog = blogsRepository.updateBlog(req.params.id, req.body);
   if (!blog) {
-    res.status(HTTP_STATUSES.BAD_REQUEST_400).send(createErrorMessages([{ field: 'id', message: 'Post is not created' }]))
     res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     return;
   }

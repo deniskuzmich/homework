@@ -21,18 +21,19 @@ const contentValidation = body('content')
   .isLength({min: 1, max: 1000})
   .withMessage('content length is not correct')
 
-const blogerIdValidation = body('blogerId')
+const blogIdValidation = body('blogId')
   .exists()
-  .withMessage('blogerId is required')
-  .isString()
-  .withMessage('blogerId must be a string')
+  .withMessage('blogId is required')
   .trim()
+  .isString()
+  .withMessage('blogId must be a string')
+
 
 
 export const postInputValidation = [
   titleValidation,
   shortDescriptionValidation,
-  contentValidation,,
-  blogerIdValidation
+  contentValidation,
+  blogIdValidation
 ]
 
