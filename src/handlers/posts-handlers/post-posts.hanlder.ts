@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {postsRepository} from "../../respositories/posts-repository";
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
+import { Request, Response } from "express";
+import { postsRepository } from "../../respositories/posts-repository";
+import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 
 export function postPostsHandler(req: Request, res: Response) {
   const newPost = postsRepository.createPost(req.body);

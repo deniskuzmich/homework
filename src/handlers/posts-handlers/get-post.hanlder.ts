@@ -1,6 +1,6 @@
-import {Request, Response} from "express";
-import {postsRepository} from "../../respositories/posts-repository";
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
+import { Request, Response } from "express";
+import { postsRepository } from "../../respositories/posts-repository";
+import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 
 export function getPostHandler(req: Request, res: Response) {
   const post = postsRepository.getPostById(req.params.id);

@@ -5,7 +5,7 @@ const in_memory_db_1 = require("../db/in-memory.db.");
 exports.blogsRepository = {
     findBlogs(name) {
         if (name) {
-            let filteredBlogs = in_memory_db_1.db.blogs.filter(blog => blog.name.indexOf(name) > -1);
+            let filteredBlogs = in_memory_db_1.db.blogs.filter((blog) => blog.name.indexOf(name) > -1);
             return filteredBlogs;
         }
         else {
@@ -13,22 +13,24 @@ exports.blogsRepository = {
         }
     },
     getBlogById(id) {
-        const blog = in_memory_db_1.db.blogs.find(blog => blog.id === id);
+        const blog = in_memory_db_1.db.blogs.find((blog) => blog.id === id);
         return blog;
     },
     updateBlog(id, data) {
-        const blog = in_memory_db_1.db.blogs.find(blog => blog.id === id);
+        const blog = in_memory_db_1.db.blogs.find((blog) => blog.id === id);
         if (!blog) {
-            throw new Error('Blog not found');
+            throw new Error("Blog not found");
         }
-        blog.name = data.name,
-            blog.description = data.description,
-            blog.websiteUrl = data.websiteUrl;
+        ((blog.name = data.name),
+            (blog.description = data.description),
+            (blog.websiteUrl = data.websiteUrl));
         return blog;
     },
     createBlog(blog) {
         const newBlog = {
-            id: (in_memory_db_1.db.blogs.length ? in_memory_db_1.db.blogs[in_memory_db_1.db.blogs.length - 1].id + 1 : 1).toString(),
+            id: (in_memory_db_1.db.blogs.length
+                ? in_memory_db_1.db.blogs[in_memory_db_1.db.blogs.length - 1].id + 1
+                : 1).toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,
@@ -43,5 +45,5 @@ exports.blogsRepository = {
                 return true;
             }
         }
-    }
+    },
 };

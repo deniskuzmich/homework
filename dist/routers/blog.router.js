@@ -14,7 +14,7 @@ const super_admin_guard_middleware_1 = require("../auth/super-admin.guard.middle
 exports.blogRouter = (0, express_1.Router)();
 exports.blogRouter
     .get("", get_blogs_list_hanlder_1.getBlogsListHandler)
-    .get('/:id', id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_blog_hanlder_1.getBlogHandler)
-    .put('/:id', super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, blogs_input_validation_middleware_1.blogsInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, update_blog_hanlder_1.updateBlogHandler)
+    .get("/:id", id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_blog_hanlder_1.getBlogHandler)
+    .put("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, blogs_input_validation_middleware_1.blogsInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, update_blog_hanlder_1.updateBlogHandler)
     .post("", super_admin_guard_middleware_1.superAdminGuardMiddleware, blogs_input_validation_middleware_1.blogsInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, post_blog_hanlder_1.postBlogHanlder)
-    .delete('/:id', super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_blog_hanlder_1.deleteBlogHanlder);
+    .delete("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_blog_hanlder_1.deleteBlogHanlder);

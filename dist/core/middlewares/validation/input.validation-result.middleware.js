@@ -15,9 +15,13 @@ const formatErrors = (error) => {
     };
 };
 const inputValidationResultMiddleware = (req, res, next) => {
-    const errors = (0, express_validator_1.validationResult)(req).formatWith(formatErrors).array({ onlyFirstError: true });
+    const errors = (0, express_validator_1.validationResult)(req)
+        .formatWith(formatErrors)
+        .array({ onlyFirstError: true });
     if (errors.length) {
-        return res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).json({ errorsMessages: errors });
+        return res
+            .status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400)
+            .json({ errorsMessages: errors });
     }
     next();
 };

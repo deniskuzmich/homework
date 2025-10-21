@@ -1,7 +1,6 @@
-import {Request, Response} from "express";
-import {blogsRepository} from "../../respositories/blogs-repository";
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
-
+import { Request, Response } from "express";
+import { blogsRepository } from "../../respositories/blogs-repository";
+import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 
 export function getBlogHandler(req: Request, res: Response) {
   const blog = blogsRepository.getBlogById(req.params.id);
