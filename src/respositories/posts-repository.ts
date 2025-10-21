@@ -21,24 +21,24 @@ export const postsRepository = {
     if (!post) {
       return false
     }
-    ((post.title = data.title),
+      (post.title = data.title),
       (post.shortDescription = data.shortDescription),
       (post.content = data.content),
-      (post.blogId = data.blogId));
+      (post.blogId = data.blogId);
 
     return post;
   },
   createPost(data: Post) {
+    const blog = db.blogs.find((post) => post.id === data.id);
+    if (!blog) return null
+
     const newPost = {
-      id: (db.posts.length
-        ? db.posts[db.posts.length - 1].id + 1
-        : 1
-      ).toString(),
+      id: (db.posts.length ? db.posts[db.posts.length - 1].id + 1 : 1).toString(),
       title: data.title,
       shortDescription: data.shortDescription,
       content: data.content,
       blogId: data.blogId,
-      blogName: data.blogName,
+      blogName: blog.name,
     };
     db.posts.push(newPost);
     return newPost;
