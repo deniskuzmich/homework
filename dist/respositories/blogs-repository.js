@@ -19,18 +19,16 @@ exports.blogsRepository = {
     updateBlog(id, data) {
         const blog = in_memory_db_1.db.blogs.find((blog) => blog.id === id);
         if (!blog) {
-            throw new Error("Blog not found");
+            return false;
         }
-        ((blog.name = data.name),
+        (blog.name = data.name),
             (blog.description = data.description),
-            (blog.websiteUrl = data.websiteUrl));
+            (blog.websiteUrl = data.websiteUrl);
         return blog;
     },
     createBlog(blog) {
         const newBlog = {
-            id: (in_memory_db_1.db.blogs.length
-                ? in_memory_db_1.db.blogs[in_memory_db_1.db.blogs.length - 1].id + 1
-                : 1).toString(),
+            id: (in_memory_db_1.db.blogs.length ? in_memory_db_1.db.blogs[in_memory_db_1.db.blogs.length - 1].id + 1 : 1).toString(),
             name: blog.name,
             description: blog.description,
             websiteUrl: blog.websiteUrl,

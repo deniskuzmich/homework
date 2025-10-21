@@ -19,7 +19,7 @@ export const postsRepository = {
   updatePost(id: string, data: Post) {
     const post = db.posts.find((post) => post.id === id);
     if (!post) {
-      throw new Error("post not found");
+      return false
     }
     ((post.title = data.title),
       (post.shortDescription = data.shortDescription),

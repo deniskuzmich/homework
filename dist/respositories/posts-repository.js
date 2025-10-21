@@ -19,7 +19,7 @@ exports.postsRepository = {
     updatePost(id, data) {
         const post = in_memory_db_1.db.posts.find((post) => post.id === id);
         if (!post) {
-            throw new Error("post not found");
+            return false;
         }
         ((post.title = data.title),
             (post.shortDescription = data.shortDescription),

@@ -19,20 +19,17 @@ export const blogsRepository = {
   updateBlog(id: string, data: Blog) {
     const blog = db.blogs.find((blog) => blog.id === id);
     if (!blog) {
-      throw new Error("Blog not found");
+      return false
     }
-    ((blog.name = data.name),
+      (blog.name = data.name),
       (blog.description = data.description),
-      (blog.websiteUrl = data.websiteUrl));
+      (blog.websiteUrl = data.websiteUrl);
 
     return blog;
   },
   createBlog(blog: Blog) {
     const newBlog = {
-      id: (db.blogs.length
-        ? db.blogs[db.blogs.length - 1].id + 1
-        : 1
-      ).toString(),
+      id: (db.blogs.length ? db.blogs[db.blogs.length - 1].id + 1 : 1).toString(),
       name: blog.name,
       description: blog.description,
       websiteUrl: blog.websiteUrl,
