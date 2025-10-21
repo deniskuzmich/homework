@@ -12,3 +12,4 @@ const PORT = process.env.PORT || 5000;
 exports.app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
 });
+exports.default = exports.app;

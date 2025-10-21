@@ -9,10 +9,11 @@ const testing_router_1 = require("./routers/testing-router/testing.router");
 const blog_router_1 = require("./routers/blog.router");
 const post_router_1 = require("./routers/post.router");
 const paths_1 = require("./core/paths/paths");
+const http_statuses_1 = require("./http_statuses/http_statuses");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.get("/", (req, res) => {
-        res.status(200).send("Blogs and Posts");
+        res.status(http_statuses_1.HTTP_STATUSES.OK_200).send("Blogs and Posts");
     });
     app.use(paths_1.TESTING_PATH, testing_router_1.testingRouter);
     app.use(paths_1.BLOGS_PATH, blog_router_1.blogRouter);
