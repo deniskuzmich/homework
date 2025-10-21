@@ -1,41 +1,19 @@
-import {Response,Request, Router} from "express";
-import {HTTP_STATUSES} from "../http_statuses/http_statuses";
-import {blogsRepository} from "../respositories/blogs-repository";
+import {Router} from "express";
+import {getBlogsListHandler} from "../handlers/blogs-hadlers/get-blogs-list.hanlder";
+import {updateBlogHandler} from "../handlers/blogs-hadlers/update-blog.hanlder";
+import {postBlogHanlder} from "../handlers/blogs-hadlers/post-blog.hanlder";
+import {deleteBlogHanlder} from "../handlers/blogs-hadlers/delete-blog.hanlder";
+import {getBlogHandler} from "../handlers/blogs-hadlers/get-blog.hanlder";
 
 
 export const blogRouter = Router();
+  blogRouter
+    .get("", getBlogsListHandler)
 
-blogRouter.get("", (req: Request, res: Response) => {
-  const foundBlogs = blogsRepository.findBlogs(req.query.name?.toString())
-  res.status(HTTP_STATUSES.OK_200).send(foundBlogs);
-});
+    .get('/:id', getBlogHandler)
 
-blogRouter.get('/:id', (req: Request, res: Response) => {
-  const blog = blogsRepository.getBlogById(req.params.id);
-  if (!blog) {
-    return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
-  }
-  res.status(HTTP_STATUSES.OK_200).send(blog);
-})
+    .put('/:id', updateBlogHandler)
 
-blogRouter.put('/:id', (req: Request, res: Response) => {
-  const blog = blogsRepository.updateBlog(req.params.id, req.body);
-  if (!blog) {
-    res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
-    return
-  }
-  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
-})
+    .post("", postBlogHanlder)
 
-blogRouter.post("", (req: Request, res: Response) => {
-  const newBlog = blogsRepository.createBlog(req.body);
-  res.status(HTTP_STATUSES.CREATED_201).send(newBlog);
-})
-
-blogRouter.delete('/:id', (req: Request, res: Response) => {
-  const deletedBlog = blogsRepository.deleteBlog(req.params.id);
-  if (deletedBlog) {
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
-  }
-  res.sendStatus(HTTP_STATUSES.NOT_FOUND_404)
-})
+    .delete('/:id', deleteBlogHanlder)
