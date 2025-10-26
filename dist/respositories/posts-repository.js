@@ -27,18 +27,7 @@ exports.postsRepository = {
             (post.blogId = data.blogId);
         return post;
     },
-    createPost(data) {
-        const blog = in_memory_db_1.db.blogs.find((b) => b.id === data.blogId);
-        if (!blog)
-            return null;
-        const newPost = {
-            id: (in_memory_db_1.db.posts.length ? in_memory_db_1.db.posts[in_memory_db_1.db.posts.length - 1].id + 1 : 1).toString(),
-            title: data.title,
-            shortDescription: data.shortDescription,
-            content: data.content,
-            blogId: data.blogId,
-            blogName: blog.name,
-        };
+    createPost(newPost) {
         in_memory_db_1.db.posts.push(newPost);
         return newPost;
     },

@@ -26,13 +26,7 @@ exports.blogsRepository = {
             (blog.websiteUrl = data.websiteUrl);
         return blog;
     },
-    createBlog(blog) {
-        const newBlog = {
-            id: (in_memory_db_1.db.blogs.length ? in_memory_db_1.db.blogs[in_memory_db_1.db.blogs.length - 1].id + 1 : 1).toString(),
-            name: blog.name,
-            description: blog.description,
-            websiteUrl: blog.websiteUrl,
-        };
+    createBlog(newBlog) {
         in_memory_db_1.db.blogs.push(newBlog);
         return newBlog;
     },

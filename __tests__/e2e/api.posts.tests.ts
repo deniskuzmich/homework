@@ -4,7 +4,6 @@ import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
 import {basicAuthToken} from "../../src/utils/admin-auth-token";
-import {db} from "../../src/db/in-memory.db.";
 
 describe("Posts API", () => {
   const app = express();

@@ -27,22 +27,16 @@ export const blogsRepository = {
 
     return blog;
   },
-  createBlog(blog: Blog) {
-    const newBlog = {
-      id: (db.blogs.length ? db.blogs[db.blogs.length - 1].id + 1 : 1).toString(),
-      name: blog.name,
-      description: blog.description,
-      websiteUrl: blog.websiteUrl,
-    };
+  createBlog(newBlog: Blog) {
     db.blogs.push(newBlog);
     return newBlog;
   },
   deleteBlog(id: string) {
-    for (let i = 0; i < db.blogs.length; i++) {
-      if (db.blogs[i].id === id) {
-        db.blogs.splice(i, 1);
-        return true;
+      for (let i = 0; i < db.blogs.length; i++) {
+        if (db.blogs[i].id === id) {
+          db.blogs.splice(i, 1);
+          return true;
+        }
       }
-    }
-  },
+    },
 };

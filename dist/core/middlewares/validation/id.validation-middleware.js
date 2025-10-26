@@ -8,4 +8,6 @@ exports.idValidation = (0, express_validator_1.param)("id")
     .isString()
     .withMessage("ID must be a string")
     .isLength({ min: 1 })
-    .withMessage("ID must not be empty");
+    .withMessage("ID must not be empty")
+    .isMongoId()
+    .withMessage('Incorrect format of ObjectId');

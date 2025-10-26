@@ -28,18 +28,7 @@ export const postsRepository = {
 
     return post;
   },
-  createPost(data: Post) {
-    const blog = db.blogs.find((b) => b.id === data.blogId);
-    if (!blog) return null;
-
-    const newPost = {
-      id: (db.posts.length ? db.posts[db.posts.length - 1].id + 1 : 1).toString(),
-      title: data.title,
-      shortDescription: data.shortDescription,
-      content: data.content,
-      blogId: data.blogId,
-      blogName: blog.name,
-    };
+  createPost(newPost: Post) {
     db.posts.push(newPost);
     return newPost;
   },
