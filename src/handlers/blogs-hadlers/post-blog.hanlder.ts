@@ -12,7 +12,7 @@ export async function postBlogHanlder(req: Request<{}, {}, BlogInputDto>, res: R
       name: req.body.name,
       description: req.body.description,
       websiteUrl: req.body.websiteUrl,
-      createdAt: new Date().toString(),
+      createdAt: new Date().toISOString(),
       isMembership: false
     }
     const createdBlog = await blogsRepository.createBlog(newBlog);

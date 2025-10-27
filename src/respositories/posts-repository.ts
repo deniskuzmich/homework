@@ -1,43 +1,40 @@
-import { db } from "../db/in-memory.db.";
-import { Post } from "../core/types/posts-types";
+import {Post} from "../core/types/posts-types";
+import {ObjectId, WithId} from "mongodb";
+import {postsCollection} from "../db/mongo.db";
+import {PostInputDto} from "../input-types/post.input-dto";
 
 export const postsRepository = {
-  findPosts(title: string | null | undefined) {
-    if (title) {
-      let filteredPosts = db.posts.filter(
-        (post) => post.title.indexOf(title) > -1,
-      );
-      return filteredPosts;
-    } else {
-      return db.posts;
-    }
+  async findPosts(): Promise<WithId<Post>[]> {
+    return postsCollection.find().toArray()
   },
-  getPostById(id: string) {
-    const post = db.posts.find((post) => post.id === id);
-    return post;
+  async getPostById(id: string): Promise<WithId<Post> | null> {
+    return postsCollection.findOne({_id: new ObjectId(id)});
   },
-  updatePost(id: string, data: Post) {
-    const post = db.posts.find((post) => post.id === id);
-    if (!post) {
-      return false
-    }
-      (post.title = data.title),
-      (post.shortDescription = data.shortDescription),
-      (post.content = data.content),
-      (post.blogId = data.blogId);
-
-    return post;
-  },
-  createPost(newPost: Post) {
-    db.posts.push(newPost);
-    return newPost;
-  },
-  deletePost(id: string) {
-    for (let i = 0; i < db.posts.length; i++) {
-      if (db.posts[i].id === id) {
-        db.posts.splice(i, 1);
-        return true;
+  async updatePost(id: string, newData: PostInputDto): Promise<void> {
+    const updatedPost = await postsCollection.updateOne(
+      {_id: new ObjectId(id)},
+      {
+        $set: {
+          title: newData.title,
+          shortDescription: newData.shortDescription,
+          content: newData.content,
+          blogId: newData.blogId
+        }
       }
+    );
+    if (updatedPost.matchedCount < 1) {
+      throw new Error("Post not exist")
+    }
+    return
+  },
+  async createPost(newPost: Post): Promise<WithId<Post>> {
+    const insertResult = await postsCollection.insertOne(newPost);
+    return {...newPost, _id: insertResult.insertedId};
+  },
+  async deletePost(id: string) {
+    const deletedPost = await postsCollection.deleteOne({_id: new ObjectId(id)});
+    if (deletedPost.deletedCount < 1) {
+      throw new Error("Post not exist")
     }
   },
 };

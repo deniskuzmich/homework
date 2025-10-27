@@ -25,14 +25,14 @@ exports.blogsRepository = {
     },
     updateBlog(id, newData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const updateBlog = yield mongo_db_1.blogsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
+            const updatedBlog = yield mongo_db_1.blogsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
                 $set: {
                     name: newData.name,
                     description: newData.description,
                     websiteUrl: newData.websiteUrl
                 }
             });
-            if (updateBlog.matchedCount < 1) {
+            if (updatedBlog.matchedCount < 1) {
                 throw new Error("Blog not exist");
             }
             return;

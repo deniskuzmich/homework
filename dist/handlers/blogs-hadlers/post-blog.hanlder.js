@@ -21,7 +21,7 @@ function postBlogHanlder(req, res) {
                 name: req.body.name,
                 description: req.body.description,
                 websiteUrl: req.body.websiteUrl,
-                createdAt: new Date().toString(),
+                createdAt: new Date().toISOString(),
                 isMembership: false
             };
             const createdBlog = yield blogs_repository_1.blogsRepository.createBlog(newBlog);

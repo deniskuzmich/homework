@@ -11,7 +11,7 @@ export const blogsRepository = {
     return blogsCollection.findOne({_id: new ObjectId(id)});
   },
   async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
-    const updateBlog = await blogsCollection.updateOne(
+    const updatedBlog = await blogsCollection.updateOne(
       {_id: new ObjectId(id)},
       {
         $set: {
@@ -21,7 +21,7 @@ export const blogsRepository = {
         }
       }
     );
-    if (updateBlog.matchedCount < 1) {
+    if (updatedBlog.matchedCount < 1) {
       throw new Error("Blog not exist")
     }
     return
