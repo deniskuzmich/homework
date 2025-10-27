@@ -1,41 +1,55 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsRepository = void 0;
-const in_memory_db_1 = require("../db/in-memory.db.");
+const mongodb_1 = require("mongodb");
+const mongo_db_1 = require("../db/mongo.db");
 exports.blogsRepository = {
-    findBlogs(name) {
-        if (name) {
-            let filteredBlogs = in_memory_db_1.db.blogs.filter((blog) => blog.name.indexOf(name) > -1);
-            return filteredBlogs;
-        }
-        else {
-            return in_memory_db_1.db.blogs;
-        }
+    findBlogs() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.blogsCollection.find().toArray();
+        });
     },
     getBlogById(id) {
-        const blog = in_memory_db_1.db.blogs.find((blog) => blog.id === id);
-        return blog;
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+        });
     },
-    updateBlog(id, data) {
-        const blog = in_memory_db_1.db.blogs.find((blog) => blog.id === id);
-        if (!blog) {
-            return false;
-        }
-        (blog.name = data.name),
-            (blog.description = data.description),
-            (blog.websiteUrl = data.websiteUrl);
-        return blog;
+    updateBlog(id, newData) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const updateBlog = yield mongo_db_1.blogsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
+                $set: {
+                    name: newData.name,
+                    description: newData.description,
+                    websiteUrl: newData.websiteUrl
+                }
+            });
+            if (updateBlog.matchedCount < 1) {
+                throw new Error("Blog not exist");
+            }
+            return;
+        });
     },
     createBlog(newBlog) {
-        in_memory_db_1.db.blogs.push(newBlog);
-        return newBlog;
+        return __awaiter(this, void 0, void 0, function* () {
+            const insertResult = yield mongo_db_1.blogsCollection.insertOne(newBlog);
+            return Object.assign(Object.assign({}, newBlog), { _id: insertResult.insertedId });
+        });
     },
     deleteBlog(id) {
-        for (let i = 0; i < in_memory_db_1.db.blogs.length; i++) {
-            if (in_memory_db_1.db.blogs[i].id === id) {
-                in_memory_db_1.db.blogs.splice(i, 1);
-                return true;
+        return __awaiter(this, void 0, void 0, function* () {
+            const deletedBlog = yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
+            if (deletedBlog.deletedCount < 1) {
+                throw new Error("Blog not exist");
             }
-        }
+        });
     },
 };

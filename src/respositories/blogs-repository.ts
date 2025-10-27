@@ -1,42 +1,39 @@
-import { db } from "../db/in-memory.db.";
-import { Blog } from "../core/types/blogs-types";
+import {Blog} from "../core/types/blogs-types";
+import {ObjectId, WithId} from "mongodb";
+import {blogsCollection} from "../db/mongo.db";
+import {BlogInputDto} from "../input-types/blog.input-dto";
 
 export const blogsRepository = {
-  findBlogs(name: string | null | undefined) {
-    if (name) {
-      let filteredBlogs = db.blogs.filter(
-        (blog) => blog.name.indexOf(name) > -1,
-      );
-      return filteredBlogs;
-    } else {
-      return db.blogs;
-    }
+  async findBlogs(): Promise<WithId<Blog>[]> {
+    return blogsCollection.find().toArray();
   },
-  getBlogById(id: string) {
-    const blog = db.blogs.find((blog) => blog.id === id);
-    return blog;
+  async getBlogById(id: string): Promise<WithId<Blog> | null> {
+    return blogsCollection.findOne({_id: new ObjectId(id)});
   },
-  updateBlog(id: string, data: Blog) {
-    const blog = db.blogs.find((blog) => blog.id === id);
-    if (!blog) {
-      return false
-    }
-      (blog.name = data.name),
-      (blog.description = data.description),
-      (blog.websiteUrl = data.websiteUrl);
-
-    return blog;
-  },
-  createBlog(newBlog: Blog) {
-    db.blogs.push(newBlog);
-    return newBlog;
-  },
-  deleteBlog(id: string) {
-      for (let i = 0; i < db.blogs.length; i++) {
-        if (db.blogs[i].id === id) {
-          db.blogs.splice(i, 1);
-          return true;
+  async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
+    const updateBlog = await blogsCollection.updateOne(
+      {_id: new ObjectId(id)},
+      {
+        $set: {
+          name: newData.name,
+          description: newData.description,
+          websiteUrl: newData.websiteUrl
         }
       }
-    },
+    );
+    if (updateBlog.matchedCount < 1) {
+      throw new Error("Blog not exist")
+    }
+    return
+  },
+  async createBlog(newBlog: Blog): Promise<WithId<Blog>> {
+    const insertResult = await blogsCollection.insertOne(newBlog);
+    return {...newBlog, _id: insertResult.insertedId};
+  },
+  async deleteBlog(id: string): Promise<void> {
+    const deletedBlog = await blogsCollection.deleteOne({_id: new ObjectId(id)});
+    if (deletedBlog.deletedCount < 1) {
+      throw new Error("Blog not exist");
+    }
+  },
 };
