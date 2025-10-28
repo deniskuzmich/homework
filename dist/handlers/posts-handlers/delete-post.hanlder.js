@@ -20,10 +20,10 @@ function deletePostHanlder(req, res) {
                 res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }
             yield posts_repository_1.postsRepository.deletePost(req.params.id);
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
         }
         catch (e) {
-            res.status(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+            res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
         }
     });
 }

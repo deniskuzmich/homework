@@ -15,15 +15,15 @@ const http_statuses_1 = require("../../http_statuses/http_statuses");
 function deleteBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const blog = blogs_repository_1.blogsRepository.getBlogById(req.params.id);
+            const blog = yield blogs_repository_1.blogsRepository.getBlogById(req.params.id);
             if (!blog) {
                 res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }
             yield blogs_repository_1.blogsRepository.deleteBlog(req.params.id);
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
         }
         catch (e) {
-            res.status(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+            res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
         }
     });
 }

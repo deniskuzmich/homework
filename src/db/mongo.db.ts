@@ -11,12 +11,12 @@ export let client: MongoClient;
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
 
-// Подключения к бд
+
 export async function runDB(url: string): Promise<void> {
   client = new MongoClient(url);
   const db: Db = client.db(SETTINGS.DB_NAME);
 
-  // Инициализация коллекций
+
   blogsCollection = db.collection<Blog>(BLOGS_COLLECTION_NAME);
   postsCollection = db.collection<Post>(POSTS_COLLECTION_NAME);
 
@@ -30,7 +30,7 @@ export async function runDB(url: string): Promise<void> {
   }
 }
 
-// для тестов
+
 export async function stopDb() {
   if (!client) {
     throw new Error(`No active client`);

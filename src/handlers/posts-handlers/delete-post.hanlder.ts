@@ -11,10 +11,10 @@ export async function deletePostHanlder(req: Request, res: Response) {
     }
 
     await postsRepository.deletePost(req.params.id);
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
   } catch (e: unknown) {
-    res.status(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+    res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
   }
 }
 

@@ -16,12 +16,10 @@ const mongodb_1 = require("mongodb");
 const settings_1 = require("../core/settings/settings");
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
-// Подключения к бд
 function runDB(url) {
     return __awaiter(this, void 0, void 0, function* () {
         exports.client = new mongodb_1.MongoClient(url);
         const db = exports.client.db(settings_1.SETTINGS.DB_NAME);
-        // Инициализация коллекций
         exports.blogsCollection = db.collection(BLOGS_COLLECTION_NAME);
         exports.postsCollection = db.collection(POSTS_COLLECTION_NAME);
         try {
@@ -35,7 +33,6 @@ function runDB(url) {
         }
     });
 }
-// для тестов
 function stopDb() {
     return __awaiter(this, void 0, void 0, function* () {
         if (!exports.client) {
