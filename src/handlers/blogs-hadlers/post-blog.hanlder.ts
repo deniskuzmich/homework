@@ -8,7 +8,6 @@ import {mapToBlogViewModel} from "../mappers/map-to-blog-view-model";
 export async function postBlogHanlder(req: Request<{}, {}, BlogInputDto>, res: Response) {
   try {
     const newBlog: Blog = {
-      id: req.body.id,
       name: req.body.name,
       description: req.body.description,
       websiteUrl: req.body.websiteUrl,
@@ -19,7 +18,7 @@ export async function postBlogHanlder(req: Request<{}, {}, BlogInputDto>, res: R
     const blogViewModel = mapToBlogViewModel(createdBlog);
     res.status(HTTP_STATUSES.CREATED_201).send(blogViewModel);
 
-    if (!newBlog) {
+    if (!createdBlog) {
       res.status(HTTP_STATUSES.BAD_REQUEST_400);
     }
 

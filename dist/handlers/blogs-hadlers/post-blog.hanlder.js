@@ -17,7 +17,6 @@ function postBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const newBlog = {
-                id: req.body.id,
                 name: req.body.name,
                 description: req.body.description,
                 websiteUrl: req.body.websiteUrl,
@@ -27,7 +26,7 @@ function postBlogHanlder(req, res) {
             const createdBlog = yield blogs_repository_1.blogsRepository.createBlog(newBlog);
             const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
             res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
-            if (!newBlog) {
+            if (!createdBlog) {
                 res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
             }
         }
