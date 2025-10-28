@@ -7,17 +7,16 @@ export async function updatePostHanlder(
   req: Request<{ id: string }, {}, PostInputDto>,
   res: Response) {
   try {
-    const post = postsRepository.getPostById(req.params.id);
+    const post = await postsRepository.getPostById(req.params.id);
 
     if (!post) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
-      return;
+      return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 
     await postsRepository.updatePost(req.params.id, req.body);
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
   } catch (e: unknown) {
-    res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
+    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
   }
 }

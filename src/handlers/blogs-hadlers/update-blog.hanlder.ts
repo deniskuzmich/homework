@@ -8,17 +8,16 @@ export async function updateBlogHandler(
   res: Response)
 {
   try {
-    const blog = blogsRepository.getBlogById(req.params.id);
+    const blog = await blogsRepository.getBlogById(req.params.id);
 
     if (!blog) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
-      return;
+      return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 
     await blogsRepository.updateBlog(req.params.id, req.body);
-    res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
   } catch (e: unknown) {
-    res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
+    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
   }
 }

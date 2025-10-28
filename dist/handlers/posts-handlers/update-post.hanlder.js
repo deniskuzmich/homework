@@ -15,16 +15,15 @@ const http_statuses_1 = require("../../http_statuses/http_statuses");
 function updatePostHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const post = posts_repository_1.postsRepository.getPostById(req.params.id);
+            const post = yield posts_repository_1.postsRepository.getPostById(req.params.id);
             if (!post) {
-                res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
-                return;
+                return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }
             yield posts_repository_1.postsRepository.updatePost(req.params.id, req.body);
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
         }
         catch (e) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
         }
     });
 }
