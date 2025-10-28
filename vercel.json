@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "name": "hm1_2",
+  "name": "hm1_3",
   "builds": [
     {
       "src": "src/index.ts",
