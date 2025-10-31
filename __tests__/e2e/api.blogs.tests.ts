@@ -1,20 +1,29 @@
 import {HTTP_STATUSES} from "../../src/http_statuses/http_statuses";
-import express from "express";
+import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
 import {basicAuthToken} from "../../src/utils/admin-auth-token";
+import {runDB, stopDb} from "../../src/db/mongo.db";
+import {SETTINGS} from "../../src/core/settings/settings";
 
 describe("Blogs API", () => {
-  const app = express();
-  setupApp(app);
-
+  let app: Express
   const adminToken = basicAuthToken()
 
   beforeAll(async () => {
+    await runDB(SETTINGS.MONGO_URL)
+
+    app = express();
+    setupApp(app);
+
     await request(app)
       .delete(`${TESTING_PATH}/${'all-data'}`)
       .expect(HTTP_STATUSES.NO_CONTENT_204)
+  })
+
+  afterAll(async () => {
+    await stopDb();
   })
 
   const testBlogData = {
