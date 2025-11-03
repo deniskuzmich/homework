@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../respositories/blogs-repository";
 import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
+import {blogsService} from "../../application/blogs.service";
 
 export async function deleteBlogHanlder(req: Request, res: Response) {
   try {
-    const blog = await blogsRepository.getBlogById(req.params.id);
+    const blog = await blogsService.getBlogById(req.params.id);
     if (!blog) {
       res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 
-    await blogsRepository.deleteBlog(req.params.id);
+    await blogsService.deleteBlog(req.params.id);
     return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
 

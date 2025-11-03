@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { postsRepository } from "../../respositories/posts-repository";
 import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 import {mapToPostViewModel} from "../mappers/map-to-post-view-model";
+import {postsService} from "../../application/posts.service";
 
 export async function getPostHandler(req: Request, res: Response) {
   try {
-    const post = await postsRepository.getPostById(req.params.id);
+    const post = await postsService.getPostById(req.params.id);
 
     if (!post) {
       return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);

@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
-import { blogsRepository } from "../../respositories/blogs-repository";
 import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 import {BlogInputDto} from "../../input-types/blog.input-dto";
+import {blogsService} from "../../application/blogs.service";
 
 export async function updateBlogHandler(
   req: Request<{id: string}, {}, BlogInputDto>,
   res: Response)
 {
   try {
-    const blog = await blogsRepository.getBlogById(req.params.id);
+    const blog = await blogsService.getBlogById(req.params.id);
 
     if (!blog) {
       return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
 
-    await blogsRepository.updateBlog(req.params.id, req.body);
+    await blogsService.updateBlog(req.params.id, req.body);
     return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
 
   } catch (e: unknown) {

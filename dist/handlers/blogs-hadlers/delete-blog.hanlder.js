@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteBlogHanlder = deleteBlogHanlder;
-const blogs_repository_1 = require("../../respositories/blogs-repository");
 const http_statuses_1 = require("../../http_statuses/http_statuses");
+const blogs_service_1 = require("../../application/blogs.service");
 function deleteBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const blog = yield blogs_repository_1.blogsRepository.getBlogById(req.params.id);
+            const blog = yield blogs_service_1.blogsService.getBlogById(req.params.id);
             if (!blog) {
                 res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }
-            yield blogs_repository_1.blogsRepository.deleteBlog(req.params.id);
+            yield blogs_service_1.blogsService.deleteBlog(req.params.id);
             return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
         }
         catch (e) {

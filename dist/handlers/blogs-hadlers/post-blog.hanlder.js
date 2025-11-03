@@ -10,20 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postBlogHanlder = postBlogHanlder;
-const blogs_repository_1 = require("../../respositories/blogs-repository");
 const http_statuses_1 = require("../../http_statuses/http_statuses");
 const map_to_blog_view_model_1 = require("../mappers/map-to-blog-view-model");
+const blogs_service_1 = require("../../application/blogs.service");
 function postBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const newBlog = {
-                name: req.body.name,
-                description: req.body.description,
-                websiteUrl: req.body.websiteUrl,
-                createdAt: new Date().toISOString(),
-                isMembership: false
-            };
-            const createdBlog = yield blogs_repository_1.blogsRepository.createBlog(newBlog);
+            const createdBlog = yield blogs_service_1.blogsService.createBlog(req.body);
             const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
             res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
             if (!createdBlog) {

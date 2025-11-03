@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostHanlder = deletePostHanlder;
-const posts_repository_1 = require("../../respositories/posts-repository");
 const http_statuses_1 = require("../../http_statuses/http_statuses");
+const posts_service_1 = require("../../application/posts.service");
 function deletePostHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const post = yield posts_repository_1.postsRepository.getPostById(req.params.id);
+            const post = yield posts_service_1.postsService.getPostById(req.params.id);
             if (!post) {
                 res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }
-            yield posts_repository_1.postsRepository.deletePost(req.params.id);
+            yield posts_service_1.postsService.deletePost(req.params.id);
             return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
         }
         catch (e) {

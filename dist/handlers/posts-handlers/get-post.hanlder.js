@@ -10,13 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostHandler = getPostHandler;
-const posts_repository_1 = require("../../respositories/posts-repository");
 const http_statuses_1 = require("../../http_statuses/http_statuses");
 const map_to_post_view_model_1 = require("../mappers/map-to-post-view-model");
+const posts_service_1 = require("../../application/posts.service");
 function getPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const post = yield posts_repository_1.postsRepository.getPostById(req.params.id);
+            const post = yield posts_service_1.postsService.getPostById(req.params.id);
             if (!post) {
                 return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
             }

@@ -10,28 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postPostsHandler = postPostsHandler;
-const posts_repository_1 = require("../../respositories/posts-repository");
 const http_statuses_1 = require("../../http_statuses/http_statuses");
-const blogs_repository_1 = require("../../respositories/blogs-repository");
 const map_to_post_view_model_1 = require("../mappers/map-to-post-view-model");
+const posts_service_1 = require("../../application/posts.service");
 function postPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const blog = yield blogs_repository_1.blogsRepository.getBlogById(req.body.blogId);
-            if (!blog)
-                return null;
-            const newPost = {
-                title: req.body.title,
-                shortDescription: req.body.shortDescription,
-                content: req.body.content,
-                blogId: req.body.blogId,
-                blogName: blog.name,
-                createdAt: new Date().toISOString(),
-            };
-            if (!newPost) {
+            const createdPost = yield posts_service_1.postsService.createPost(req.body);
+            if (!createdPost) {
                 return res.sendStatus(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
             }
-            const createdPost = yield posts_repository_1.postsRepository.createPost(newPost);
             const postViewModel = (0, map_to_post_view_model_1.mapToPostViewModel)(createdPost);
             res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(postViewModel);
         }
