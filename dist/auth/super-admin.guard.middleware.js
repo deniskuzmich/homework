@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.superAdminGuardMiddleware = exports.ADMIN_PASSWORD = exports.ADMIN_USERNAME = void 0;
-const http_statuses_1 = require("../http_statuses/http_statuses");
+const http_statuses_1 = require("../core/http_statuses/http_statuses");
 exports.ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
 exports.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "qwerty";
 const superAdminGuardMiddleware = (req, res, next) => {

@@ -1,4 +1,4 @@
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
+import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
 import {Router, Request, Response} from "express";
 import {blogsCollection, postsCollection} from "../../db/mongo.db";
 

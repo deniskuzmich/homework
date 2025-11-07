@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
+import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
 import {postsService} from "../../application/posts.service";
 
 export async function deletePostHanlder(req: Request, res: Response) {

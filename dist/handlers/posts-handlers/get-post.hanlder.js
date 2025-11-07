@@ -10,8 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostHandler = getPostHandler;
-const http_statuses_1 = require("../../http_statuses/http_statuses");
-const map_to_post_view_model_1 = require("../mappers/map-to-post-view-model");
+const http_statuses_1 = require("../../core/http_statuses/http_statuses");
+const map_to_post_view_model_1 = require("../../mappers/posts-mappers/map-to-post-view-model");
 const posts_service_1 = require("../../application/posts.service");
 function getPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

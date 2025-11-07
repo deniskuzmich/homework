@@ -1,9 +1,9 @@
-import {PaginationAndSorting} from "../../core/types/pagination-and-sorting";
-import {BlogsSortField} from "./blogs-sort-field";
+import {SortDirection} from "mongodb";
 
-export type DriverQueryInput = PaginationAndSorting<BlogsSortField> &
-  Partial<{
-    searchDriverNameTerm: string;
-    searchDriverEmailTerm: string;
-    searchVehicleMakeTerm: string;
-  }>;
+export type BlogQueryInput = {
+  searchNameTerm?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy?: string;
+  sortDirection?: SortDirection;
+};

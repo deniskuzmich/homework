@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../http_statuses/http_statuses";
-import {PostInputDto} from "../../input-types/post.input-dto";
+import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
+import {PostInputDto} from "../../input-types/posts-input-type/post.input-dto";
 import {postsService} from "../../application/posts.service";
 
 export async function updatePostHanlder(

@@ -9,7 +9,7 @@ const testing_router_1 = require("./routers/testing-router/testing.router");
 const blog_router_1 = require("./routers/blog.router");
 const post_router_1 = require("./routers/post.router");
 const paths_1 = require("./core/paths/paths");
-const http_statuses_1 = require("./http_statuses/http_statuses");
+const http_statuses_1 = require("./core/http_statuses/http_statuses");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.get("/", (req, res) => {

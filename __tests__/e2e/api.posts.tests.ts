@@ -1,4 +1,4 @@
-import {HTTP_STATUSES} from "../../src/http_statuses/http_statuses";
+import {HTTP_STATUSES} from "../../src/core/http_statuses/http_statuses";
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";

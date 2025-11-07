@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
+import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
 import {blogsService} from "../../application/blogs.service";
 
 export async function deleteBlogHanlder(req: Request, res: Response) {

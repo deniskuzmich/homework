@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.inputValidationResultMiddleware = exports.createErrorMessages = void 0;
 const express_validator_1 = require("express-validator");
-const http_statuses_1 = require("../../../http_statuses/http_statuses");
+const http_statuses_1 = require("../../http_statuses/http_statuses");
 const createErrorMessages = (errors) => {
     return { errorsMessages: errors };
 };

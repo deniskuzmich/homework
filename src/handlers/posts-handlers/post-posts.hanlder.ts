@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
-import {PostInputDto} from "../../input-types/post.input-dto";
-import {mapToPostViewModel} from "../mappers/map-to-post-view-model";
+import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
+import {PostInputDto} from "../../input-types/posts-input-type/post.input-dto";
+import {mapToPostViewModel} from "../../mappers/posts-mappers/map-to-post-view-model";
 import {postsService} from "../../application/posts.service";
 
 export async function postPostsHandler(req: Request <{},{}, PostInputDto>, res: Response) {

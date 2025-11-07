@@ -1,12 +1,12 @@
-import { ValidationErrorType } from "../../types/ValidationErrorType";
-import { ValidationErrorTypeDto } from "../../types/ValidationErrorTypeDto";
+import { ValidationErrorType } from "../../types/validation-types/ValidationErrorType";
+import { ValidationErrorTypeDto } from "../../types/validation-types/ValidationErrorTypeDto";
 import {
   FieldValidationError,
   ValidationError,
   validationResult,
 } from "express-validator";
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUSES } from "../../../http_statuses/http_statuses";
+import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
 
 export const createErrorMessages = (
   errors: ValidationErrorType[],

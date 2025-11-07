@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
-import {mapToBlogViewModel} from "../mappers/map-to-blog-view-model";
+import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
+import {mapToBlogViewModel} from "../../mappers/blogs-mappers/map-to-blog-view-model";
 import {blogsService} from "../../application/blogs.service";
 
 export async function getBlogHandler(req: Request, res: Response) {

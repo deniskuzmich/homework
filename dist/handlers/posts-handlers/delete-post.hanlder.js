@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostHanlder = deletePostHanlder;
-const http_statuses_1 = require("../../http_statuses/http_statuses");
+const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const posts_service_1 = require("../../application/posts.service");
 function deletePostHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

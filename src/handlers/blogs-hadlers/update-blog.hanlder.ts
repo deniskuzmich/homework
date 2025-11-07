@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../http_statuses/http_statuses";
-import {BlogInputDto} from "../../input-types/blog.input-dto";
+import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
+import {BlogInputDto} from "../../input-types/blogs-input-type/blog.input-dto";
 import {blogsService} from "../../application/blogs.service";
 
 export async function updateBlogHandler(

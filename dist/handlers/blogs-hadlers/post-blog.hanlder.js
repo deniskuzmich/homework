@@ -10,18 +10,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postBlogHanlder = postBlogHanlder;
-const http_statuses_1 = require("../../http_statuses/http_statuses");
-const map_to_blog_view_model_1 = require("../mappers/map-to-blog-view-model");
+const http_statuses_1 = require("../../core/http_statuses/http_statuses");
+const map_to_blog_view_model_1 = require("../../mappers/blogs-mappers/map-to-blog-view-model");
 const blogs_service_1 = require("../../application/blogs.service");
 function postBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const createdBlog = yield blogs_service_1.blogsService.createBlog(req.body);
-            const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
-            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
             if (!createdBlog) {
                 res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
             }
+            const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
+            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
         }
         catch (err) {
             res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
