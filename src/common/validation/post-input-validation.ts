@@ -8,5 +8,4 @@ export const postInputDtoValidation = [
   titleValidation,
   shortDescriptionValidation,
   contentValidation,
-
 ];

@@ -4,14 +4,11 @@ import {mapToBlogViewModel} from "../../mappers/blogs-mappers/map-to-blog-view-m
 import {blogsService} from "../../application/blogs.service";
 
 export async function getBlogHandler(req: Request, res: Response) {
-  try {
+
     const blog = await blogsService.getBlogById(req.params.id);
     if (!blog) {
       return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
     }
     const blogViewModel = mapToBlogViewModel(blog)
     res.status(HTTP_STATUSES.OK_200).send(blogViewModel);
-  } catch (err) {
-    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
-  }
 }

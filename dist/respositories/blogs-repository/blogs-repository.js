@@ -35,9 +35,9 @@ exports.blogsRepository = {
             } : {};
             const items = yield mongo_db_1.blogsCollection //запрос в db
                 .find(searchFilter)
-                .sort({ [queryDto.sortBy]: queryDto.sortDirection === 'asc' ? 1 : -1 })
                 .skip(skip)
                 .limit(queryDto.pageSize)
+                .sort({ [queryDto.sortBy]: queryDto.sortDirection })
                 .toArray();
             const totalCount = yield mongo_db_1.blogsCollection.countDocuments({ searchFilter }); //общее кол-во элементов
             const paramsForFront = {
