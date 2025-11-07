@@ -11,6 +11,7 @@ import { superAdminGuardMiddleware } from "../auth/super-admin.guard.middleware"
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {postInputDtoValidation} from "../common/validation/post-input-validation";
 import {createPostForBlogHandler} from "../handlers/blogs-hadlers/create-post-for-blog.handler";
+import {getPostByBlogIdHanlder} from "../handlers/blogs-hadlers/get-post-by-blog";
 
 
 export const blogRouter = Router();
@@ -44,7 +45,7 @@ blogRouter
     deleteBlogHanlder,
   )
 
-  .get("/:id/posts",idValidation,paginationValidation, inputValidationResultMiddleware, getBlogHandler)
+  .get("/:id/posts",idValidation,paginationValidation, inputValidationResultMiddleware, getPostByBlogIdHanlder)
   .post("/:id/posts", superAdminGuardMiddleware,idValidation,postInputDtoValidation,inputValidationResultMiddleware, createPostForBlogHandler)
 
 
