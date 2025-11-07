@@ -39,7 +39,7 @@ exports.blogsRepository = {
                 .limit(queryDto.pageSize)
                 .sort({ [queryDto.sortBy]: queryDto.sortDirection })
                 .toArray();
-            const totalCount = yield mongo_db_1.blogsCollection.countDocuments({ searchFilter }); //общее кол-во элементов
+            const totalCount = yield mongo_db_1.blogsCollection.countDocuments(searchFilter); //общее кол-во элементов
             const paramsForFront = {
                 pagesCount: Math.ceil(totalCount / queryDto.pageSize),
                 page: queryDto.pagesNumber,

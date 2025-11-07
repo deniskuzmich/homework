@@ -43,7 +43,7 @@ export const blogsRepository = {
       .sort({[queryDto.sortBy]: queryDto.sortDirection})
       .toArray();
 
-    const totalCount = await blogsCollection.countDocuments({searchFilter}) //общее кол-во элементов
+    const totalCount = await blogsCollection.countDocuments(searchFilter) //общее кол-во элементов
 
     const paramsForFront = { //мазоль, которая идет во фронт
       pagesCount: Math.ceil(totalCount / queryDto.pageSize),

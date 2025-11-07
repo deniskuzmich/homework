@@ -36,14 +36,6 @@ blogRouter
     postBlogHanlder,
   )
 
-  .post(
-    "/:id/posts",
-    superAdminGuardMiddleware,
-    blogsInputValidation,
-    inputValidationResultMiddleware,
-    postBlogHanlder,
-  )
-
   .delete(
     "/:id",
     superAdminGuardMiddleware,
