@@ -14,7 +14,7 @@ import {BlogInputWithoutSearch} from "../input/blogs-input/blog-input-without-se
 import {PostOutput} from "../core/types/posts-types/post-output.type";
 
 export type BlogInputWithoutSearchMazol = {
-  pagesNumber?: string;
+  pageNumber?: string;
   pageSize?: string;
   sortBy?:string;
   sortDirection?: SortDirection;
@@ -22,7 +22,7 @@ export type BlogInputWithoutSearchMazol = {
 
 export const valuesPaginationMaper = (query: BlogInputWithoutSearchMazol): BlogInputWithoutSearch => {
   return {
-    pageNumber: query.pagesNumber ? Number(query.pagesNumber) : 1,
+    pageNumber: query.pageNumber ? Number(query.pageNumber) : 1,
     pageSize: query.pageSize ? Number(query.pageSize) : 10,
     sortBy: query.sortBy ?? 'createdAt',
     sortDirection: query.sortDirection ?? 'desc',
@@ -32,7 +32,7 @@ export const valuesPaginationMaper = (query: BlogInputWithoutSearchMazol): BlogI
 export const blogsService = {
   async findBlogs(queryDto: BlogQueryInput):  Promise<OutputTypeWithPagination<BlogOutput>> {
     const foundBlogs: BlogInputWithSearch = {
-      pagesNumber: queryDto.pageNumber ? Number(queryDto.pageNumber) : 1,
+      pageNumber: queryDto.pageNumber ? Number(queryDto.pageNumber) : 1,
       pageSize: queryDto.pageSize ? Number(queryDto.pageSize): 10,
       sortBy: queryDto.sortBy ? queryDto.sortBy : 'createdAt',
       sortDirection: queryDto.sortDirection ? queryDto.sortDirection : 'desc',

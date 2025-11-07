@@ -26,7 +26,7 @@ exports.finalBlogMapper = finalBlogMapper;
 exports.blogsRepository = {
     findBlogs(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const skip = (queryDto.pagesNumber - 1) * queryDto.pageSize;
+            const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
             const searchFilter = queryDto.searchNameTerm ? {
                 name: {
                     $regex: queryDto.searchNameTerm,
@@ -42,7 +42,7 @@ exports.blogsRepository = {
             const totalCount = yield mongo_db_1.blogsCollection.countDocuments(searchFilter); //общее кол-во элементов
             const paramsForFront = {
                 pagesCount: Math.ceil(totalCount / queryDto.pageSize),
-                page: queryDto.pagesNumber,
+                page: queryDto.pageNumber,
                 pageSize: queryDto.pageSize,
                 totalCount: totalCount,
             };
