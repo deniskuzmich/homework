@@ -10,6 +10,7 @@ import { blogsInputValidation } from "../core/middlewares/validation/blogs.valid
 import { superAdminGuardMiddleware } from "../auth/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {postInputDtoValidation} from "../common/validation/post-input-validation";
+import {createPostForBlogHandler} from "../handlers/blogs-hadlers/create-post-for-blog.handler";
 
 
 export const blogRouter = Router();
@@ -52,7 +53,7 @@ blogRouter
   )
 
   .get("/:id/posts",idValidation,paginationValidation, inputValidationResultMiddleware, getBlogHandler)
-  .post("/:id/posts", superAdminGuardMiddleware,idValidation,postInputDtoValidation,inputValidationResultMiddleware, getBlogHandler)
+  .post("/:id/posts", superAdminGuardMiddleware,idValidation,postInputDtoValidation,inputValidationResultMiddleware, createPostForBlogHandler)
 
 
 

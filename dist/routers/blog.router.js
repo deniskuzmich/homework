@@ -13,6 +13,7 @@ const blogs_input_validation_middleware_1 = require("../core/middlewares/validat
 const super_admin_guard_middleware_1 = require("../auth/super-admin.guard.middleware");
 const pagination_validation_1 = require("../common/validation/pagination-validation");
 const post_input_validation_1 = require("../common/validation/post-input-validation");
+const create_post_for_blog_handler_1 = require("../handlers/blogs-hadlers/create-post-for-blog.handler");
 exports.blogRouter = (0, express_1.Router)();
 exports.blogRouter
     .get("", pagination_validation_1.paginationValidation, get_blogs_list_hanlder_1.getBlogsListHandler)
@@ -22,4 +23,4 @@ exports.blogRouter
     .post("/:id/posts", super_admin_guard_middleware_1.superAdminGuardMiddleware, blogs_input_validation_middleware_1.blogsInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, post_blog_hanlder_1.postBlogHanlder)
     .delete("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_blog_hanlder_1.deleteBlogHanlder)
     .get("/:id/posts", id_validation_middleware_1.idValidation, pagination_validation_1.paginationValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_blog_hanlder_1.getBlogHandler)
-    .post("/:id/posts", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, post_input_validation_1.postInputDtoValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_blog_hanlder_1.getBlogHandler);
+    .post("/:id/posts", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, post_input_validation_1.postInputDtoValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, create_post_for_blog_handler_1.createPostForBlogHandler);
