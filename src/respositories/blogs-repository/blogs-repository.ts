@@ -25,7 +25,7 @@ export const finalBlogMapper = (dto: BlogViewModel[], params: ParamsForFrontOutp
 export const blogsRepository = {
   async findBlogs(queryDto: BlogInputWithSearch): Promise<OutputTypeWithPagination<BlogOutput>> {
 
-    const skip = (queryDto.pagesNumber - 1) * queryDto.pageSize;
+    const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
 
     const searchFilter =
       queryDto.searchNameTerm ? {
@@ -47,7 +47,7 @@ export const blogsRepository = {
 
     const paramsForFront = { //мазоль, которая идет во фронт
       pagesCount: Math.ceil(totalCount / queryDto.pageSize),
-      page: queryDto.pagesNumber,
+      page: queryDto.pageNumber,
       pageSize: queryDto.pageSize,
       totalCount: totalCount,
     }
