@@ -15,18 +15,13 @@ const blogs_service_1 = require("../../application/blogs.service");
 const map_to_post_view_model_1 = require("../../mappers/posts-mappers/map-to-post-view-model");
 function createPostForBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const blogId = req.params.id;
-            const blog = yield blogs_service_1.blogsService.getBlogById(blogId);
-            if (!blog) {
-                return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
-            }
-            const createdPost = yield blogs_service_1.blogsService.createPostForBlog(blog, req.body);
-            const mapedToCreatePost = (0, map_to_post_view_model_1.mapToPostViewModel)(createdPost);
-            return res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(mapedToCreatePost);
+        const blogId = req.params.id;
+        const blog = yield blogs_service_1.blogsService.getBlogById(blogId);
+        if (!blog) {
+            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
         }
-        catch (err) {
-            return res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
-        }
+        const createdPost = yield blogs_service_1.blogsService.createPostForBlog(blog, req.body);
+        const mapedToCreatePost = (0, map_to_post_view_model_1.mapToPostViewModel)(createdPost);
+        return res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(mapedToCreatePost);
     });
 }

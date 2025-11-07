@@ -7,7 +7,6 @@ export async function createPostForBlogHandler(
   req: Request<{ id: string }>,
   res: Response
 ) {
-  try {
     const blogId = req.params.id;
 
     const blog = await blogsService.getBlogById(blogId);
@@ -20,8 +19,4 @@ export async function createPostForBlogHandler(
     const mapedToCreatePost = mapToPostViewModel(createdPost);
 
     return res.status(HTTP_STATUSES.CREATED_201).send(mapedToCreatePost);
-
-  } catch (err) {
-    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
-  }
 }
