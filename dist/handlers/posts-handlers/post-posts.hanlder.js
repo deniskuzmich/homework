@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postPostsHandler = postPostsHandler;
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const map_to_post_view_model_1 = require("../../mappers/posts-mappers/map-to-post-view-model");
-const posts_service_1 = require("../../application/posts.service");
+const posts_service_1 = require("../../posts/posts-service/posts.service");
 function postPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

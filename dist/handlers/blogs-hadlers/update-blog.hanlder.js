@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBlogHandler = updateBlogHandler;
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
-const blogs_service_1 = require("../../application/blogs.service");
+const blogs_service_1 = require("../../blogs/blogs-service/blogs.service");
 function updateBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

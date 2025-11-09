@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { getPostsListHanlder } from "../handlers/posts-handlers/get-posts-list.hanlder";
-import { getPostHandler } from "../handlers/posts-handlers/get-post.hanlder";
-import { updatePostHanlder } from "../handlers/posts-handlers/update-post.hanlder";
-import { postPostsHandler } from "../handlers/posts-handlers/post-posts.hanlder";
-import { deletePostHanlder } from "../handlers/posts-handlers/delete-post.hanlder";
-import { idValidation } from "../core/middlewares/validation/id.validation-middleware";
-import { inputValidationResultMiddleware } from "../core/middlewares/validation/input.validation-result.middleware";
-import { postInputValidation } from "../core/middlewares/validation/posts.validation-middleware/posts.input.validation-middleware";
+import { getPostsListHanlder } from "../posts/handlers/get-posts-list.hanlder";
+import { getPostHandler } from "../posts/handlers/get-post.hanlder";
+import { updatePostHanlder } from "../posts/handlers/update-post.hanlder";
+import { postPostsHandler } from "../posts/handlers/post-posts.hanlder";
+import { deletePostHanlder } from "../posts/handlers/delete-post.hanlder";
+import { idValidation } from "../core/middleware-validation/id.validation-middleware";
+import { inputValidationResultMiddleware } from "../core/middleware-validation/input.validation-result.middleware";
+import { postInputValidation } from "../posts/middleware-validation/posts.input.validation-middleware";
 import { superAdminGuardMiddleware } from "../auth/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 

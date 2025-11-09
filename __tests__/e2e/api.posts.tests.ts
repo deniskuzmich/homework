@@ -3,7 +3,7 @@ import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
-import {basicAuthToken} from "../../src/utils/admin-auth-token";
+import {basicAuthToken} from "../../src/auth/admin-auth-token";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
 

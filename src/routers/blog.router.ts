@@ -1,20 +1,21 @@
 import { Router } from "express";
-import { getBlogsListHandler } from "../handlers/blogs-hadlers/get-blogs-list.hanlder";
-import { updateBlogHandler } from "../handlers/blogs-hadlers/update-blog.hanlder";
-import { postBlogHanlder } from "../handlers/blogs-hadlers/post-blog.hanlder";
-import { deleteBlogHanlder } from "../handlers/blogs-hadlers/delete-blog.hanlder";
-import { getBlogHandler } from "../handlers/blogs-hadlers/get-blog.hanlder";
-import { idValidation } from "../core/middlewares/validation/id.validation-middleware";
-import { inputValidationResultMiddleware } from "../core/middlewares/validation/input.validation-result.middleware";
-import { blogsInputValidation } from "../core/middlewares/validation/blogs.validation-middleware/blogs.input.validation-middleware";
+import { getBlogsListHandler } from "../blogs/handlers/get-blogs-list.hanlder";
+import { updateBlogHandler } from "../blogs/handlers/update-blog.hanlder";
+import { postBlogHanlder } from "../blogs/handlers/post-blog.hanlder";
+import { deleteBlogHanlder } from "../blogs/handlers/delete-blog.hanlder";
+import { getBlogHandler } from "../blogs/handlers/get-blog.hanlder";
+import { idValidation } from "../core/middleware-validation/id.validation-middleware";
+import { inputValidationResultMiddleware } from "../core/middleware-validation/input.validation-result.middleware";
+import { blogsInputValidation } from "../blogs/middleware-validation/blogs.input.validation-middleware";
 import { superAdminGuardMiddleware } from "../auth/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
-import {postInputDtoValidation} from "../common/validation/post-input-validation";
-import {createPostForBlogHandler} from "../handlers/blogs-hadlers/create-post-for-blog.handler";
-import {getPostByBlogIdHanlder} from "../handlers/blogs-hadlers/get-post-by-blog";
+import {postInputDtoValidation} from "../posts/middleware-validation/post-inputDto-validation";
+import {createPostForBlogHandler} from "../blogs/handlers/create-post-for-blog.handler";
+import {getPostByBlogIdHanlder} from "../blogs/handlers/get-post-by-blog";
 
 
 export const blogRouter = Router();
+
 blogRouter
   .get("",paginationValidation, getBlogsListHandler)
 

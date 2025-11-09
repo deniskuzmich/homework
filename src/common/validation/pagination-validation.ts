@@ -1,6 +1,5 @@
 import {query} from "express-validator";
 
-
 export const searchNameTermValidation = query('searchNameTerm')
   .optional()
   .isString()
@@ -10,7 +9,6 @@ export const sortBy = query('sortBy')
   .optional()
   .isString()
   .withMessage("sortBy should be a string")
-
 
 export const sortDirection = query('sortDirection')
   .optional()

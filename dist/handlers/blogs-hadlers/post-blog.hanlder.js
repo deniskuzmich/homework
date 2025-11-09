@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postBlogHanlder = postBlogHanlder;
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const map_to_blog_view_model_1 = require("../../mappers/blogs-mappers/map-to-blog-view-model");
-const blogs_service_1 = require("../../application/blogs.service");
+const blogs_service_1 = require("../../blogs/blogs-service/blogs.service");
 function postBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

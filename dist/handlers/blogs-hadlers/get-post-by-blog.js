@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostByBlogIdHanlder = getPostByBlogIdHanlder;
-const blogs_service_1 = require("../../application/blogs.service");
+const blogs_service_1 = require("../../blogs/blogs-service/blogs.service");
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 function getPostByBlogIdHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {

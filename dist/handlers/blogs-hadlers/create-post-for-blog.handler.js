@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createPostForBlogHandler = createPostForBlogHandler;
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
-const blogs_service_1 = require("../../application/blogs.service");
+const blogs_service_1 = require("../../blogs/blogs-service/blogs.service");
 const map_to_post_view_model_1 = require("../../mappers/posts-mappers/map-to-post-view-model");
 function createPostForBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
