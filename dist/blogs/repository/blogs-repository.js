@@ -37,8 +37,8 @@ exports.blogsRepository = {
                 pageSize: queryDto.pageSize,
                 totalCount: totalCount,
             };
-            const BlogForFront = items.map(map_to_blog_view_model_1.mapToBlogViewModel);
-            return (0, final_blog_map_1.finalBlogMapper)(BlogForFront, paramsForFront);
+            const blogForFront = items.map(map_to_blog_view_model_1.mapToBlogViewModel);
+            return (0, final_blog_map_1.finalBlogMapper)(blogForFront, paramsForFront);
         });
     },
     getBlogById(id) {

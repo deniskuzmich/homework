@@ -25,11 +25,21 @@ export const pageSize = query('pageSize')
   .isInt()
   .withMessage("pageSize should be a number");
 
+export const searchLoginTerm = query('searchLoginTerm')
+  .isString()
+  .withMessage("searchLoginTerm should be a string");
+
+export const searchEmailTerm = query('searchEmailTerm')
+  .isString()
+  .withMessage("searchEmailTerm should be a string");
+
 
 export const paginationValidation = [
   searchNameTermValidation,
   sortBy,
   sortDirection,
   pageNumber,
-  pageSize
+  pageSize,
+  searchLoginTerm,
+  searchEmailTerm,
 ];

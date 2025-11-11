@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.paginationValidation = exports.pageSize = exports.pageNumber = exports.sortDirection = exports.sortBy = exports.searchNameTermValidation = void 0;
+exports.paginationValidation = exports.searchEmailTerm = exports.searchLoginTerm = exports.pageSize = exports.pageNumber = exports.sortDirection = exports.sortBy = exports.searchNameTermValidation = void 0;
 const express_validator_1 = require("express-validator");
 exports.searchNameTermValidation = (0, express_validator_1.query)('searchNameTerm')
     .optional()
@@ -22,10 +22,18 @@ exports.pageSize = (0, express_validator_1.query)('pageSize')
     .optional()
     .isInt()
     .withMessage("pageSize should be a number");
+exports.searchLoginTerm = (0, express_validator_1.query)('searchLoginTerm')
+    .isString()
+    .withMessage("searchLoginTerm should be a string");
+exports.searchEmailTerm = (0, express_validator_1.query)('searchEmailTerm')
+    .isString()
+    .withMessage("searchEmailTerm should be a string");
 exports.paginationValidation = [
     exports.searchNameTermValidation,
     exports.sortBy,
     exports.sortDirection,
     exports.pageNumber,
-    exports.pageSize
+    exports.pageSize,
+    exports.searchLoginTerm,
+    exports.searchEmailTerm,
 ];

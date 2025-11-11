@@ -5,7 +5,6 @@ import {mapToBlogViewModel} from "../mapper/map-to-blog-view-model";
 import {blogsService} from "../service/blogs.service";
 
 export async function postBlogHanlder(req: Request<{}, {}, BlogInputDto>, res: Response) {
-  try {
     const createdBlog = await blogsService.createBlog(req.body);
 
     if (!createdBlog) {
@@ -15,8 +14,4 @@ export async function postBlogHanlder(req: Request<{}, {}, BlogInputDto>, res: R
     const blogViewModel = mapToBlogViewModel(createdBlog);
     res.status(HTTP_STATUSES.CREATED_201).send(blogViewModel);
 
-
-  } catch (err: unknown) {
-      res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
-  }
 }

@@ -1,5 +1,5 @@
 import {BlogOutput} from "../types/main-types/blog-output.type";
-import {ParamsForFrontOutput} from "../types/output.types/blog-params-for-front-output";
+import {ParamsForFrontOutput} from "../../common/types/params-for-front-output";
 
 export const finalBlogMapper = (dto: BlogOutput[], params: ParamsForFrontOutput) => {
   return {

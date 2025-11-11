@@ -4,15 +4,15 @@ import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {blogsRepository} from "../repository/blogs-repository";
 import {BlogQueryInput} from "../types/input-types/blogs-query.input";
 import {BlogInput} from "../types/main-types/blog-input.type";
-import {OutputTypeWithPagination} from "../../common/types/blog-output-with-pagintaion.type";
+import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {postsRepository} from "../../posts/repository/posts-repository";
 import {Post} from "../../posts/types/main-types/posts-db.type";
-import {PostInputDtoForBlog} from "../../posts/service/posts.service";
 import {BlogInputWithoutSearch} from "../types/input-types/blog-input-without-search";
 import {PostOutput} from "../../posts/types/main-types/post-output.type";
 import {BlogOutput} from "../types/main-types/blog-output.type";
 import {valuesPaginationMaper} from "../middleware-validation/post-for-blog-pagination";
 import {BlogQueryInputWithoutSearch} from "../types/input-types/blog-query-input-without-search";
+import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
 
 
 export const blogsService = {

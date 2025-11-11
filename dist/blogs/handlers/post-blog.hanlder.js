@@ -15,16 +15,11 @@ const map_to_blog_view_model_1 = require("../mapper/map-to-blog-view-model");
 const blogs_service_1 = require("../service/blogs.service");
 function postBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const createdBlog = yield blogs_service_1.blogsService.createBlog(req.body);
-            if (!createdBlog) {
-                res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
-            }
-            const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
-            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
+        const createdBlog = yield blogs_service_1.blogsService.createBlog(req.body);
+        if (!createdBlog) {
+            res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
         }
-        catch (err) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
-        }
+        const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(createdBlog);
+        res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(blogViewModel);
     });
 }

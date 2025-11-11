@@ -1,22 +1,17 @@
 import {Post} from "../types/main-types/posts-db.type";
 import {ObjectId, WithId} from "mongodb";
 import {PostInputDto} from "../types/main-types/post.input-dto";
-import {paginationForRepo, postsRepository} from "../repository/posts-repository";
+import {postsRepository} from "../repository/posts-repository";
 import {blogsRepository} from "../../blogs/repository/blogs-repository";
 import {PostOutput} from "../types/main-types/post-output.type";
-import {OutputTypeWithPagination} from "../../common/types/blog-output-with-pagintaion.type";
+import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {BlogQueryInputWithoutSearch} from "../../blogs/types/input-types/blog-query-input-without-search";
 import {valuesPaginationMaper} from "../../blogs/middleware-validation/post-for-blog-pagination";
-
-export type PostInputDtoForBlog = {
-  title: string,
-  shortDescription: string,
-  content: string
-}
+import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 
 export const postsService = {
   async findPosts(query: BlogQueryInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
-    const values: paginationForRepo  = valuesPaginationMaper(query)
+    const values: BlogInputWithoutSearch  = valuesPaginationMaper(query)
     return postsRepository.findPosts(values)
   },
   async getPostById(id: string): Promise<WithId<Post> | null> {

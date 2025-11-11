@@ -9,20 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsRepository = exports.finalPostMapper = void 0;
+exports.postsRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
 const map_to_post_view_model_1 = require("../mapper/map-to-post-view-model");
-const finalPostMapper = (dto, params) => {
-    return {
-        pagesCount: params.pagesCount,
-        page: params.page,
-        pageSize: params.pageSize,
-        totalCount: params.totalCount,
-        items: dto
-    };
-};
-exports.finalPostMapper = finalPostMapper;
+const final_post_map_1 = require("../mapper/final-post-map");
 exports.postsRepository = {
     findPosts(query) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -42,7 +33,7 @@ exports.postsRepository = {
                 totalCount: totalCount,
             };
             const postsForFront = posts.map(map_to_post_view_model_1.mapToPostViewModel);
-            return (0, exports.finalPostMapper)(postsForFront, paramsForFront);
+            return (0, final_post_map_1.finalPostMapper)(postsForFront, paramsForFront);
         });
     },
     getPostById(id) {
@@ -98,7 +89,7 @@ exports.postsRepository = {
                 totalCount: totalCount,
             };
             const postsForFront = posts.map(map_to_post_view_model_1.mapToPostViewModel);
-            return (0, exports.finalPostMapper)(postsForFront, paramsForFront);
+            return (0, final_post_map_1.finalPostMapper)(postsForFront, paramsForFront);
         });
     }
 };

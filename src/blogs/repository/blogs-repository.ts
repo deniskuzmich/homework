@@ -6,7 +6,7 @@ import {mapToBlogViewModel} from "../mapper/map-to-blog-view-model";
 import {BlogInput} from "../types/main-types/blog-input.type";
 import {
   OutputTypeWithPagination
-} from "../../common/types/blog-output-with-pagintaion.type";
+} from "../../common/types/output-with-pagintaion.type";
 import {BlogOutput} from "../types/main-types/blog-output.type";
 import {finalBlogMapper} from "../mapper/final-blog-map";
 
@@ -39,8 +39,8 @@ export const blogsRepository = {
       totalCount: totalCount,
     }
 
-    const BlogForFront = items.map(mapToBlogViewModel)
-    return finalBlogMapper(BlogForFront, paramsForFront);
+    const blogForFront = items.map(mapToBlogViewModel)
+    return finalBlogMapper(blogForFront, paramsForFront);
 
   },
   async getBlogById(id: string): Promise<WithId<Blog> | null> {

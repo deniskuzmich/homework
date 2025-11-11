@@ -2,14 +2,17 @@ import { Collection, Db, MongoClient } from 'mongodb';
 import {SETTINGS} from "../core/settings/settings";
 import {Blog} from "../blogs/types/main-types/blog-db.type";
 import {Post} from "../posts/types/main-types/posts-db.type";
+import {User} from "../users/types/main-types/user-db.type";
 
 
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
+const USERS_COLLECTION_NAME = 'users';
 
 export let client: MongoClient;
 export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
+export let usersCollection: Collection<User>;
 
 
 export async function runDB(url: string): Promise<void> {
@@ -19,6 +22,7 @@ export async function runDB(url: string): Promise<void> {
 
   blogsCollection = db.collection<Blog>(BLOGS_COLLECTION_NAME);
   postsCollection = db.collection<Post>(POSTS_COLLECTION_NAME);
+  usersCollection = db.collection<User>(USERS_COLLECTION_NAME);
 
   try {
     await client.connect();

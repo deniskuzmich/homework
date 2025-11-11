@@ -5,30 +5,14 @@ import {PostInputDto} from "../types/main-types/post.input-dto";
 import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 import {
   OutputTypeWithPagination
-} from "../../common/types/blog-output-with-pagintaion.type";
+} from "../../common/types/output-with-pagintaion.type";
 import {PostOutput} from "../types/main-types/post-output.type";
 import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
-import {ParamsForFrontOutput} from "../../blogs/types/output.types/blog-params-for-front-output";
-
-export const finalPostMapper = (dto: PostOutput[], params: ParamsForFrontOutput):OutputTypeWithPagination<PostOutput> => {
-    return {
-      pagesCount: params.pagesCount,
-      page: params.page,
-      pageSize: params.pageSize,
-      totalCount: params.totalCount,
-      items: dto
-    }
-  }
-
-  export type paginationForRepo = {
-    sortBy: string,
-    sortDirection: SortDirection,
-    pageNumber: number,
-    pageSize: number
-  }
+import {finalPostMapper} from "../mapper/final-post-map";
+import {InputPaginationForRepo} from "../types/input-types/input-pagination.type";
 
 export const postsRepository = {
-  async findPosts(query: paginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {
+  async findPosts(query: InputPaginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {
 
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
