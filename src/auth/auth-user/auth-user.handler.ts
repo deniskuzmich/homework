@@ -7,7 +7,7 @@ export async function loginUserHandler(req: Request, res: Response) {
   const password = req.body.password;
 
   const checkedResult = await usersService.checkCredentials(loginOrEmail, password);
-  if (!checkedResult === null) {
+  if (checkedResult === null) {
     res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
   }
   return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204)
