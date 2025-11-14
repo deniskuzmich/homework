@@ -16,8 +16,8 @@ export const usersQueryRepository = {
         login: {$regex: queryDto.searchLoginTerm, $options: "i",}
       } : {}
     queryDto.searchEmailTerm ? {
-      login: {$regex: queryDto.searchEmailTerm, $options: "i",}
-      } : {} //если ничего нет, нужно вернуть пустой объект
+        email: {$regex: queryDto.searchEmailTerm, $options: "i",}
+    } : {} //если ничего нет, нужно вернуть пустой объект
 
 
     const items = await usersCollection //запрос в db

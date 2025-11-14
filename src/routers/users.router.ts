@@ -11,8 +11,8 @@ import {userInputValidation} from "../users/middleware-validation/users-input.va
 export const usersRouter = Router();
 
 usersRouter
-  .get("", superAdminGuardMiddleware, paginationValidation, getAllUsers)
+  .get("", superAdminGuardMiddleware, userInputDtoValidation,paginationValidation, getAllUsers)
 
-  .post("", superAdminGuardMiddleware,userInputValidation ,userInputDtoValidation, createUserHandler)
+  .post("", superAdminGuardMiddleware,userInputValidation, createUserHandler)
 
   .delete('/:id', superAdminGuardMiddleware,  idValidation, deleteUserHandler )

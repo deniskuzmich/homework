@@ -7,7 +7,7 @@ export const loginValidation = body("login")
   .notEmpty()
   .withMessage('login should not be empty')
   .isLength({ min: 3, max: 10 })
-  .withMessage("title length is not correct")
+  .withMessage("login length is not correct")
   .matches('^[a-zA-Z0-9_-]*$')
 
 export const passwordValidation = body("password")
@@ -20,13 +20,14 @@ export const passwordValidation = body("password")
 
 export const emailValidation = body("email")
   .isString()
-  .withMessage("content is not correct")
+  .withMessage("email is not correct")
   .trim()
   .notEmpty()
-  .withMessage('content should not be empty')
+  .withMessage('email should not be empty')
   .isLength({ min: 6, max: 20 })
-  .withMessage("content length is not correct")
+  .withMessage("email length is not correct")
   .matches('^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$')
+  .withMessage("email length is not correct")
 
 export const userInputValidation = [
   loginValidation,
