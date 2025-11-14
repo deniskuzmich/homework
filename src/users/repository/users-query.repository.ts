@@ -14,11 +14,11 @@ export const usersQueryRepository = {
     let searchFilter: any = {}
 
     if(queryDto.searchLoginTerm) {
-      searchFilter.login = { $regex: queryDto.searchLoginTerm, options: "i" };
+      searchFilter.login = { $regex: queryDto.searchLoginTerm, $options: "i" };
     }
 
     if(queryDto.searchEmailTerm) {
-      searchFilter.email = { $regex: queryDto.searchEmailTerm, options: "i" };
+      searchFilter.email = { $regex: queryDto.searchEmailTerm, $options: "i" };
     }
 
     const items = await usersCollection //запрос в db
