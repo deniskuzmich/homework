@@ -11,14 +11,19 @@ export const usersQueryRepository = {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
     const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
 
-    let searchFilter: any = {}
+    let searchFilter = {}
 
-    if(queryDto.searchLoginTerm) {
-      searchFilter.login = { $regex: queryDto.searchLoginTerm, $options: "i" };
-    }
-
-    if(queryDto.searchEmailTerm) {
-      searchFilter.email = { $regex: queryDto.searchEmailTerm, $options: "i" };
+    if(queryDto.searchLoginTerm || queryDto.searchEmailTerm) {
+      searchFilter = {
+        $or: [
+          { login: { regex: queryDto.searchLoginTerm, $options: "i" } },
+          { email: { regex: queryDto.searchEmailTerm, $options: "i" } },
+        ]
+      }
+    } else if (queryDto.searchLoginTerm) {
+      searchFilter =  { login: { regex: queryDto.searchLoginTerm, $options: "i" } }
+    } else if (queryDto.searchEmailTerm) {
+      searchFilter = { email: { $regex: queryDto.searchEmailTerm, $options: "i" } }
     }
 
     const items = await usersCollection //запрос в db
