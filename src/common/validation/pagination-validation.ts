@@ -26,10 +26,12 @@ export const pageSize = query('pageSize')
   .withMessage("pageSize should be a number");
 
 export const searchLoginTerm = query('searchLoginTerm')
+  .optional()
   .isString()
   .withMessage("searchLoginTerm should be a string");
 
 export const searchEmailTerm = query('searchEmailTerm')
+  .optional()
   .isString()
   .withMessage("searchEmailTerm should be a string");
 

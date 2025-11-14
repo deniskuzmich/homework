@@ -46,8 +46,8 @@ blogRouter
     deleteBlogHandler,
   )
 
-  .get("/:id/posts",idValidation,paginationValidation, inputValidationResultMiddleware, getPostByBlogIdHanlder)
-  .post("/:id/posts", superAdminGuardMiddleware,idValidation,postInputDtoValidation,inputValidationResultMiddleware, createPostForBlogHandler)
+  .get("/:id/posts",idValidation,inputValidationResultMiddleware,paginationValidation, getPostByBlogIdHanlder)
+  .post("/:id/posts", superAdminGuardMiddleware,idValidation,inputValidationResultMiddleware,postInputDtoValidation, createPostForBlogHandler)
 
 
 
