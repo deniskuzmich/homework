@@ -11,14 +11,15 @@ export const usersQueryRepository = {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
     const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
 
-    let searchFilter =
-      queryDto.searchLoginTerm ? {
-        login: {$regex: queryDto.searchLoginTerm, $options: "i",}
-      } : {}
-    queryDto.searchEmailTerm ? {
-        email: {$regex: queryDto.searchEmailTerm, $options: "i",}
-    } : {} //если ничего нет, нужно вернуть пустой объект
+    let searchFilter: any = {}
 
+    if(queryDto.searchLoginTerm) {
+      searchFilter.login = { $regex: queryDto.searchLoginTerm, options: "i" };
+    }
+
+    if(queryDto.searchEmailTerm) {
+      searchFilter.email = { $regex: queryDto.searchEmailTerm, options: "i" };
+    }
 
     const items = await usersCollection //запрос в db
       .find(searchFilter)
