@@ -9,16 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testingRouter = void 0;
+exports.loginUserHandler = loginUserHandler;
+const users_service_1 = require("../../users/service/users.service");
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
-const express_1 = require("express");
-const mongo_db_1 = require("../../db/mongo.db");
-exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield Promise.all([
-        mongo_db_1.blogsCollection.deleteMany(),
-        mongo_db_1.postsCollection.deleteMany(),
-        mongo_db_1.usersCollection.deleteMany(),
-    ]);
-    res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
-}));
+function loginUserHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const loginOrEmail = req.body.loginOrEmail;
+        const password = req.body.password;
+        const checkedResult = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
+        if (!checkedResult === null) {
+            res.sendStatus(http_statuses_1.HTTP_STATUSES.UNAUTHORIZED_401);
+        }
+        return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+    });
+}

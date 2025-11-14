@@ -12,18 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsService = void 0;
 const mongodb_1 = require("mongodb");
 const posts_repository_1 = require("../repository/posts-repository");
-const blogs_repository_1 = require("../../blogs/repository/blogs-repository");
 const post_for_blog_pagination_1 = require("../../blogs/middleware-validation/post-for-blog-pagination");
+const posts_query_repository_1 = require("../repository/posts-query-repository");
+const blogs_query_repository_1 = require("../../blogs/repository/blogs-query-repository");
 exports.postsService = {
     findPosts(query) {
         return __awaiter(this, void 0, void 0, function* () {
             const values = (0, post_for_blog_pagination_1.valuesPaginationMaper)(query);
-            return posts_repository_1.postsRepository.findPosts(values);
+            return posts_query_repository_1.postsQueryRepository.findPosts(values);
         });
     },
     getPostById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return posts_repository_1.postsRepository.getPostById(id);
+            return posts_query_repository_1.postsQueryRepository.getPostById(id);
         });
     },
     updatePost(id, newData) {
@@ -34,7 +35,7 @@ exports.postsService = {
     },
     createPost(newData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogs_repository_1.blogsRepository.getBlogById(newData.blogId);
+            const blog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(newData.blogId);
             if (!blog)
                 return null;
             const newPost = {

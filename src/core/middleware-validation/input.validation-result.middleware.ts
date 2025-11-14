@@ -1,5 +1,5 @@
-import { ValidationErrorType } from "../types/validation-types/ValidationErrorType";
-import { ValidationErrorTypeDto } from "../types/validation-types/ValidationErrorTypeDto";
+import { ErrorType } from "../types/error-types/ErrorType";
+import { ErrorTypeOutput } from "../types/error-types/ErrorTypeOutput";
 import {
   FieldValidationError,
   ValidationError,
@@ -9,12 +9,12 @@ import { NextFunction, Request, Response } from "express";
 import { HTTP_STATUSES } from "../http_statuses/http_statuses";
 
 export const createErrorMessages = (
-  errors: ValidationErrorType[],
-): ValidationErrorTypeDto => {
+  errors: ErrorType[],
+): ErrorTypeOutput => {
   return { errorsMessages: errors };
 };
 
-const formatErrors = (error: ValidationError): ValidationErrorType => {
+const formatErrors = (error: ValidationError): ErrorType => {
   const expressError = error as unknown as FieldValidationError;
 
   return {

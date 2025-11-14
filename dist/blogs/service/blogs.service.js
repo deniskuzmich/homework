@@ -13,6 +13,8 @@ exports.blogsService = void 0;
 const blogs_repository_1 = require("../repository/blogs-repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
 const post_for_blog_pagination_1 = require("../middleware-validation/post-for-blog-pagination");
+const blogs_query_repository_1 = require("../repository/blogs-query-repository");
+const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
 exports.blogsService = {
     findBlogs(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -23,22 +25,22 @@ exports.blogsService = {
                 sortDirection: queryDto.sortDirection ? queryDto.sortDirection : 'desc',
                 searchNameTerm: queryDto.searchNameTerm ? queryDto.searchNameTerm : null,
             };
-            return blogs_repository_1.blogsRepository.findBlogs(foundBlogs);
+            return blogs_query_repository_1.blogsQueryRepository.findBlogs(foundBlogs);
         });
     },
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.getBlogById(id);
+            return blogs_query_repository_1.blogsQueryRepository.getBlogById(id);
         });
     },
     getPostByBlogId(id, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogs_repository_1.blogsRepository.getBlogById(id);
+            const blog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(id);
             if (!blog) {
                 return null;
             }
             const values = (0, post_for_blog_pagination_1.valuesPaginationMaper)(query);
-            return yield posts_repository_1.postsRepository.getPostByBlogId(id, values);
+            return yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(id, values);
         });
     },
     createPostForBlog(blog, inputInfo) {

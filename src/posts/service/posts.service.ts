@@ -8,14 +8,16 @@ import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaio
 import {BlogQueryInputWithoutSearch} from "../../blogs/types/input-types/blog-query-input-without-search";
 import {valuesPaginationMaper} from "../../blogs/middleware-validation/post-for-blog-pagination";
 import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
+import {postsQueryRepository} from "../repository/posts-query-repository";
+import {blogsQueryRepository} from "../../blogs/repository/blogs-query-repository";
 
 export const postsService = {
   async findPosts(query: BlogQueryInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
     const values: BlogInputWithoutSearch  = valuesPaginationMaper(query)
-    return postsRepository.findPosts(values)
+    return postsQueryRepository.findPosts(values)
   },
   async getPostById(id: string): Promise<WithId<Post> | null> {
-    return postsRepository.getPostById(id);
+    return postsQueryRepository.getPostById(id);
   },
 
   async updatePost(id: string, newData: PostInputDto): Promise<void> {
@@ -24,7 +26,7 @@ export const postsService = {
   },
   async createPost(newData: PostInputDto): Promise<WithId<Post> | null> {
 
-    const blog = await blogsRepository.getBlogById(newData.blogId);
+    const blog = await blogsQueryRepository.getBlogById(newData.blogId);
     if (!blog) return null;
 
     const newPost: Post = {
