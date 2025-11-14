@@ -10,7 +10,7 @@ import {Post} from "../../posts/types/main-types/posts-db.type";
 import {BlogInputWithoutSearch} from "../types/input-types/blog-input-without-search";
 import {PostOutput} from "../../posts/types/main-types/post-output.type";
 import {BlogOutput} from "../types/main-types/blog-output.type";
-import {valuesPaginationMaper} from "../middleware-validation/post-for-blog-pagination";
+import {valuesPaginationMaper} from "../mapper/post-for-blog-mapper";
 import {BlogQueryInputWithoutSearch} from "../types/input-types/blog-query-input-without-search";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
 import {blogsQueryRepository} from "../repository/blogs-query-repository";

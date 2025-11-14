@@ -6,7 +6,7 @@ import {blogsRepository} from "../../blogs/repository/blogs-repository";
 import {PostOutput} from "../types/main-types/post-output.type";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {BlogQueryInputWithoutSearch} from "../../blogs/types/input-types/blog-query-input-without-search";
-import {valuesPaginationMaper} from "../../blogs/middleware-validation/post-for-blog-pagination";
+import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 import {postsQueryRepository} from "../repository/posts-query-repository";
 import {blogsQueryRepository} from "../../blogs/repository/blogs-query-repository";
