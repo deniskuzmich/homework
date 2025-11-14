@@ -5,12 +5,13 @@ import {superAdminGuardMiddleware} from "../auth/super-admin.guard.middleware";
 import {createUserHandler} from "../users/handlers/create-user";
 import {idValidation} from "../core/middleware-validation/id.validation-middleware";
 import {deleteUserHandler} from "../users/handlers/delete-user";
+import {paginationValidation} from "../common/validation/pagination-validation";
 
 export const usersRouter = Router();
 
 usersRouter
-  .get("", superAdminGuardMiddleware, userInputDtoValidation, getAllUsers)
+  .get("", superAdminGuardMiddleware, paginationValidation, getAllUsers)
 
-  .post("", superAdminGuardMiddleware, createUserHandler)
+  .post("", superAdminGuardMiddleware,userInputDtoValidation, createUserHandler)
 
   .delete('/:id', superAdminGuardMiddleware,  idValidation, deleteUserHandler )
