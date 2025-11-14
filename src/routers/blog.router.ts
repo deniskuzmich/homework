@@ -47,7 +47,7 @@ blogRouter
   )
 
   .get("/:id/posts",idValidation,inputValidationResultMiddleware,paginationValidation, getPostByBlogIdHanlder)
-  .post("/:id/posts", superAdminGuardMiddleware,idValidation,inputValidationResultMiddleware,postInputDtoValidation, createPostForBlogHandler)
+  .post("/:id/posts", superAdminGuardMiddleware,postInputDtoValidation,inputValidationResultMiddleware,createPostForBlogHandler)
 
 
 
