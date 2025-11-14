@@ -1,5 +1,5 @@
 import {Blog} from "../types/main-types/blog-db.type";
-import {SortDirection, WithId} from "mongodb";
+import {WithId} from "mongodb";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {blogsRepository} from "../repository/blogs-repository";
 import {BlogQueryInput} from "../types/input-types/blogs-query.input";
@@ -13,6 +13,8 @@ import {BlogOutput} from "../types/main-types/blog-output.type";
 import {valuesPaginationMaper} from "../middleware-validation/post-for-blog-pagination";
 import {BlogQueryInputWithoutSearch} from "../types/input-types/blog-query-input-without-search";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
+import {blogsQueryRepository} from "../repository/blogs-query-repository";
+import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
 
 
 export const blogsService = {
@@ -24,19 +26,19 @@ export const blogsService = {
       sortDirection: queryDto.sortDirection ? queryDto.sortDirection : 'desc',
       searchNameTerm: queryDto.searchNameTerm ? queryDto.searchNameTerm : null,
     }
-    return blogsRepository.findBlogs(foundBlogs);
+    return blogsQueryRepository.findBlogs(foundBlogs);
   },
   async getBlogById(id: string): Promise<WithId<Blog> | null> {
-    return blogsRepository.getBlogById(id);
+    return blogsQueryRepository.getBlogById(id);
   },
 
   async getPostByBlogId(id: string, query: BlogQueryInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput> | null> {
-    const blog: WithId<Blog> | null = await blogsRepository.getBlogById(id)
+    const blog: WithId<Blog> | null = await blogsQueryRepository.getBlogById(id)
     if (!blog) {
       return null;
     }
     const values: BlogInputWithoutSearch = valuesPaginationMaper(query);
-    return await postsRepository.getPostByBlogId(id, values)
+    return await postsQueryRepository.getPostByBlogId(id, values)
   },
 
   async createPostForBlog(blog: WithId<Blog>, inputInfo: PostInputDtoForBlog): Promise<WithId<Post>> {

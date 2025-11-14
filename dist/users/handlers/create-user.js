@@ -9,16 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testingRouter = void 0;
+exports.createUserHandler = createUserHandler;
 const http_statuses_1 = require("../../core/http_statuses/http_statuses");
-const express_1 = require("express");
-const mongo_db_1 = require("../../db/mongo.db");
-exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield Promise.all([
-        mongo_db_1.blogsCollection.deleteMany(),
-        mongo_db_1.postsCollection.deleteMany(),
-        mongo_db_1.usersCollection.deleteMany(),
-    ]);
-    res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
-}));
+const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
+const users_service_1 = require("../service/users.service");
+function createUserHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = yield users_service_1.usersService.createUser(req.body);
+        if ("errorsMessages" in result) {
+            return res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send(result);
+        }
+        const userViewModel = (0, map_to_user_view_model_1.mapToUserViewModel)(result);
+        return res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(userViewModel);
+    });
+}
