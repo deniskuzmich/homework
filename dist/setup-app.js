@@ -12,12 +12,14 @@ const paths_1 = require("./core/paths/paths");
 const http_statuses_1 = require("./core/http_statuses/http_statuses");
 const users_router_1 = require("./routers/users.router");
 const auth_router_1 = require("./routers/auth.router");
+const comments_router_1 = require("./routers/comments.router");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.get("/", (req, res) => {
         res.status(http_statuses_1.HTTP_STATUSES.OK_200).send("Blogs and Posts");
     });
     app.use(paths_1.AUTH_PATH, auth_router_1.authRouter);
+    app.use(paths_1.COMMENTS_PATH, comments_router_1.commentsRouter);
     app.use(paths_1.USERS_PATH, users_router_1.usersRouter);
     app.use(paths_1.TESTING_PATH, testing_router_1.testingRouter);
     app.use(paths_1.BLOGS_PATH, blog_router_1.blogRouter);

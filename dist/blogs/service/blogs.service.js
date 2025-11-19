@@ -12,7 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsService = void 0;
 const blogs_repository_1 = require("../repository/blogs-repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
-const post_for_blog_pagination_1 = require("../middleware-validation/post-for-blog-pagination");
+const post_for_blog_mapper_1 = require("../mapper/post-for-blog-mapper");
 const blogs_query_repository_1 = require("../repository/blogs-query-repository");
 const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
 exports.blogsService = {
@@ -39,7 +39,7 @@ exports.blogsService = {
             if (!blog) {
                 return null;
             }
-            const values = (0, post_for_blog_pagination_1.valuesPaginationMaper)(query);
+            const values = (0, post_for_blog_mapper_1.valuesPaginationMaper)(query);
             return yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(id, values);
         });
     },

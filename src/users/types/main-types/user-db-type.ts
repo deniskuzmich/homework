@@ -3,5 +3,4 @@ export type UserDbType = {
   email: string;
   createdAt: string;
   passwordHash: string;
-  passwordSalt: string;
 }

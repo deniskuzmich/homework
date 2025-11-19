@@ -18,17 +18,26 @@ exports.usersQueryRepository = {
     getAllUsers(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
-            let searchFilter = queryDto.searchLoginTerm ? {
-                login: { $regex: queryDto.searchLoginTerm, $options: "i", }
-            } : {};
-            queryDto.searchEmailTerm ? {
-                login: { $regex: queryDto.searchEmailTerm, $options: "i", }
-            } : {}; //если ничего нет, нужно вернуть пустой объект
-            const items = yield mongo_db_1.usersCollection //запрос в db
+            let searchFilter = {};
+            if (queryDto.searchLoginTerm || queryDto.searchEmailTerm) {
+                searchFilter = {
+                    $or: [
+                        { login: { $regex: queryDto.searchLoginTerm, $options: "i" } },
+                        { email: { $regex: queryDto.searchEmailTerm, $options: "i" } },
+                    ]
+                };
+            }
+            else if (queryDto.searchLoginTerm) {
+                searchFilter = { login: { $regex: queryDto.searchLoginTerm, $options: "i" } };
+            }
+            else if (queryDto.searchEmailTerm) {
+                searchFilter = { email: { $regex: queryDto.searchEmailTerm, $options: "i" } };
+            }
+            const itemsFromDb = yield mongo_db_1.usersCollection //запрос в db
                 .find(searchFilter)
                 .skip(skip)
                 .limit(queryDto.pageSize)
-                .sort({ [queryDto.sortBy]: queryDto.sortDirection })
+                .sort({ [queryDto.sortBy]: queryDto.sortDirection }) //ключ: значение
                 .toArray();
             const totalCount = yield mongo_db_1.usersCollection.countDocuments(searchFilter); //общее кол-во элементов
             const paramsForFront = {
@@ -37,7 +46,7 @@ exports.usersQueryRepository = {
                 pageSize: queryDto.pageSize,
                 totalCount: totalCount,
             };
-            const userForFront = items.map(map_to_user_view_model_1.mapToUserViewModel);
+            const userForFront = itemsFromDb.map(map_to_user_view_model_1.mapToUserViewModel);
             return (0, map_user_for_front_1.userForFrontMapper)(userForFront, paramsForFront);
         });
     },

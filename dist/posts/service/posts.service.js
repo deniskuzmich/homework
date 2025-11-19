@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.postsService = void 0;
 const mongodb_1 = require("mongodb");
 const posts_repository_1 = require("../repository/posts-repository");
-const post_for_blog_pagination_1 = require("../../blogs/middleware-validation/post-for-blog-pagination");
+const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 const posts_query_repository_1 = require("../repository/posts-query-repository");
 const blogs_query_repository_1 = require("../../blogs/repository/blogs-query-repository");
 exports.postsService = {
     findPosts(query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const values = (0, post_for_blog_pagination_1.valuesPaginationMaper)(query);
+            const values = (0, post_for_blog_mapper_1.valuesPaginationMaper)(query);
             return posts_query_repository_1.postsQueryRepository.findPosts(values);
         });
     },
