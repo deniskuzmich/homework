@@ -7,7 +7,7 @@ import { deletePostHanlder } from "../posts/handlers/delete-post.hanlder";
 import { idValidation } from "../core/middleware-validation/id.validation-middleware";
 import { inputValidationResultMiddleware } from "../core/middleware-validation/input.validation-result.middleware";
 import { postInputValidation } from "../posts/middleware-validation/posts.input.validation-middleware";
-import { superAdminGuardMiddleware } from "../auth/super-admin.guard.middleware";
+import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 
 export const postRouter = Router();

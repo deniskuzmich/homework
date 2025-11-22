@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
+import {ResultStatus} from "../../common/types/result.status";
 import {postsService} from "../service/posts.service";
 
 export async function deletePostHanlder(req: Request, res: Response) {
@@ -7,14 +7,14 @@ export async function deletePostHanlder(req: Request, res: Response) {
     const post = await postsService.getPostById(req.params.id);
 
     if (!post) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      res.sendStatus(ResultStatus.NotFound);
     }
 
     await postsService.deletePost(req.params.id);
-    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(ResultStatus.NoContent);
 
   } catch (e: unknown) {
-    res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+    res.sendStatus(ResultStatus.IntervalServerError);
   }
 }
 

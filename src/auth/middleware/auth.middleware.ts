@@ -1,11 +1,12 @@
 import {NextFunction, Request, Response} from "express";
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
+import {ResultStatus} from "../../common/types/result.status";
 import {jwtService} from "../../common/services/jwt.service";
 import {usersService} from "../../users/service/users.service";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   if (!req.headers.authorization) {
-    res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+    res.sendStatus(HttpStatuses.Unauthorized)
     return
   }
 
@@ -17,5 +18,5 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     next()
   }
 
-  res.sendStatus(HTTP_STATUSES.UNAUTHORIZED_401)
+  res.sendStatus(HttpStatuses.Success)
 }

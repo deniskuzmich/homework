@@ -1,8 +1,14 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
 import {commentsService} from "../service/comments.service";
+import {ResultStatus} from "../../common/types/result.status";
+import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function getCommentByIdHandler (req: Request, res: Response) {
-  const feedBack = await commentsService.getCommentById(req.params.id, req.params);
-  res.status(HTTP_STATUSES.CREATED_201).send(feedBack);
+  const comment = await commentsService.getCommentById(req.params.id);
+  if(comment.status !== ResultStatus.Success) {
+    return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.extensions)
+  }
+
+  res.status(HttpStatuses.Success).send(comment);
 }

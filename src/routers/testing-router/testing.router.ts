@@ -1,4 +1,4 @@
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
+import {ResultStatus} from "../../common/types/result.status";
 import {Router, Request, Response} from "express";
 import {blogsCollection, postsCollection, usersCollection} from "../../db/mongo.db";
 
@@ -10,5 +10,5 @@ testingRouter.delete("/all-data", async (req: Request, res: Response) => {
     postsCollection.deleteMany(),
     usersCollection.deleteMany(),
   ]);
-  res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+  res.sendStatus(ResultStatus.NoContent);
 });

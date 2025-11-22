@@ -1,9 +1,9 @@
-import {HTTP_STATUSES} from "../../src/core/http_statuses/http_statuses";
+import {ResultStatus} from "../../src/common/types/result.status";
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
-import {basicAuthToken} from "../../src/auth/admin-auth-token";
+import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
 
@@ -19,7 +19,7 @@ describe("Blogs API", () => {
 
     await request(app)
       .delete(`${TESTING_PATH}/${'all-data'}`)
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
   })
 
   afterAll(async () => {
@@ -36,13 +36,13 @@ describe("Blogs API", () => {
   it('should return 200 and empty array', async () => {
     await request(app)
       .get(BLOGS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   it('should return 404 for not existing blog', async () => {
     await request(app)
       .get(`${TESTING_PATH}/${testBlogData.id}`)
-      .expect(HTTP_STATUSES.NOT_FOUND_404)
+      .expect(ResultStatus.NotFound)
   })
 
   it(`should'nt create a blog with incorrect input data`, async () => {
@@ -55,11 +55,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   it(`should'nt create a blog without Authorization`, async () => {
@@ -71,11 +71,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "",
       })
-      .expect(HTTP_STATUSES.UNAUTHORIZED_401)
+      .expect(ResultStatus.UNAUTHORIZED_401)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   let createdBlog: any = null
@@ -89,13 +89,13 @@ describe("Blogs API", () => {
         description: "asdawdafsafsdgesg",
         websiteUrl: "https://www.example.com",
       })
-      .expect(HTTP_STATUSES.CREATED_201)
+      .expect(ResultStatus.CREATED_201)
 
     createdBlog = createResponse.body
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [createdBlog])
+      .expect(ResultStatus.Success, [createdBlog])
   })
 
   it(`should'nt update blog with incorrect input data`, async () => {
@@ -108,11 +108,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "string",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
 
     await request(app)
       .get(`${BLOGS_PATH}/${createdBlog.id}`)
-      .expect(HTTP_STATUSES.OK_200, createdBlog)
+      .expect(ResultStatus.Success, createdBlog)
   })
 
   it(`should'nt update blog that not exist`, async () => {
@@ -125,7 +125,7 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "https://www.example.com",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
   })
 
   it(`should update blog with correct input data`, async () => {
@@ -138,21 +138,21 @@ describe("Blogs API", () => {
         description: "asdawdafsafsdgesg",
         websiteUrl: "https://www.example.com",
       })
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
   })
 
   it(`should delete blog`, async () => {
     await request(app)
       .delete(`${BLOGS_PATH}/${createdBlog.id}`)
       .set('Authorization', adminToken)
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
 
     await request(app)
       .get(`${BLOGS_PATH}/${createdBlog.id}`)
-      .expect(HTTP_STATUSES.NOT_FOUND_404)
+      .expect(ResultStatus.NotFound)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 })

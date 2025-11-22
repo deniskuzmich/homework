@@ -1,11 +1,16 @@
 import {Router} from "express";
-import {authMiddleware} from "../auth/middleware/auth-middleware";
-import {createCommentsHandler} from "../feedback/handler/create-comments.handler";
+import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {getCommentByIdHandler} from "../feedback/handler/get-comment.handler";
+import {updateCommentsHandler} from "../feedback/handler/update-comments.handler";
+
 
 export const commentsRouter = Router()
   .get('/:id', getCommentByIdHandler)
 
-  .post('/commentId', authMiddleware, createCommentsHandler)
+  .put('/commentId', authMiddleware, updateCommentsHandler)
 
   .delete('/commentId', authMiddleware)
+
+
+
+

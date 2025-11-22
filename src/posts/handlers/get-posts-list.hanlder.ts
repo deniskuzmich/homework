@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
+import { ResultStatus } from "../../common/types/result.status";
 import {postsService} from "../service/posts.service";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {PostOutput} from "../types/main-types/post-output.type";
@@ -10,6 +10,6 @@ export async function getPostsListHanlder(req: Request, res: Response) {
   const query: BlogQueryInputWithoutSearch = req.query
   const foundPosts:OutputTypeWithPagination<PostOutput> = await postsService.findPosts(query);
 
-  res.status(HTTP_STATUSES.OK_200).send(foundPosts);
+  res.status(ResultStatus.Success).send(foundPosts);
 
 }

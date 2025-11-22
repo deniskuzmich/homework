@@ -12,10 +12,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentsQueryRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
+const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
 exports.commentsQueryRepository = {
     getCommentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield mongo_db_1.commentsCollection.find({ userId: new mongodb_1.ObjectId(id) });
+            const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            if (!comment) {
+                return null;
+            }
+            return (0, map_to_comment_view_model_1.mapToCommentViewModel)(comment);
         });
     }
 };
