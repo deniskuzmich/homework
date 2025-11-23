@@ -10,15 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateBlogHandler = updateBlogHandler;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const blogs_service_1 = require("../service/blogs.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function updateBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const blog = yield blogs_service_1.blogsService.getBlogById(req.params.id);
         if (!blog) {
-            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
         yield blogs_service_1.blogsService.updateBlog(req.params.id, req.body);
-        return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+        return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
     });
 }

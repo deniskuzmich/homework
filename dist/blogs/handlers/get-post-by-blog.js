@@ -11,14 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getPostByBlogIdHanlder = getPostByBlogIdHanlder;
 const blogs_service_1 = require("../service/blogs.service");
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function getPostByBlogIdHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const query = req.query;
         const post = yield blogs_service_1.blogsService.getPostByBlogId(req.params.id, query);
         if (!post) {
-            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(post);
+        res.status(http_statuses_1.HttpStatuses.Success).send(post);
     });
 }

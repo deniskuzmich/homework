@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
-import {ResultStatus} from "../../common/types/result.status";
 import {blogsService} from "../service/blogs.service";
 import {mapToPostViewModel} from "../../posts/mapper/map-to-post-view-model";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function createPostForBlogHandler(
   req: Request<{ id: string }>,
@@ -11,12 +11,12 @@ export async function createPostForBlogHandler(
 
     const blog = await blogsService.getBlogById(blogId);
     if (!blog) {
-      return res.sendStatus(ResultStatus.NotFound);
+      return res.sendStatus(HttpStatuses.NotFound);
     }
 
     const createdPost = await blogsService.createPostForBlog(blog, req.body);
 
     const postForBlog = mapToPostViewModel(createdPost);
 
-    return res.status(ResultStatus.CREATED_201).send(postForBlog);
+    return res.status(HttpStatuses.Created).send(postForBlog);
 }

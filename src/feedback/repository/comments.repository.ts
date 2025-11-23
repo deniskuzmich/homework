@@ -1,6 +1,7 @@
 import {commentsCollection} from "../../db/mongo.db";
 import {ObjectId} from "mongodb";
 
+
 export const commentsRepository = {
   async updateComment(id: string, newContent: string) {
     const updatedComment = await commentsCollection.updateOne(
@@ -11,5 +12,12 @@ export const commentsRepository = {
         }
       });
     if (updatedComment.matchedCount < 1) return false
+  },
+
+  async deleteComment(id: string)  {
+    const deletedComment = await commentsCollection.deleteOne({_id: new ObjectId(id)});
+    if (deletedComment.deletedCount < 1) {
+      return null
+    }
   }
 }

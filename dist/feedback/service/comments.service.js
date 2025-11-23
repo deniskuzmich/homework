@@ -37,15 +37,35 @@ exports.commentsService = {
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
+                    errorMessage: 'Comment not found',
                     extensions: [],
                     data: null
                 };
             }
             const updatedComment = yield comments_repository_1.commentsRepository.updateComment(id, newContent);
-            if (updatedComment) {
+            if (!updatedComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
+                    errorMessage: 'Bad request',
                     extensions: [{ field: 'content', message: 'Bad request to update comment' }],
+                    data: null
+                };
+            }
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: null
+            };
+        });
+    },
+    deleteComment(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const deletedComment = yield comments_repository_1.commentsRepository.deleteComment(id);
+            if (deletedComment) {
+                return {
+                    status: result_status_1.ResultStatus.NotFound,
+                    errorMessage: 'Comment not found',
+                    extensions: [],
                     data: null
                 };
             }

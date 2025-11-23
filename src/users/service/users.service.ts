@@ -24,7 +24,7 @@ export const usersService = {
     }
     return usersQueryRepository.getAllUsers(foundUsers);
   },
-  async createUser(queryDto: UserInputDto): Promise<WithId<UserDbType> | ErrorTypeOutput> {
+  async createUser(queryDto: UserInputDto): Promise<UserDbType | ErrorTypeOutput> {
     const isLoginExists = await usersQueryRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {
       return {

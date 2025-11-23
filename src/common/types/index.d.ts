@@ -1,11 +1,10 @@
 import "express";
-import {UserDbType} from "../../users/types/main-types/user-db-type";
+import {UserInfoType} from "../../users/types/output-types/user-info.type";
 
 declare global {
   namespace Express {
     interface Request {
-      userId: string | null;
-      user: UserDbType | null
+      user: UserInfoType | null
     }
   }
 }

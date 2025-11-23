@@ -11,5 +11,3 @@ export async function updateCommentsHandler(req: Request, res: Response) {
   }
   res.sendStatus(HttpStatuses.NoContent);
 }
-
-//VALIATION

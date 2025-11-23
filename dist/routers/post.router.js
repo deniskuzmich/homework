@@ -10,7 +10,7 @@ const delete_post_hanlder_1 = require("../posts/handlers/delete-post.hanlder");
 const id_validation_middleware_1 = require("../core/middleware-validation/id.validation-middleware");
 const input_validation_result_middleware_1 = require("../core/middleware-validation/input.validation-result.middleware");
 const posts_input_validation_middleware_1 = require("../posts/middleware-validation/posts.input.validation-middleware");
-const super_admin_guard_middleware_1 = require("../auth/super-admin.guard.middleware");
+const super_admin_guard_middleware_1 = require("../auth/auth-admin/super-admin.guard.middleware");
 const pagination_validation_1 = require("../common/validation/pagination-validation");
 exports.postRouter = (0, express_1.Router)();
 exports.postRouter

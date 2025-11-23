@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ResultStatus } from "../../common/types/result.status";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export const ADMIN_USERNAME = process.env.ADMIN_USERNAME || "admin";
 export const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || "qwerty";
@@ -11,13 +12,13 @@ export const superAdminGuardMiddleware = (
 ) => {
   const auth = req.headers["authorization"] as string;
   if (!auth) {
-    res.sendStatus(ResultStatus.UNAUTHORIZED_401);
+    res.sendStatus(HttpStatuses.Unauthorized);
     return;
   }
 
   const [authType, token] = auth.split(" ");
   if (authType !== "Basic") {
-    res.sendStatus(ResultStatus.UNAUTHORIZED_401);
+    res.sendStatus(HttpStatuses.Unauthorized);
     return;
   }
 
@@ -25,7 +26,7 @@ export const superAdminGuardMiddleware = (
   const [username, password] = credentials.split(":");
 
   if (username !== ADMIN_USERNAME || password !== ADMIN_PASSWORD) {
-    res.sendStatus(ResultStatus.UNAUTHORIZED_401);
+    res.sendStatus(HttpStatuses.Unauthorized);
     return;
   }
 

@@ -19,11 +19,20 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         return;
     }
     const token = req.headers.authorization.split(" ")[1];
-    const userId = yield jwt_service_1.jwtService.getUserIdByToken(token);
-    if (userId) {
-        req.user = yield users_service_1.usersService.getUserById(userId.toString());
-        next();
+    const payload = yield jwt_service_1.jwtService.getUserInfoByToken(token);
+    if (!payload) {
+        return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
     }
-    res.sendStatus(http_statuses_1.HttpStatuses.Success);
+    const userFromDb = yield users_service_1.usersService.getUserById(payload.userId.toString());
+    if (!userFromDb) {
+        return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+    }
+    const userInfo = {
+        userId: userFromDb._id.toString(),
+        login: userFromDb.login,
+        email: userFromDb.email,
+    };
+    req.user = userInfo;
+    next();
 });
 exports.authMiddleware = authMiddleware;

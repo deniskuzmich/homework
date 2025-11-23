@@ -1,37 +1,22 @@
 import {SETTINGS} from "../../core/settings/settings";
 import jwt from 'jsonwebtoken';
 import {UserOutput} from "../../users/types/main-types/user-output.type";
-import {ObjectId} from "mongodb";
 
 export const jwtService = {
   createJWT(user: UserOutput) {
-    const token = jwt.sign({userId: user.id}, SETTINGS.JWT_SECRET, {expiresIn: "100h"});
+    const token = jwt.sign({email: user.email, login: user.login, userId: user.id}, SETTINGS.JWT_SECRET, {expiresIn: "100h"});
     return token
   },
 
-  getUserIdByToken(token: string) {
+  getUserInfoByToken(token: string) {
     try {
-      const result = jwt.verify(token, SETTINGS.JWT_SECRET);
+      const payload = jwt.verify(token, SETTINGS.JWT_SECRET);
 
-      if(typeof result === "string") return null;
-      if(!('userId' in result)) return null;
+      if(typeof payload === "string") return null;
 
-      return new ObjectId(result.userId)
+      return payload
     } catch (e) {
       return null;
     }
   },
-
-  getCommentById(token: string) {
-    try {
-      const result = jwt.verify(token, SETTINGS.JWT_SECRET);
-
-      if (typeof result === "string") return null;
-      if (!('content' in result)) return null;
-
-      return result.content
-    } catch (e) {
-      return null;
-    }
-  }
 }

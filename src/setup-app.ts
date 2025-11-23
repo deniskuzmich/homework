@@ -3,15 +3,15 @@ import { testingRouter } from "./routers/testing-router/testing.router";
 import { blogRouter } from "./routers/blog.router";
 import { postRouter } from "./routers/post.router";
 import {AUTH_PATH, BLOGS_PATH, COMMENTS_PATH, POSTS_PATH, TESTING_PATH, USERS_PATH} from "./core/paths/paths";
-import {ResultStatus} from "./common/types/result.status";
 import {usersRouter} from "./routers/users.router";
 import {authRouter} from "./routers/auth.router";
 import {commentsRouter} from "./routers/comments.router";
+import {HttpStatuses} from "./common/types/http-statuses";
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
   app.get("/", (req, res) => {
-    res.status(ResultStatus.Success).send("Blogs and Posts");
+    res.status(HttpStatuses.Success).send("Blogs and Posts");
   });
 
   app.use(AUTH_PATH, authRouter);

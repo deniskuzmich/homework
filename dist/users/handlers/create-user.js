@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserHandler = createUserHandler;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const users_service_1 = require("../service/users.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function createUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield users_service_1.usersService.createUser(req.body);
         if ("errorsMessages" in result) {
-            return res.status(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400).send(result);
+            return res.status(http_statuses_1.HttpStatuses.BadRequest).send(result);
         }
         const userViewModel = (0, map_to_user_view_model_1.mapToUserViewModel)(result);
-        return res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(userViewModel);
+        return res.status(http_statuses_1.HttpStatuses.Created).send(userViewModel);
     });
 }

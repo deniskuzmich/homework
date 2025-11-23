@@ -11,11 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUsers = getAllUsers;
 const users_service_1 = require("../service/users.service");
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function getAllUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const queryInput = req.query;
         const usersList = yield users_service_1.usersService.getAllUsers(queryInput);
-        res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(usersList);
+        res.status(http_statuses_1.HttpStatuses.Success).send(usersList);
     });
 }

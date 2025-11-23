@@ -16,7 +16,14 @@ exports.usersRepository = {
     createUser(newUser) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.usersCollection.insertOne(newUser);
-            return Object.assign(Object.assign({}, newUser), { _id: insertResult.insertedId });
+            const createdUser = {
+                _id: insertResult.insertedId,
+                login: newUser.login,
+                email: newUser.email,
+                passwordHash: newUser.passwordHash,
+                createdAt: newUser.createdAt,
+            };
+            return createdUser;
         });
     },
     deleteUser(id) {

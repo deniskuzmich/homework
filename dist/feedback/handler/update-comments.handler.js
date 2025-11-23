@@ -23,4 +23,3 @@ function updateCommentsHandler(req, res) {
         res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
     });
 }
-//VALIATION

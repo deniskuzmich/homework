@@ -9,14 +9,14 @@ const testing_router_1 = require("./routers/testing-router/testing.router");
 const blog_router_1 = require("./routers/blog.router");
 const post_router_1 = require("./routers/post.router");
 const paths_1 = require("./core/paths/paths");
-const http_statuses_1 = require("./core/http_statuses/http_statuses");
 const users_router_1 = require("./routers/users.router");
 const auth_router_1 = require("./routers/auth.router");
 const comments_router_1 = require("./routers/comments.router");
+const http_statuses_1 = require("./common/types/http-statuses");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.get("/", (req, res) => {
-        res.status(http_statuses_1.HTTP_STATUSES.OK_200).send("Blogs and Posts");
+        res.status(http_statuses_1.HttpStatuses.Success).send("Blogs and Posts");
     });
     app.use(paths_1.AUTH_PATH, auth_router_1.authRouter);
     app.use(paths_1.COMMENTS_PATH, comments_router_1.commentsRouter);

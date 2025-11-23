@@ -10,15 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteUserHandler = deleteUserHandler;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const users_service_1 = require("../service/users.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function deleteUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = yield users_service_1.usersService.getUserById(req.params.id);
         if (!user) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
+            res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
         yield users_service_1.usersService.deleteUser(req.params.id);
-        return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+        return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
     });
 }

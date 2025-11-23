@@ -10,21 +10,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postPostsHandler = postPostsHandler;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const map_to_post_view_model_1 = require("../mapper/map-to-post-view-model");
 const posts_service_1 = require("../service/posts.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function postPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const createdPost = yield posts_service_1.postsService.createPost(req.body);
             if (!createdPost) {
-                return res.sendStatus(http_statuses_1.HTTP_STATUSES.BAD_REQUEST_400);
+                return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
             }
             const postViewModel = (0, map_to_post_view_model_1.mapToPostViewModel)(createdPost);
-            res.status(http_statuses_1.HTTP_STATUSES.CREATED_201).send(postViewModel);
+            res.status(http_statuses_1.HttpStatuses.Created).send(postViewModel);
         }
         catch (e) {
-            res.status(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+            res.status(http_statuses_1.HttpStatuses.ServerError);
         }
     });
 }

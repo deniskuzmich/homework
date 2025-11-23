@@ -10,20 +10,20 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deletePostHanlder = deletePostHanlder;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const posts_service_1 = require("../service/posts.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function deletePostHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const post = yield posts_service_1.postsService.getPostById(req.params.id);
             if (!post) {
-                res.sendStatus(http_statuses_1.HTTP_STATUSES.NOT_FOUND_404);
+                res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
             yield posts_service_1.postsService.deletePost(req.params.id);
-            return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+            return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
         }
         catch (e) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+            res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
         }
     });
 }
