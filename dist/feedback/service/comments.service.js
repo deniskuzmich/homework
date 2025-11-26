@@ -64,7 +64,7 @@ exports.commentsService = {
                 };
             }
             const updatedComment = yield comments_repository_1.commentsRepository.updateComment(id, newContent);
-            if (!updatedComment) {
+            if (!updatedComment && newContent.length < 20) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
                     errorMessage: 'Bad request',
@@ -115,7 +115,7 @@ exports.commentsService = {
     deleteComment(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const deletedComment = yield comments_repository_1.commentsRepository.deleteComment(id);
-            if (deletedComment) {
+            if (!deletedComment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
                     errorMessage: 'Comment not found',

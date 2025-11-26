@@ -7,7 +7,7 @@ exports.contentValidation = (0, express_validator_1.body)("content")
     .withMessage("content is not correct")
     .notEmpty()
     .withMessage('content should not be empty')
-    .isLength({ min: 20, max: 1000 })
+    .isLength({ min: 20, max: 300 })
     .withMessage("content length is not correct");
 exports.commentInputValidation = [
     exports.contentValidation

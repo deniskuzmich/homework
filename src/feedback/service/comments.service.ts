@@ -57,7 +57,7 @@ export const commentsService = {
       }
     }
     const updatedComment = await commentsRepository.updateComment(id, newContent);
-    if(!updatedComment) {
+    if(!updatedComment && newContent.length < 20) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: 'Bad request',
