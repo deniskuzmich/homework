@@ -5,7 +5,7 @@ export const contentValidation = body("content")
   .withMessage("content is not correct")
   .notEmpty()
   .withMessage('content should not be empty')
-  .isLength({ min: 20, max: 1000 })
+  .isLength({ min: 20, max: 300 })
   .withMessage("content length is not correct");
 
 export const commentInputValidation = [

@@ -107,7 +107,7 @@ export const commentsService = {
 
   async deleteComment(id: string): Promise<ResultType<null>> {
    const deletedComment = await commentsRepository.deleteComment(id);
-   if(deletedComment) {
+   if(!deletedComment) {
      return {
        status: ResultStatus.NotFound,
        errorMessage: 'Comment not found',
