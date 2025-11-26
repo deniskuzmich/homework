@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 
 export const jwtService = {
-  createJWT(user: UserOutput) {
+  createJWT(user: any) {
     const token = jwt.sign({email: user.email, login: user.login, userId: user.id}, SETTINGS.JWT_SECRET, {expiresIn: "100h"});
     return token
   },

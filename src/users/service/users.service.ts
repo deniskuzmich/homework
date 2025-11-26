@@ -10,6 +10,8 @@ import {usersQueryRepository} from "../repository/users-query.repository";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
 import {bcryptService} from "../../common/services/bcrypt.service";
+import {ResultStatus} from "../../common/types/result.status";
+import {ResultType} from "../../common/types/result.type";
 
 
 export const usersService = {
@@ -61,15 +63,30 @@ export const usersService = {
     const deletedUser = await usersRepository.deleteUser(id);
   },
 
-  async checkCredentials(loginOrEmail: string, password: string): Promise<UserOutput | null> {
+  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
     const user = await usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
-    if (!user) return null;
-
+    if (!user) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [],
+        data: null
+      }
+    }
     const passwordHash = await bcryptService.generateHash(password);
     const isPassCorrect = await bcryptService.checkPassword(password, passwordHash);
-    if(!isPassCorrect) return null;
-
-    return mapToUserViewModel(user)
+    if(!isPassCorrect) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [{field: 'auth', message: 'Bad request to login'}],
+        data: null
+      }
+    }
+    const result = await mapToUserViewModel(user)
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: result
+    }
   }
 }
 
