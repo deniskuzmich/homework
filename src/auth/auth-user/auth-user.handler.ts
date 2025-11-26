@@ -12,7 +12,7 @@ export async function authUserHandler(req: Request, res: Response) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
     const token = await jwtService.createJWT(authUser);
-    return res.status(HttpStatuses.Success).send({token})
+    return res.status(HttpStatuses.Success).send({accessToken: token});
   } catch (e) {
     return res.sendStatus(HttpStatuses.ServerError)
   }
