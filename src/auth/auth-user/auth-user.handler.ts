@@ -10,10 +10,16 @@ export async function authUserHandler(req: Request, res: Response) {
 
   try {
     const authUser = await usersService.checkCredentials(loginOrEmail, password);
+
+    if (authUser.status === ResultStatus.Unauthorized) {
+      // Log the error or extensions to check the exact details
+      return res.status(HttpStatuses.Unauthorized).send(authUser.extensions);
+    }
+
     if (authUser.status !== ResultStatus.Success) {
       return res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
     }
-    const token = await jwtService.createJWT(authUser);
+    const token = await jwtService.createJWT(authUser.data!);
     return res.status(HttpStatuses.Success).send({accessToken: token});
   } catch (e) {
     return res.sendStatus(HttpStatuses.ServerError)
