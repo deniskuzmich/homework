@@ -4,13 +4,16 @@ import {HttpStatuses} from "../../common/types/http-statuses";
 import {jwtService} from "../../common/services/jwt.service";
 
 export async function authUserHandler(req: Request, res: Response) {
-  const loginOrEmail = req.body.loginOrEmail;
-  const password = req.body.password;
+  const { loginOrEmail, password } = req.body;
 
-  const authUser = await usersService.checkCredentials(loginOrEmail, password);
-  if (authUser === null) {
-    return res.sendStatus(HttpStatuses.Unauthorized)
+  try {
+    const authUser = await usersService.checkCredentials(loginOrEmail, password);
+    if (!authUser) {
+      return res.sendStatus(HttpStatuses.Unauthorized)
+    }
+    const token = await jwtService.createJWT(authUser);
+    return res.status(HttpStatuses.Success).send({token})
+  } catch (e) {
+    return res.sendStatus(HttpStatuses.ServerError)
   }
-  const token = await jwtService.createJWT(authUser);
-  return res.status(HttpStatuses.Success).send(token)
 }

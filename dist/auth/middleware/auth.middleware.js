@@ -14,25 +14,29 @@ const jwt_service_1 = require("../../common/services/jwt.service");
 const users_service_1 = require("../../users/service/users.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
 const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    if (!req.headers.authorization) {
-        res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        return;
+    try {
+        if (!req.headers.authorization) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        const token = req.headers.authorization.split(" ")[1];
+        const payload = yield jwt_service_1.jwtService.getUserInfoByToken(token);
+        if (!payload) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        const userFromDb = yield users_service_1.usersService.getUserById(payload.userId.toString());
+        if (!userFromDb) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        const userInfo = {
+            userId: userFromDb._id.toString(),
+            login: userFromDb.login,
+            email: userFromDb.email,
+        };
+        req.user = userInfo;
+        next();
     }
-    const token = req.headers.authorization.split(" ")[1];
-    const payload = yield jwt_service_1.jwtService.getUserInfoByToken(token);
-    if (!payload) {
-        return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+    catch (e) {
+        return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
     }
-    const userFromDb = yield users_service_1.usersService.getUserById(payload.userId.toString());
-    if (!userFromDb) {
-        return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-    }
-    const userInfo = {
-        userId: userFromDb._id.toString(),
-        login: userFromDb.login,
-        email: userFromDb.email,
-    };
-    req.user = userInfo;
-    next();
 });
 exports.authMiddleware = authMiddleware;

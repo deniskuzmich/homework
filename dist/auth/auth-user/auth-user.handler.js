@@ -15,13 +15,17 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const jwt_service_1 = require("../../common/services/jwt.service");
 function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const loginOrEmail = req.body.loginOrEmail;
-        const password = req.body.password;
-        const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
-        if (authUser === null) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        const { loginOrEmail, password } = req.body;
+        try {
+            const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
+            if (!authUser) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const token = yield jwt_service_1.jwtService.createJWT(authUser);
+            return res.status(http_statuses_1.HttpStatuses.Success).send({ token });
         }
-        const token = yield jwt_service_1.jwtService.createJWT(authUser);
-        return res.status(http_statuses_1.HttpStatuses.Success).send(token);
+        catch (e) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
+        }
     });
 }
