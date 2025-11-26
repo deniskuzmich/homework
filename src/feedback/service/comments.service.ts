@@ -56,8 +56,16 @@ export const commentsService = {
         data: null
       }
     }
+    if (newContent.length < 20 || newContent.length > 300) {
+      return {
+        status: ResultStatus.BadRequest,
+        errorMessage: 'Invalid content',
+        extensions: [{ field: 'content', message: 'Content must be at least 5 characters long' }],
+        data: null
+      }
+    }
     const updatedComment = await commentsRepository.updateComment(id, newContent);
-    if(!updatedComment && newContent.length < 20) {
+    if(!updatedComment) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: 'Bad request',
