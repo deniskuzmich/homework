@@ -19,6 +19,7 @@ exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0
         mongo_db_1.blogsCollection.deleteMany(),
         mongo_db_1.postsCollection.deleteMany(),
         mongo_db_1.usersCollection.deleteMany(),
+        mongo_db_1.commentsCollection.deleteMany(),
     ]);
     res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
 }));
