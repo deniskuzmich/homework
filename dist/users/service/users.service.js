@@ -60,6 +60,8 @@ exports.usersService = {
     },
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!id)
+                return null;
             return users_query_repository_1.usersQueryRepository.getUserById(id);
         });
     },

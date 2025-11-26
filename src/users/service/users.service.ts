@@ -56,6 +56,7 @@ export const usersService = {
   },
 
   async getUserById(id: string): Promise<WithId<UserDbType> | null> {
+    if (!id) return null
     return usersQueryRepository.getUserById(id);
   },
 

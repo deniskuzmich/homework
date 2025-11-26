@@ -47,6 +47,7 @@ export const usersQueryRepository = {
   },
 
   async getUserById(id: string): Promise<WithId<UserDbType> | null> {
+    if(!ObjectId.isValid(id)) return null;
     return usersCollection.findOne({_id: new ObjectId(id)});
   },
 
