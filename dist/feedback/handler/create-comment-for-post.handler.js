@@ -18,7 +18,7 @@ function createCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.user;
         const content = req.body.content;
-        const postId = req.params.userId;
+        const postId = req.params.postId;
         if (!content || !user) {
             return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
         }

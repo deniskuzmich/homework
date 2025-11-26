@@ -7,7 +7,7 @@ import {commentsService} from "../service/comments.service";
 export async function createCommentForPostHandler(req: Request, res: Response) {
   const user = req.user
   const content = req.body.content
-  const postId = req.params.userId;
+  const postId = req.params.postId;
 
   if (!content || !user) {
     return res.sendStatus(HttpStatuses.BadRequest);
