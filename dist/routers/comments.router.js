@@ -9,5 +9,5 @@ const comments_validation_1 = require("../feedback/validation/comments-validatio
 const delete_comment_handler_1 = require("../feedback/handler/delete-comment.handler");
 exports.commentsRouter = (0, express_1.Router)()
     .get('/:id', get_comment_handler_1.getCommentByIdHandler)
-    .put('/commentId', auth_middleware_1.authMiddleware, comments_validation_1.commentInputValidation, update_comments_handler_1.updateCommentsHandler)
-    .delete('/commentId', auth_middleware_1.authMiddleware, delete_comment_handler_1.deleteCommentHandler);
+    .put('/:commentId', auth_middleware_1.authMiddleware, comments_validation_1.commentInputValidation, update_comments_handler_1.updateCommentsHandler)
+    .delete('/:commentId', auth_middleware_1.authMiddleware, delete_comment_handler_1.deleteCommentHandler);

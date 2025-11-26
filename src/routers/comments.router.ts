@@ -9,9 +9,9 @@ import {deleteCommentHandler} from "../feedback/handler/delete-comment.handler";
 export const commentsRouter = Router()
   .get('/:id', getCommentByIdHandler)
 
-  .put('/commentId', authMiddleware, commentInputValidation, updateCommentsHandler)
+  .put('/:commentId', authMiddleware, commentInputValidation, updateCommentsHandler)
 
-  .delete('/commentId', authMiddleware, deleteCommentHandler)
+  .delete('/:commentId', authMiddleware, deleteCommentHandler)
 
 
 

@@ -22,6 +22,6 @@ function authUserHandler(req, res) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
         const token = yield jwt_service_1.jwtService.createJWT(authUser);
-        return res.status(http_statuses_1.HttpStatuses.Unauthorized).send(token);
+        return res.status(http_statuses_1.HttpStatuses.Success).send(token);
     });
 }
