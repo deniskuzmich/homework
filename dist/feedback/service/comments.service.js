@@ -97,9 +97,10 @@ exports.commentsService = {
                     data: null
                 };
             }
-            if (!newCommentForPost) {
+            if (!createdComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
+                    errorMessage: 'Bad request to create comment',
                     extensions: [{ field: 'comment', message: 'Bad request to create comment' }],
                     data: null
                 };

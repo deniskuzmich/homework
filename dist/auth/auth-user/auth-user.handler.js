@@ -20,10 +20,6 @@ function authUserHandler(req, res) {
         const { loginOrEmail, password } = req.body;
         try {
             const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
-            if (authUser.status === result_status_1.ResultStatus.Unauthorized) {
-                // Log the error or extensions to check the exact details
-                return res.status(http_statuses_1.HttpStatuses.Unauthorized).send(authUser.extensions);
-            }
             if (authUser.status !== result_status_1.ResultStatus.Success) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }

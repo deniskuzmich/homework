@@ -90,9 +90,10 @@ export const commentsService = {
         data: null
       }
     }
-    if(!newCommentForPost) {
+    if(!createdComment) {
       return {
         status: ResultStatus.BadRequest,
+        errorMessage: 'Bad request to create comment' ,
         extensions: [{field: 'comment', message: 'Bad request to create comment'}],
         data: null
       }

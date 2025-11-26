@@ -11,11 +11,6 @@ export async function authUserHandler(req: Request, res: Response) {
   try {
     const authUser = await usersService.checkCredentials(loginOrEmail, password);
 
-    if (authUser.status === ResultStatus.Unauthorized) {
-      // Log the error or extensions to check the exact details
-      return res.status(HttpStatuses.Unauthorized).send(authUser.extensions);
-    }
-
     if (authUser.status !== ResultStatus.Success) {
       return res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
     }
