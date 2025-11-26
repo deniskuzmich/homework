@@ -36,8 +36,12 @@ exports.commentsRepository = {
     createCommentForPost(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.commentsCollection.insertOne(comment);
-            const commentWithId = Object.assign(Object.assign({}, comment), { _id: insertResult.insertedId });
-            return (0, map_to_comment_view_model_1.mapToCommentViewModel)(commentWithId);
+            if (!insertResult)
+                return null;
+            const newComment = yield mongo_db_1.commentsCollection.findOne({ _id: insertResult.insertedId });
+            if (!newComment)
+                return null;
+            return (0, map_to_comment_view_model_1.mapToCommentViewModel)(newComment);
         });
     }
 };

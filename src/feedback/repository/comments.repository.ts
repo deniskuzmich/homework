@@ -25,12 +25,13 @@ export const commentsRepository = {
     }
   },
 
-  async createCommentForPost(comment: CommentDbType): Promise<CommentOutput> {
+  async createCommentForPost(comment: CommentDbType): Promise<CommentOutput | null> {
       const insertResult = await commentsCollection.insertOne(comment)
-      const commentWithId = {
-      ...comment,
-        _id: insertResult.insertedId
-      }
-      return mapToCommentViewModel(commentWithId)
+      if (!insertResult) return null;
+
+      const newComment = await commentsCollection.findOne({_id: insertResult.insertedId})
+      if (!newComment) return null;
+
+      return mapToCommentViewModel(newComment)
   }
 }
