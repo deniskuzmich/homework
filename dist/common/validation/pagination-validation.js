@@ -23,9 +23,11 @@ exports.pageSize = (0, express_validator_1.query)('pageSize')
     .isInt()
     .withMessage("pageSize should be a number");
 exports.searchLoginTerm = (0, express_validator_1.query)('searchLoginTerm')
+    .optional()
     .isString()
     .withMessage("searchLoginTerm should be a string");
 exports.searchEmailTerm = (0, express_validator_1.query)('searchEmailTerm')
+    .optional()
     .isString()
     .withMessage("searchEmailTerm should be a string");
 exports.paginationValidation = [

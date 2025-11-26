@@ -18,12 +18,21 @@ exports.usersQueryRepository = {
     getAllUsers(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
-            let searchFilter = queryDto.searchLoginTerm ? {
-                login: { $regex: queryDto.searchLoginTerm, $options: "i", }
-            } : {};
-            queryDto.searchEmailTerm ? {
-                login: { $regex: queryDto.searchEmailTerm, $options: "i", }
-            } : {}; //если ничего нет, нужно вернуть пустой объект
+            let searchFilter = {};
+            if (queryDto.searchLoginTerm || queryDto.searchEmailTerm) {
+                searchFilter = {
+                    $or: [
+                        { login: { $regex: queryDto.searchLoginTerm, $options: "i" } },
+                        { email: { $regex: queryDto.searchEmailTerm, $options: "i" } },
+                    ]
+                };
+            }
+            else if (queryDto.searchLoginTerm) {
+                searchFilter = { login: { $regex: queryDto.searchLoginTerm, $options: "i" } };
+            }
+            else if (queryDto.searchEmailTerm) {
+                searchFilter = { email: { $regex: queryDto.searchEmailTerm, $options: "i" } };
+            }
             const items = yield mongo_db_1.usersCollection //запрос в db
                 .find(searchFilter)
                 .skip(skip)

@@ -17,7 +17,7 @@ function loginUserHandler(req, res) {
         const loginOrEmail = req.body.loginOrEmail;
         const password = req.body.password;
         const checkedResult = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
-        if (!checkedResult === null) {
+        if (checkedResult === null) {
             res.sendStatus(http_statuses_1.HTTP_STATUSES.UNAUTHORIZED_401);
         }
         return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
