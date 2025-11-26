@@ -31,6 +31,7 @@ export const commentsService = {
     if(!post) {
       return {
         status: ResultStatus.NotFound,
+        errorMessage: 'Post not found',
         extensions: [],
         data: null
       }
@@ -70,7 +71,17 @@ export const commentsService = {
     }
   },
 
-  async createCommentForPost(user: UserInfoType, content: string): Promise<ResultType<CommentOutput | null>>  {
+  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentOutput | null>>  {
+    const isPostExists = await postsQueryRepository.getPostById(postId);
+    if(!isPostExists) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: 'Post not found',
+        extensions: [],
+        data: null
+      }
+    }
+
     if(!user.userId) {
       return {
         status: ResultStatus.NotFound,
@@ -81,6 +92,7 @@ export const commentsService = {
     }
 
     const newCommentForPost = {
+      postId: postId,
       content: content,
       commentatorInfo: {
         userId: user.userId.toString(),

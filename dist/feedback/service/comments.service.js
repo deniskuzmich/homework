@@ -39,6 +39,7 @@ exports.commentsService = {
             if (!post) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
+                    errorMessage: 'Post not found',
                     extensions: [],
                     data: null
                 };
@@ -79,8 +80,17 @@ exports.commentsService = {
             };
         });
     },
-    createCommentForPost(user, content) {
+    createCommentForPost(user, content, postId) {
         return __awaiter(this, void 0, void 0, function* () {
+            const isPostExists = yield posts_query_repository_1.postsQueryRepository.getPostById(postId);
+            if (!isPostExists) {
+                return {
+                    status: result_status_1.ResultStatus.NotFound,
+                    errorMessage: 'Post not found',
+                    extensions: [],
+                    data: null
+                };
+            }
             if (!user.userId) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -90,6 +100,7 @@ exports.commentsService = {
                 };
             }
             const newCommentForPost = {
+                postId: postId,
                 content: content,
                 commentatorInfo: {
                     userId: user.userId.toString(),

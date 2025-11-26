@@ -18,13 +18,14 @@ function createCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.user;
         const content = req.body.content;
-        if (!user) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        if (!content) {
+        const postId = req.params.userId;
+        if (!content || !user) {
             return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
         }
-        const createdComment = yield comments_service_1.commentsService.createCommentForPost(user, content);
+        if (!postId) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        }
+        const createdComment = yield comments_service_1.commentsService.createCommentForPost(user, content, postId);
         if (createdComment.status !== result_status_1.ResultStatus.Created) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }

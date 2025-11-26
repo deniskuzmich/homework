@@ -7,15 +7,16 @@ import {commentsService} from "../service/comments.service";
 export async function createCommentForPostHandler(req: Request, res: Response) {
   const user = req.user
   const content = req.body.content
+  const postId = req.params.userId;
 
-  if(!user) {
-    return res.sendStatus(HttpStatuses.NotFound);
-  }
-
-  if (!content) {
+  if (!content || !user) {
     return res.sendStatus(HttpStatuses.BadRequest);
   }
-  const createdComment = await commentsService.createCommentForPost(user, content)
+  if (!postId) {
+    return res.sendStatus(HttpStatuses.NotFound)
+  }
+
+  const createdComment = await commentsService.createCommentForPost(user, content, postId)
 
   if (createdComment.status !== ResultStatus.Created) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
