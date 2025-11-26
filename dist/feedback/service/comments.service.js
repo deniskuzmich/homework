@@ -90,7 +90,7 @@ exports.commentsService = {
                 createdAt: new Date().toISOString()
             };
             const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
-            if (!newCommentForPost.commentatorInfo.userId) {
+            if (newCommentForPost.commentatorInfo.userId === null) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
                     extensions: [{ field: 'comment', message: "post with specified postId doesn't exists" }],

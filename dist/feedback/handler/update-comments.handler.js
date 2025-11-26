@@ -14,8 +14,21 @@ const comments_service_1 = require("../service/comments.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
+const comments_query_repository_1 = require("../repository/comments-query.repository");
+const users_service_1 = require("../../users/service/users.service");
 function updateCommentsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(req.params.id);
+        if (!comment) {
+            return;
+        }
+        const userDb = yield users_service_1.usersService.getUserById(req.user.userId);
+        if (!userDb) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        }
+        if (comment.commentatorInfo.userId !== userDb._id.toString()) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Forbidden);
+        }
         const updatedComment = yield comments_service_1.commentsService.updateComment(req.params.id, req.body.content);
         if (updatedComment.status !== result_status_1.ResultStatus.NoContent) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status)).send(updatedComment.extensions);

@@ -10,4 +10,5 @@ var HttpStatuses;
     HttpStatuses[HttpStatuses["Unauthorized"] = 401] = "Unauthorized";
     HttpStatuses[HttpStatuses["NotFound"] = 404] = "NotFound";
     HttpStatuses[HttpStatuses["ServerError"] = 500] = "ServerError";
+    HttpStatuses[HttpStatuses["Forbidden"] = 403] = "Forbidden";
 })(HttpStatuses || (exports.HttpStatuses = HttpStatuses = {}));

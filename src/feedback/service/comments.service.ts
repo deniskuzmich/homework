@@ -81,7 +81,7 @@ export const commentsService = {
     }
     const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
 
-    if(!newCommentForPost.commentatorInfo.userId) {
+    if(newCommentForPost.commentatorInfo.userId === null) {
       return {
         status: ResultStatus.NotFound,
         extensions: [{field: 'comment', message: "post with specified postId doesn't exists"}],

@@ -3,8 +3,27 @@ import {commentsService} from "../service/comments.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {commentsRepository} from "../repository/comments.repository";
+import {commentsQueryRepository} from "../repository/comments-query.repository";
+import {usersRepository} from "../../users/repository/users.repository";
+import {usersQueryRepository} from "../../users/repository/users-query.repository";
+import {usersService} from "../../users/service/users.service";
 
 export async function updateCommentsHandler(req: Request, res: Response) {
+  const comment = await commentsQueryRepository.getCommentById(req.params.id);
+  if (!comment) {
+    return
+  }
+
+  const userDb = await usersService.getUserById(req.user!.userId)
+  if (!userDb) {
+    return res.sendStatus(HttpStatuses.NotFound);
+  }
+
+  if (comment.commentatorInfo.userId !== userDb._id.toString()) {
+    return res.sendStatus(HttpStatuses.Forbidden)
+  }
+
   const updatedComment = await commentsService.updateComment(req.params.id, req.body.content);
   if (updatedComment.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(updatedComment.status)).send(updatedComment.extensions)
