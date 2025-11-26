@@ -81,22 +81,23 @@ exports.commentsService = {
     },
     createCommentForPost(user, content) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!user.userId) {
+                return {
+                    status: result_status_1.ResultStatus.NotFound,
+                    errorMessage: 'UserId not found',
+                    extensions: [{ field: 'comment', message: 'UserId not found' }],
+                    data: null
+                };
+            }
             const newCommentForPost = {
                 content: content,
                 commentatorInfo: {
-                    userId: user.userId,
+                    userId: user.userId.toString(),
                     userLogin: user.login,
                 },
                 createdAt: new Date().toISOString()
             };
             const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
-            if (newCommentForPost.commentatorInfo.userId === null) {
-                return {
-                    status: result_status_1.ResultStatus.NotFound,
-                    extensions: [{ field: 'comment', message: "post with specified postId doesn't exists" }],
-                    data: null
-                };
-            }
             if (!createdComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,

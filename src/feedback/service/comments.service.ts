@@ -71,23 +71,25 @@ export const commentsService = {
   },
 
   async createCommentForPost(user: UserInfoType, content: string): Promise<ResultType<CommentOutput | null>>  {
+    if(!user.userId) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: 'UserId not found' ,
+        extensions: [{field: 'comment', message: 'UserId not found'}],
+        data: null
+      }
+    }
+
     const newCommentForPost = {
       content: content,
       commentatorInfo: {
-        userId: user.userId,
+        userId: user.userId.toString(),
         userLogin: user.login,
       },
       createdAt: new Date().toISOString()
     }
     const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
 
-    if(newCommentForPost.commentatorInfo.userId === null) {
-      return {
-        status: ResultStatus.NotFound,
-        extensions: [{field: 'comment', message: "post with specified postId doesn't exists"}],
-        data: null
-      }
-    }
     if(!createdComment) {
       return {
         status: ResultStatus.BadRequest,
