@@ -72,8 +72,8 @@ export const usersService = {
         data: null
       }
     }
-    const passwordHash = await bcryptService.generateHash(password);
-    const isPassCorrect = await bcryptService.checkPassword(password, passwordHash);
+
+    const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
     if(!isPassCorrect) {
       return {
         status: ResultStatus.Unauthorized,
@@ -81,7 +81,7 @@ export const usersService = {
         data: null
       }
     }
-    const result = await mapToUserViewModel(user)
+    const result =  mapToUserViewModel(user)
     return {
       status: ResultStatus.Success,
       extensions: [],

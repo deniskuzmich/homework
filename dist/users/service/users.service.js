@@ -78,8 +78,7 @@ exports.usersService = {
                     data: null
                 };
             }
-            const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(password);
-            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, passwordHash);
+            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
@@ -87,7 +86,7 @@ exports.usersService = {
                     data: null
                 };
             }
-            const result = yield (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],

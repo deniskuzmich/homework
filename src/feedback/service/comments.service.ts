@@ -3,10 +3,8 @@ import {CommentOutput} from "../types/main-types/comment-output.type";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 import {commentsRepository} from "../repository/comments.repository";
-import {postsRepository} from "../../posts/repository/posts-repository";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
-import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
@@ -53,14 +51,6 @@ export const commentsService = {
         status: ResultStatus.NotFound,
         errorMessage: 'Comment not found',
         extensions: [],
-        data: null
-      }
-    }
-    if (newContent.length < 20 || newContent.length > 300) {
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: 'Invalid content',
-        extensions: [{ field: 'content', message: 'Content must be at least 5 characters long' }],
         data: null
       }
     }

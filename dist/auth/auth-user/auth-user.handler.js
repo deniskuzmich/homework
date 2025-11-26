@@ -23,10 +23,11 @@ function authUserHandler(req, res) {
             if (authUser.status !== result_status_1.ResultStatus.Success) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }
-            const token = yield jwt_service_1.jwtService.createJWT(authUser.data);
+            const token = jwt_service_1.jwtService.createJWT(authUser.data);
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
         }
         catch (e) {
+            console.log(e);
             return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
         }
     });

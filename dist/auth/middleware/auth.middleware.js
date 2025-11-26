@@ -19,7 +19,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
         const token = req.headers.authorization.split(" ")[1];
-        const payload = yield jwt_service_1.jwtService.getUserInfoByToken(token);
+        const payload = jwt_service_1.jwtService.getUserInfoByToken(token);
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }

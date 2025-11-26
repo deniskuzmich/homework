@@ -14,9 +14,10 @@ export async function authUserHandler(req: Request, res: Response) {
     if (authUser.status !== ResultStatus.Success) {
       return res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
     }
-    const token = await jwtService.createJWT(authUser.data!);
+    const token =  jwtService.createJWT(authUser.data!);
     return res.status(HttpStatuses.Success).send({accessToken: token});
   } catch (e) {
+    console.log(e)
     return res.sendStatus(HttpStatuses.ServerError)
   }
 }
