@@ -14,6 +14,7 @@ const users_repository_1 = require("../repository/users.repository");
 const users_query_repository_1 = require("../repository/users-query.repository");
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const bcrypt_service_1 = require("../../common/services/bcrypt.service");
+const result_status_1 = require("../../common/types/result.status");
 exports.usersService = {
     getAllUsers(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -70,13 +71,28 @@ exports.usersService = {
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield users_query_repository_1.usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
-            if (!user)
-                return null;
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.Unauthorized,
+                    extensions: [],
+                    data: null
+                };
+            }
             const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(password);
             const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, passwordHash);
-            if (!isPassCorrect)
-                return null;
-            return (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            if (!isPassCorrect) {
+                return {
+                    status: result_status_1.ResultStatus.Unauthorized,
+                    extensions: [{ field: 'auth', message: 'Bad request to login' }],
+                    data: null
+                };
+            }
+            const result = yield (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            return {
+                status: result_status_1.ResultStatus.Success,
+                extensions: [],
+                data: result
+            };
         });
     }
 };

@@ -13,13 +13,15 @@ exports.authUserHandler = authUserHandler;
 const users_service_1 = require("../../users/service/users.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
 const jwt_service_1 = require("../../common/services/jwt.service");
+const result_status_1 = require("../../common/types/result.status");
+const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { loginOrEmail, password } = req.body;
         try {
             const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
-            if (!authUser) {
-                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            if (authUser.status !== result_status_1.ResultStatus.Success) {
+                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }
             const token = yield jwt_service_1.jwtService.createJWT(authUser);
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
