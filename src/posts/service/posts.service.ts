@@ -5,14 +5,19 @@ import {postsRepository} from "../repository/posts-repository";
 import {blogsRepository} from "../../blogs/repository/blogs-repository";
 import {PostOutput} from "../types/main-types/post-output.type";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
-import {BlogQueryInputWithoutSearch} from "../../blogs/types/input-types/blog-query-input-without-search";
+import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
 import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 import {postsQueryRepository} from "../repository/posts-query-repository";
 import {blogsQueryRepository} from "../../blogs/repository/blogs-query-repository";
+import {CommentOutput} from "../../feedback/types/main-types/comment-output.type";
+import {UserInfoType} from "../../users/types/output-types/user-info.type";
+import {commentsRepository} from "../../feedback/repository/comments.repository";
+import {ResultStatus} from "../../common/types/result.status";
+import {ResultType} from "../../common/types/result.type";
 
 export const postsService = {
-  async findPosts(query: BlogQueryInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
+  async findPosts(query: QueryInputForPagination): Promise<OutputTypeWithPagination<PostOutput>> {
     const values: BlogInputWithoutSearch  = valuesPaginationMaper(query)
     return postsQueryRepository.findPosts(values)
   },
@@ -40,6 +45,7 @@ export const postsService = {
     const createdPost = await postsRepository.createPost(newPost);
     return createdPost
   },
+
   async deletePost(id: string) {
     const deletedPost = await postsRepository.deletePost(id);
   },

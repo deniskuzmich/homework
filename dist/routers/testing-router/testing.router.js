@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.testingRouter = void 0;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const express_1 = require("express");
 const mongo_db_1 = require("../../db/mongo.db");
+const http_statuses_1 = require("../../common/types/http-statuses");
 exports.testingRouter = (0, express_1.Router)();
 exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     yield Promise.all([
@@ -20,5 +20,5 @@ exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0
         mongo_db_1.postsCollection.deleteMany(),
         mongo_db_1.usersCollection.deleteMany(),
     ]);
-    res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+    res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
 }));

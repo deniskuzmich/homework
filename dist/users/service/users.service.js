@@ -8,15 +8,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersService = void 0;
 const users_repository_1 = require("../repository/users.repository");
 const users_query_repository_1 = require("../repository/users-query.repository");
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
+const bcrypt_service_1 = require("../../common/services/bcrypt.service");
 exports.usersService = {
     getAllUsers(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -50,12 +47,10 @@ exports.usersService = {
                     ]
                 };
             }
-            const passwordSalt = yield bcrypt_1.default.genSalt(10);
-            const passwordHash = yield bcrypt_1.default.hash(queryDto.password, passwordSalt);
+            const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(queryDto.password);
             const newUser = {
                 login: queryDto.login,
                 email: queryDto.email,
-                passwordSalt,
                 passwordHash,
                 createdAt: new Date().toISOString()
             };
@@ -77,10 +72,10 @@ exports.usersService = {
             const user = yield users_query_repository_1.usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
             if (!user)
                 return null;
-            const passwordHash = yield bcrypt_1.default.hash(password, user.passwordSalt);
-            if (user.passwordHash !== passwordHash) {
+            const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(password);
+            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, passwordHash);
+            if (!isPassCorrect)
                 return null;
-            }
             return (0, map_to_user_view_model_1.mapToUserViewModel)(user);
         });
     }

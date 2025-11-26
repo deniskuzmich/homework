@@ -1,20 +1,20 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
 import {postsService} from "../service/posts.service";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function deletePostHanlder(req: Request, res: Response) {
   try {
     const post = await postsService.getPostById(req.params.id);
 
     if (!post) {
-      res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      res.sendStatus(HttpStatuses.NotFound);
     }
 
     await postsService.deletePost(req.params.id);
-    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(HttpStatuses.NoContent);
 
   } catch (e: unknown) {
-    res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500);
+    res.sendStatus(HttpStatuses.ServerError);
   }
 }
 

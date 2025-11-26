@@ -7,9 +7,9 @@ import {UserDbType} from "../types/main-types/user-db-type";
 import {UserInputDto} from "../types/input-types/user-input-dto.type";
 import {WithId} from "mongodb";
 import {usersQueryRepository} from "../repository/users-query.repository";
-import bcrypt from 'bcrypt';
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
+import {bcryptService} from "../../common/services/bcrypt.service";
 
 
 export const usersService = {
@@ -24,7 +24,7 @@ export const usersService = {
     }
     return usersQueryRepository.getAllUsers(foundUsers);
   },
-  async createUser(queryDto: UserInputDto): Promise<WithId<UserDbType> | ErrorTypeOutput> {
+  async createUser(queryDto: UserInputDto): Promise<UserDbType | ErrorTypeOutput> {
     const isLoginExists = await usersQueryRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {
       return {
@@ -43,12 +43,10 @@ export const usersService = {
       }
     }
 
-    const passwordSalt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(queryDto.password, passwordSalt);
+    const passwordHash = await bcryptService.generateHash(queryDto.password);
     const newUser = {
       login: queryDto.login,
       email: queryDto.email,
-      passwordSalt,
       passwordHash,
       createdAt: new Date().toISOString()
     }
@@ -67,10 +65,10 @@ export const usersService = {
     const user = await usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) return null;
 
-    const passwordHash = await bcrypt.hash(password, user.passwordSalt)
-    if (user.passwordHash !== passwordHash) {
-      return null;
-    }
+    const passwordHash = await bcryptService.generateHash(password);
+    const isPassCorrect = await bcryptService.checkPassword(password, passwordHash);
+    if(!isPassCorrect) return null;
+
     return mapToUserViewModel(user)
   }
 }

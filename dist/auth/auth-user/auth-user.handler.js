@@ -9,17 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.loginUserHandler = loginUserHandler;
+exports.authUserHandler = authUserHandler;
 const users_service_1 = require("../../users/service/users.service");
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
-function loginUserHandler(req, res) {
+const http_statuses_1 = require("../../common/types/http-statuses");
+const jwt_service_1 = require("../../common/services/jwt.service");
+function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const loginOrEmail = req.body.loginOrEmail;
         const password = req.body.password;
-        const checkedResult = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
-        if (checkedResult === null) {
-            res.sendStatus(http_statuses_1.HTTP_STATUSES.UNAUTHORIZED_401);
+        const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
+        if (authUser === null) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        return res.sendStatus(http_statuses_1.HTTP_STATUSES.NO_CONTENT_204);
+        const token = yield jwt_service_1.jwtService.createJWT(authUser);
+        return res.status(http_statuses_1.HttpStatuses.Unauthorized).send(token);
     });
 }

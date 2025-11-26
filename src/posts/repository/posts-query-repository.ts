@@ -9,7 +9,7 @@ import {
 import {PostOutput} from "../types/main-types/post-output.type";
 import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {finalPostMapper} from "../mapper/final-post-map";
-import {InputPaginationForRepo} from "../types/input-types/input-pagination.type";
+import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 
 export const postsQueryRepository = {
   async findPosts(query: InputPaginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {

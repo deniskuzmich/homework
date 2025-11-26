@@ -1,9 +1,9 @@
-import {HTTP_STATUSES} from "../../src/core/http_statuses/http_statuses";
+import {ResultStatus} from "../../src/common/types/result.status";
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
-import {basicAuthToken} from "../../src/auth/admin-auth-token";
+import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
 
@@ -19,7 +19,7 @@ describe("Posts API", () => {
 
     await request(app)
       .delete(`${TESTING_PATH}/${'all-data'}`)
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
   })
 
   afterAll(async () => {
@@ -37,13 +37,13 @@ describe("Posts API", () => {
   it('should return 200 and empty array', async () => {
     await request(app)
       .get(POSTS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   it('should return 404 for not existing post', async () => {
     await request(app)
       .get(`${TESTING_PATH}/${testPostData.id}`)
-      .expect(HTTP_STATUSES.NOT_FOUND_404)
+      .expect(ResultStatus.NotFound)
   })
 
   it(`should'nt create a post with incorrect input data`, async () => {
@@ -56,11 +56,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   it(`should'nt create a post without Authorization`, async () => {
@@ -72,11 +72,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "",
       })
-      .expect(HTTP_STATUSES.UNAUTHORIZED_401)
+      .expect(ResultStatus.UNAUTHORIZED_401)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 
   let createdPost: any = null
@@ -92,7 +92,7 @@ describe("Posts API", () => {
         description: "Some description",
         websiteUrl: "https://example.com"
       })
-      .expect(HTTP_STATUSES.CREATED_201)
+      .expect(ResultStatus.CREATED_201)
 
     createdBlog = blogResponse.body
   })
@@ -109,13 +109,13 @@ describe("Posts API", () => {
         blogId: createdBlog.id,
         blogName: "string",
       })
-      .expect(HTTP_STATUSES.CREATED_201)
+      .expect(ResultStatus.CREATED_201)
 
     createdPost = createResponse.body
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [createdPost])
+      .expect(ResultStatus.Success, [createdPost])
   })
 
   it(`should'nt update post with incorrect input data`, async () => {
@@ -128,11 +128,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "adawdasdd",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
 
     await request(app)
       .get(`${POSTS_PATH}/${createdPost.id}`)
-      .expect(HTTP_STATUSES.OK_200, createdPost)
+      .expect(ResultStatus.Success, createdPost)
   })
 
   it(`should'nt update post that not exist`, async () => {
@@ -145,7 +145,7 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "adawdasdd",
       })
-      .expect(HTTP_STATUSES.BAD_REQUEST_400)
+      .expect(ResultStatus.BAD_REQUEST_400)
   })
 
   it(`should update post with correct input data`, async () => {
@@ -158,21 +158,21 @@ describe("Posts API", () => {
         shortDescription: "adsdawdasdadwad",
         content: "adawdasdd",
       })
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
   })
 
   it(`should delete post`, async () => {
     await request(app)
       .delete(`${POSTS_PATH}/${createdPost.id}`)
       .set('Authorization', adminToken)
-      .expect(HTTP_STATUSES.NO_CONTENT_204)
+      .expect(ResultStatus.NoContent)
 
     await request(app)
       .get(`${POSTS_PATH}/${createdPost.id}`)
-      .expect(HTTP_STATUSES.NOT_FOUND_404)
+      .expect(ResultStatus.NotFound)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(HTTP_STATUSES.OK_200, [])
+      .expect(ResultStatus.Success, [])
   })
 })

@@ -6,7 +6,7 @@ import {
   validationResult,
 } from "express-validator";
 import { NextFunction, Request, Response } from "express";
-import { HTTP_STATUSES } from "../http_statuses/http_statuses";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export const createErrorMessages = (
   errors: ErrorType[],
@@ -34,7 +34,7 @@ export const inputValidationResultMiddleware = (
 
   if (errors.length) {
     return res
-      .status(HTTP_STATUSES.BAD_REQUEST_400)
+      .status(HttpStatuses.BadRequest)
       .json({ errorsMessages: errors });
   }
 

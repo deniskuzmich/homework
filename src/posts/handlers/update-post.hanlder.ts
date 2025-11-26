@@ -1,7 +1,8 @@
 import {Request, Response} from "express";
-import {HTTP_STATUSES} from "../../core/http_statuses/http_statuses";
+import {ResultStatus} from "../../common/types/result.status";
 import {PostInputDto} from "../types/main-types/post.input-dto";
 import {postsService} from "../service/posts.service";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function updatePostHanlder(
   req: Request<{ id: string }, {}, PostInputDto>,
@@ -10,13 +11,13 @@ export async function updatePostHanlder(
     const post = await postsService.getPostById(req.params.id);
 
     if (!post) {
-      return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      return res.sendStatus(HttpStatuses.NotFound);
     }
 
     await postsService.updatePost(req.params.id, req.body);
-    return res.sendStatus(HTTP_STATUSES.NO_CONTENT_204);
+    return res.sendStatus(HttpStatuses.NoContent);
 
   } catch (e: unknown) {
-    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
+    return res.sendStatus(HttpStatuses.ServerError)
   }
 }

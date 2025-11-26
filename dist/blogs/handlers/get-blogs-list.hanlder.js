@@ -10,12 +10,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBlogsListHandler = getBlogsListHandler;
-const http_statuses_1 = require("../../core/http_statuses/http_statuses");
 const blogs_service_1 = require("../service/blogs.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function getBlogsListHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const queryInput = req.query;
         const blogsListOutput = yield blogs_service_1.blogsService.findBlogs(queryInput);
-        res.status(http_statuses_1.HTTP_STATUSES.OK_200).send(blogsListOutput);
+        res.status(http_statuses_1.HttpStatuses.Success).send(blogsListOutput);
     });
 }

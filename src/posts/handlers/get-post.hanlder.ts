@@ -1,20 +1,20 @@
 import { Request, Response } from "express";
-import { HTTP_STATUSES } from "../../core/http_statuses/http_statuses";
 import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {postsService} from "../service/posts.service";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function getPostHandler(req: Request, res: Response) {
   try {
     const post = await postsService.getPostById(req.params.id);
 
     if (!post) {
-      return res.sendStatus(HTTP_STATUSES.NOT_FOUND_404);
+      return res.sendStatus(HttpStatuses.NotFound);
     }
 
     const postViewModel = mapToPostViewModel(post)
-    res.status(HTTP_STATUSES.OK_200).send(postViewModel);
+    res.status(HttpStatuses.Success).send(postViewModel);
   } catch (e: unknown) {
-    return res.sendStatus(HTTP_STATUSES.INTERNAL_SERVER_ERROR_500)
+    return res.sendStatus(HttpStatuses.ServerError)
   }
 }
 

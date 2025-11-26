@@ -26,11 +26,11 @@ export const usersQueryRepository = {
       searchFilter = { email: { $regex: queryDto.searchEmailTerm, $options: "i" } }
     }
 
-    const items = await usersCollection //запрос в db
+    const itemsFromDb = await usersCollection //запрос в db
       .find(searchFilter)
       .skip(skip)
       .limit(queryDto.pageSize)
-      .sort({[queryDto.sortBy]: queryDto.sortDirection})
+      .sort({[queryDto.sortBy]: queryDto.sortDirection}) //ключ: значение
       .toArray();
 
     const totalCount = await usersCollection.countDocuments(searchFilter) //общее кол-во элементов
@@ -42,7 +42,7 @@ export const usersQueryRepository = {
       totalCount: totalCount,
     }
 
-    const userForFront = items.map(mapToUserViewModel)
+    const userForFront = itemsFromDb.map(mapToUserViewModel)
     return userForFrontMapper(userForFront, paramsForFront);
   },
 
