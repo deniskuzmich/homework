@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
-import {blogsService} from "../service/blogs.service";
-import {BlogQueryInputWithoutSearch} from "../types/input-types/blog-query-input-without-search";
+import {blogsService} from "../../blogs/service/blogs.service";
+import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
 import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function getPostByBlogIdHanlder(req: Request, res:Response) {
-  const query: BlogQueryInputWithoutSearch = req.query
+  const query: QueryInputForPagination = req.query
 
   const post = await blogsService.getPostByBlogId(req.params.id, query)
   if(!post) {

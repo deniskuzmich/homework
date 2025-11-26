@@ -10,8 +10,8 @@ import { blogsInputValidation } from "../blogs/middleware-validation/blogs.input
 import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {postInputDtoValidation} from "../posts/middleware-validation/post-inputDto-validation";
-import {createPostForBlogHandler} from "../blogs/handlers/create-post-for-blog.handler";
-import {getPostByBlogIdHanlder} from "../blogs/handlers/get-post-by-blog";
+import {createPostForBlogHandler} from "../posts/handlers/create-post-for-blog.handler";
+import {getPostByBlogIdHanlder} from "../posts/handlers/get-post-by-blog";
 
 
 export const blogRouter = Router();

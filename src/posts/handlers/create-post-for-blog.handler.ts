@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {blogsService} from "../service/blogs.service";
-import {mapToPostViewModel} from "../../posts/mapper/map-to-post-view-model";
+import {blogsService} from "../../blogs/service/blogs.service";
+import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {HttpStatuses} from "../../common/types/http-statuses";
 
 export async function createPostForBlogHandler(

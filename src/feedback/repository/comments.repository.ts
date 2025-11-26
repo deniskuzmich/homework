@@ -1,5 +1,9 @@
 import {commentsCollection} from "../../db/mongo.db";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
+import {UserInfoType} from "../../users/types/output-types/user-info.type";
+import {CommentDbType} from "../types/main-types/comment-db.type";
+import {CommentOutput} from "../types/main-types/comment-output.type";
+import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 
 
 export const commentsRepository = {
@@ -19,5 +23,14 @@ export const commentsRepository = {
     if (deletedComment.deletedCount < 1) {
       return null
     }
+  },
+
+  async createCommentForPost(comment: CommentDbType): Promise<CommentOutput> {
+      const insertResult = await commentsCollection.insertOne(comment)
+      const commentWithId = {
+      ...comment,
+        _id: insertResult.insertedId
+      }
+      return mapToCommentViewModel(commentWithId)
   }
 }

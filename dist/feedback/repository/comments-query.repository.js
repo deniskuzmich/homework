@@ -13,6 +13,7 @@ exports.commentsQueryRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
 const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
+const final_comment_mapper_1 = require("../mapper/final-comment-mapper");
 exports.commentsQueryRepository = {
     getCommentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -21,6 +22,27 @@ exports.commentsQueryRepository = {
                 return null;
             }
             return (0, map_to_comment_view_model_1.mapToCommentViewModel)(comment);
+        });
+    },
+    getCommentByPostId(id, query) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const skip = (query.pageSize * query.pageNumber) - query.pageSize;
+            const sort = { [query.sortBy]: query.sortDirection };
+            const comments = yield mongo_db_1.commentsCollection
+                .find({ postId: new mongodb_1.ObjectId(id) })
+                .skip(skip)
+                .limit(query.pageSize)
+                .sort(sort)
+                .toArray();
+            const totalCount = yield mongo_db_1.commentsCollection.countDocuments({ postId: new mongodb_1.ObjectId(id) });
+            const paramsForFront = {
+                pagesCount: Math.ceil(totalCount / query.pageSize),
+                page: query.pageNumber,
+                pageSize: query.pageSize,
+                totalCount: totalCount,
+            };
+            const commentsForFront = comments.map(map_to_comment_view_model_1.mapToCommentViewModel);
+            return (0, final_comment_mapper_1.finalCommentMapper)(commentsForFront, paramsForFront);
         });
     }
 };

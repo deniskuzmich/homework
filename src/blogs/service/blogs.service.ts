@@ -11,7 +11,7 @@ import {BlogInputWithoutSearch} from "../types/input-types/blog-input-without-se
 import {PostOutput} from "../../posts/types/main-types/post-output.type";
 import {BlogOutput} from "../types/main-types/blog-output.type";
 import {valuesPaginationMaper} from "../mapper/post-for-blog-mapper";
-import {BlogQueryInputWithoutSearch} from "../types/input-types/blog-query-input-without-search";
+import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
 import {blogsQueryRepository} from "../repository/blogs-query-repository";
 import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
@@ -32,7 +32,7 @@ export const blogsService = {
     return blogsQueryRepository.getBlogById(id);
   },
 
-  async getPostByBlogId(id: string, query: BlogQueryInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput> | null> {
+  async getPostByBlogId(id: string, query: QueryInputForPagination): Promise<OutputTypeWithPagination<PostOutput> | null> {
     const blog: WithId<Blog> | null = await blogsQueryRepository.getBlogById(id)
     if (!blog) {
       return null;

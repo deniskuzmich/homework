@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { ResultStatus } from "../../common/types/result.status";
 import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {postsService} from "../service/posts.service";
 import {HttpStatuses} from "../../common/types/http-statuses";

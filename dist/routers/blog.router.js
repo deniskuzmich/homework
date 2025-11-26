@@ -13,8 +13,8 @@ const blogs_input_validation_middleware_1 = require("../blogs/middleware-validat
 const super_admin_guard_middleware_1 = require("../auth/auth-admin/super-admin.guard.middleware");
 const pagination_validation_1 = require("../common/validation/pagination-validation");
 const post_inputDto_validation_1 = require("../posts/middleware-validation/post-inputDto-validation");
-const create_post_for_blog_handler_1 = require("../blogs/handlers/create-post-for-blog.handler");
-const get_post_by_blog_1 = require("../blogs/handlers/get-post-by-blog");
+const create_post_for_blog_handler_1 = require("../posts/handlers/create-post-for-blog.handler");
+const get_post_by_blog_1 = require("../posts/handlers/get-post-by-blog");
 exports.blogRouter = (0, express_1.Router)();
 exports.blogRouter
     .get("", pagination_validation_1.paginationValidation, get_blogs_list_hanlder_1.getBlogsListHandler)

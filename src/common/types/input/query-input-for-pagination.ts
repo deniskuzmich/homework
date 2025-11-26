@@ -1,6 +1,6 @@
 import {SortDirection} from "mongodb";
 
-export type BlogQueryInputWithoutSearch = {
+export type QueryInputForPagination = {
   pageNumber?: string;
   pageSize?: string;
   sortBy?:string;
