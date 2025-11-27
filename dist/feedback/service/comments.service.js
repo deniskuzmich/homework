@@ -62,6 +62,7 @@ exports.commentsService = {
     },
     updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b;
             const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(id);
             if (!comment) {
                 return {
@@ -71,7 +72,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            if (comment.commentatorInfo.userId.toString() !== userId) {
+            if (((_b = (_a = comment.commentatorInfo) === null || _a === void 0 ? void 0 : _a.userId) === null || _b === void 0 ? void 0 : _b.toString()) !== userId) {
                 return {
                     status: result_status_1.ResultStatus.Forbidden,
                     errorMessage: 'User is not own this comment',

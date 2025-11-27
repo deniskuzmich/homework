@@ -63,7 +63,8 @@ export const commentsService = {
         data: null
       }
     }
-    if(comment.commentatorInfo.userId.toString() !== userId) {
+
+    if(comment.commentatorInfo?.userId?.toString() !== userId) {
       return {
         status: ResultStatus.Forbidden,
         errorMessage: 'User is not own this comment',
