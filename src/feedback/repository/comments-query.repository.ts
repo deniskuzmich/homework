@@ -23,13 +23,13 @@ export const commentsQueryRepository = {
     const sort = {[query.sortBy]: query.sortDirection}
 
     const comments = await commentsCollection
-      .find({postId: new ObjectId(id)})
+      .find({postId: id})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
       .toArray();
 
-    const totalCount = await commentsCollection.countDocuments({postId: new ObjectId(id)});
+    const totalCount = await commentsCollection.countDocuments({postId: id});
 
     const paramsForFront = {
       pagesCount: Math.ceil(totalCount / query.pageSize),

@@ -29,12 +29,12 @@ exports.commentsQueryRepository = {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
             const sort = { [query.sortBy]: query.sortDirection };
             const comments = yield mongo_db_1.commentsCollection
-                .find({ postId: new mongodb_1.ObjectId(id) })
+                .find({ postId: id })
                 .skip(skip)
                 .limit(query.pageSize)
                 .sort(sort)
                 .toArray();
-            const totalCount = yield mongo_db_1.commentsCollection.countDocuments({ postId: new mongodb_1.ObjectId(id) });
+            const totalCount = yield mongo_db_1.commentsCollection.countDocuments({ postId: id });
             const paramsForFront = {
                 pagesCount: Math.ceil(totalCount / query.pageSize),
                 page: query.pageNumber,

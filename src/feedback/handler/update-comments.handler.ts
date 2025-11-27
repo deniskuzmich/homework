@@ -3,10 +3,7 @@ import {commentsService} from "../service/comments.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
-import {commentsRepository} from "../repository/comments.repository";
 import {commentsQueryRepository} from "../repository/comments-query.repository";
-import {usersRepository} from "../../users/repository/users.repository";
-import {usersQueryRepository} from "../../users/repository/users-query.repository";
 import {usersService} from "../../users/service/users.service";
 
 export async function updateCommentsHandler(req: Request, res: Response) {
