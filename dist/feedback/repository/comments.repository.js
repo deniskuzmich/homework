@@ -16,8 +16,6 @@ const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model
 exports.commentsRepository = {
     updateComment(id, newContent) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (!mongodb_1.ObjectId.isValid(id))
-                return false;
             const updatedComment = yield mongo_db_1.commentsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
                 $set: {
                     content: newContent,

@@ -15,6 +15,8 @@ export const mapResultCodeToHttpExtension = (resultCode: ResultStatus): number =
       return HttpStatuses.NoContent
     case ResultStatus.Unauthorized:
       return HttpStatuses.Unauthorized
+    case ResultStatus.Forbidden:
+      return HttpStatuses.Forbidden
     default:
       return HttpStatuses.ServerError
   }

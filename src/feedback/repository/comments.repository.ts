@@ -7,7 +7,6 @@ import {CommentForPostInput} from "../types/main-types/comment-for-post-input.ty
 
 export const commentsRepository = {
   async updateComment(id: string, newContent: string) {
-    if(!ObjectId.isValid(id)) return false
 
     const updatedComment = await commentsCollection.updateOne(
       {_id: new ObjectId(id)},

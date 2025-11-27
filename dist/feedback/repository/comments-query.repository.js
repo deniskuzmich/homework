@@ -17,8 +17,6 @@ const final_comment_mapper_1 = require("../mapper/final-comment-mapper");
 exports.commentsQueryRepository = {
     getCommentById(postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            if (mongodb_1.ObjectId.isValid(postId))
-                return null;
             const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
             if (!comment) {
                 return null;
