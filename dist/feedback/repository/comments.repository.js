@@ -36,7 +36,7 @@ exports.commentsRepository = {
     createCommentForPost(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.commentsCollection.insertOne(comment);
-            if (!insertResult)
+            if (!insertResult.acknowledged)
                 return null;
             const newComment = yield mongo_db_1.commentsCollection.findOne({ _id: insertResult.insertedId });
             if (!newComment)

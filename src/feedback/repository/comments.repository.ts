@@ -27,9 +27,11 @@ export const commentsRepository = {
 
   async createCommentForPost(comment: CommentDbType): Promise<CommentOutput | null> {
       const insertResult = await commentsCollection.insertOne(comment)
-      if (!insertResult) return null;
+      if (!insertResult.acknowledged) return null;
 
-      const newComment = await commentsCollection.findOne({_id: insertResult.insertedId})
+      const newComment = await commentsCollection.findOne<WithId<CommentDbType>>(
+        {_id: insertResult.insertedId}
+      )
       if (!newComment) return null;
 
       return mapToCommentViewModel(newComment)

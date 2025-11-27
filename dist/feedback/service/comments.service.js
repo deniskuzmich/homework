@@ -100,8 +100,8 @@ exports.commentsService = {
                 };
             }
             const newCommentForPost = {
-                postId: postId,
-                content: content,
+                postId,
+                content,
                 commentatorInfo: {
                     userId: user.userId.toString(),
                     userLogin: user.login,

@@ -1,3 +1,5 @@
+import {ObjectId} from "mongodb";
+
 export type CommentOutput = {
   id: string,
   content: string,
