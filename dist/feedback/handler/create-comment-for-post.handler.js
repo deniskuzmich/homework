@@ -29,6 +29,6 @@ function createCommentForPostHandler(req, res) {
         if (createdComment.status !== result_status_1.ResultStatus.Created) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }
-        return res.status(http_statuses_1.HttpStatuses.Created).send(createdComment.data);
+        return res.status(http_statuses_1.HttpStatuses.Created).send(createdComment);
     });
 }

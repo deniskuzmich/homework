@@ -52,6 +52,8 @@ exports.usersQueryRepository = {
     },
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!mongodb_1.ObjectId.isValid(id))
+                return null;
             return mongo_db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
         });
     },

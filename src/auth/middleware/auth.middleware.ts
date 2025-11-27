@@ -30,6 +30,7 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     req.user = userInfo;
     next();
   } catch (e) {
+    console.log(e)
     return res.sendStatus(HttpStatuses.ServerError)
   }
 }

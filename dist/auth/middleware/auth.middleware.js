@@ -36,6 +36,7 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next();
     }
     catch (e) {
+        console.log(e);
         return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
     }
 });
