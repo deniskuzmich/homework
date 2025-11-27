@@ -15,6 +15,7 @@ export const commentsRepository = {
         }
       });
     if (updatedComment.matchedCount < 1) return false
+    return  true
   },
 
   async deleteComment(id: string): Promise<void | null>  {

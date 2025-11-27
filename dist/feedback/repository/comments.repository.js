@@ -23,6 +23,7 @@ exports.commentsRepository = {
             });
             if (updatedComment.matchedCount < 1)
                 return false;
+            return true;
         });
     },
     deleteComment(id) {
