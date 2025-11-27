@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCommentForPostHandler = getCommentForPostHandler;
 const comments_service_1 = require("../service/comments.service");
-const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 function getCommentForPostHandler(req, res) {
@@ -21,6 +20,6 @@ function getCommentForPostHandler(req, res) {
         if (comment.status === result_status_1.ResultStatus.NotFound) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.extensions);
         }
-        res.status(http_statuses_1.HttpStatuses.Success).send(comment.data);
+        res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.data);
     });
 }

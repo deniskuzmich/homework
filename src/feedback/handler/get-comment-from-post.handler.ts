@@ -10,5 +10,5 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   if(comment.status === ResultStatus.NotFound) {
     return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.extensions)
   }
-  res.status(HttpStatuses.Success).send(comment.data)
+  res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.data)
 }
