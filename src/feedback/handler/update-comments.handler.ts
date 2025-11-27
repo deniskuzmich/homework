@@ -6,7 +6,7 @@ import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToH
 export async function updateCommentsHandler(req: Request, res: Response) {
   const commentId = req.params.commentId
   const content = req.body.content;
-  const userId = req.user.userId;
+  const userId = req.user!.userId;
 
   const updatedComment = await commentsService.updateComment(commentId, content, userId);
   if (updatedComment.status !== ResultStatus.NoContent) {
