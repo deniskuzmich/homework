@@ -6,6 +6,7 @@ var ResultStatus;
     ResultStatus["Success"] = "Success";
     ResultStatus["Created"] = "Created";
     ResultStatus["NoContent"] = "NoContent";
+    ResultStatus["Forbidden"] = "Forbidden";
     ResultStatus["BadRequest"] = "BadRequest";
     ResultStatus["NotFound"] = "NotFound";
     ResultStatus["Unauthorized"] = "Unauthorized";

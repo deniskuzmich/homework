@@ -126,17 +126,8 @@ export const commentsService = {
   },
 
   async deleteComment(commentId: string, userId: string): Promise<ResultType> {
-    const deletedComment = await commentsRepository.deleteComment(commentId);
-
-    if (deletedComment.commentatorInfo.userId.toString() !== userId) {
-      return {
-        status: ResultStatus.Forbidden,
-        errorMessage: 'User is not own this comment',
-        extensions: [],
-        data: null
-      }
-    }
-    if (!deletedComment) {
+    const comment = await commentsQueryRepository.getCommentById(commentId);
+    if(!comment) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: 'Comment not found',
@@ -144,6 +135,17 @@ export const commentsService = {
         data: null
       }
     }
+    if (comment.commentatorInfo.userId.toString() !== userId) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: 'User is not own this comment',
+        extensions: [],
+        data: null
+      }
+    }
+
+    const deletedComment = await commentsRepository.deleteComment(commentId);
+
     return {
       status: ResultStatus.NoContent,
       extensions: [],

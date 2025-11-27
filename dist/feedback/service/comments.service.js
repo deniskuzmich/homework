@@ -132,10 +132,10 @@ exports.commentsService = {
             };
         });
     },
-    deleteComment(id) {
+    deleteComment(commentId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedComment = yield comments_repository_1.commentsRepository.deleteComment(id);
-            if (!deletedComment) {
+            const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(commentId);
+            if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
                     errorMessage: 'Comment not found',
@@ -143,6 +143,15 @@ exports.commentsService = {
                     data: null
                 };
             }
+            if (comment.commentatorInfo.userId.toString() !== userId) {
+                return {
+                    status: result_status_1.ResultStatus.Forbidden,
+                    errorMessage: 'User is not own this comment',
+                    extensions: [],
+                    data: null
+                };
+            }
+            const deletedComment = yield comments_repository_1.commentsRepository.deleteComment(commentId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],

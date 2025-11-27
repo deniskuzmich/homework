@@ -17,7 +17,7 @@ export const commentsRepository = {
     if (updatedComment.matchedCount < 1) return false
   },
 
-  async deleteComment(id: string)  {
+  async deleteComment(id: string): Promise<void | null>  {
     const deletedComment = await commentsCollection.deleteOne({_id: new ObjectId(id)});
     if (deletedComment.deletedCount < 1) {
       return null
