@@ -4,6 +4,7 @@ import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {CommentDbType} from "../types/main-types/comment-db.type";
 import {CommentOutput} from "../types/main-types/comment-output.type";
 import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
+import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
 
 
 export const commentsRepository = {
@@ -25,11 +26,11 @@ export const commentsRepository = {
     }
   },
 
-  async createCommentForPost(comment: CommentDbType): Promise<CommentOutput | null> {
+  async createCommentForPost(comment: CommentForPostInput): Promise<CommentOutput | null> {
       const insertResult = await commentsCollection.insertOne(comment)
       if (!insertResult.acknowledged) return null;
 
-      const newComment = await commentsCollection.findOne<WithId<CommentDbType>>(
+      const newComment = await commentsCollection.findOne<WithId<CommentForPostInput>>(
         {_id: insertResult.insertedId}
       )
       if (!newComment) return null;
