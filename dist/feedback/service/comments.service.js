@@ -119,7 +119,7 @@ exports.commentsService = {
                 };
             }
             return {
-                status: result_status_1.ResultStatus.Created,
+                status: result_status_1.ResultStatus.Success,
                 extensions: [],
                 data: createdComment
             };

@@ -112,7 +112,7 @@ export const commentsService = {
       }
     }
     return {
-      status: ResultStatus.Created,
+      status: ResultStatus.Success,
       extensions: [],
       data: createdComment
     }

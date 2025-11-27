@@ -13,13 +13,12 @@ exports.getCommentByIdHandler = getCommentByIdHandler;
 const comments_service_1 = require("../service/comments.service");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-const http_statuses_1 = require("../../common/types/http-statuses");
 function getCommentByIdHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const comment = yield comments_service_1.commentsService.getCommentById(req.params.id);
         if (comment.status !== result_status_1.ResultStatus.Success) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.extensions);
         }
-        res.status(http_statuses_1.HttpStatuses.Success).send(comment);
+        res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment);
     });
 }

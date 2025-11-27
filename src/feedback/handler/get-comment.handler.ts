@@ -10,5 +10,5 @@ export async function getCommentByIdHandler (req: Request, res: Response) {
     return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.extensions)
   }
 
-  res.status(HttpStatuses.Success).send(comment);
+  res.status(mapResultCodeToHttpExtension(comment.status)).send(comment);
 }
