@@ -30,7 +30,6 @@ const authMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         const userInfo = {
             userId: userFromDb._id.toString(),
             login: userFromDb.login,
-            email: userFromDb.email,
         };
         req.user = userInfo;
         next();

@@ -24,7 +24,6 @@ export const authMiddleware = async (req: Request, res: Response, next: NextFunc
     const userInfo: UserInfoType = {
       userId: userFromDb._id.toString(),
       login: userFromDb.login,
-      email: userFromDb.email,
     };
 
     req.user = userInfo;

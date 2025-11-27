@@ -1,5 +1,4 @@
 export type UserInfoType = {
-  email: string,
+  userId: string,
   login: string,
-  userId: string
 }
