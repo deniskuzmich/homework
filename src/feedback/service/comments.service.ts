@@ -8,7 +8,7 @@ import {postsQueryRepository} from "../../posts/repository/posts-query-repositor
 import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
-import {ObjectId} from "mongodb";
+
 
 export const commentsService = {
   async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
