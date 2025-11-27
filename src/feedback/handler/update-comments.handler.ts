@@ -7,8 +7,11 @@ import {commentsQueryRepository} from "../repository/comments-query.repository";
 import {usersService} from "../../users/service/users.service";
 
 export async function updateCommentsHandler(req: Request, res: Response) {
+  const commentId = req.params.commentId
+  const content = req.body.content;
+  const userId = req.params.userId;
 
-  const comment = await commentsQueryRepository.getCommentById(req.params.commentId);
+  const comment = await commentsQueryRepository.getCommentById(commentId);
   if (!comment) {
     return res.sendStatus(HttpStatuses.NotFound);
   }
@@ -21,7 +24,7 @@ export async function updateCommentsHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Forbidden)
   }
 
-  const updatedComment = await commentsService.updateComment(req.params.commentId, req.body.content);
+  const updatedComment = await commentsService.updateComment(commentId, content, userId);
   if (updatedComment.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(updatedComment.status)).send(updatedComment.extensions)
   }

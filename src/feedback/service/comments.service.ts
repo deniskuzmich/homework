@@ -53,7 +53,7 @@ export const commentsService = {
     }
   },
 
-  async updateComment(id: string, newContent: string): Promise<ResultType> {
+  async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {
       return {
@@ -63,7 +63,15 @@ export const commentsService = {
         data: null
       }
     }
-    const updatedComment = await commentsRepository.updateComment(id, newContent);
+    if(comment.commentatorInfo.userId.toString() !== userId) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: 'User is not own this comment',
+        extensions: [],
+        data: null
+      }
+    }
+    const updatedComment = await commentsRepository.updateComment(commentId, newContent);
     if (!updatedComment) {
       return {
         status: ResultStatus.BadRequest,

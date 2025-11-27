@@ -18,7 +18,10 @@ const comments_query_repository_1 = require("../repository/comments-query.reposi
 const users_service_1 = require("../../users/service/users.service");
 function updateCommentsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(req.params.commentId);
+        const commentId = req.params.commentId;
+        const content = req.body.content;
+        const userId = req.params.userId;
+        const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(commentId);
         if (!comment) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
@@ -29,7 +32,7 @@ function updateCommentsHandler(req, res) {
         if (comment.commentatorInfo.userId !== userDb._id.toString()) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Forbidden);
         }
-        const updatedComment = yield comments_service_1.commentsService.updateComment(req.params.commentId, req.body.content);
+        const updatedComment = yield comments_service_1.commentsService.updateComment(commentId, content, userId);
         if (updatedComment.status !== result_status_1.ResultStatus.NoContent) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status)).send(updatedComment.extensions);
         }

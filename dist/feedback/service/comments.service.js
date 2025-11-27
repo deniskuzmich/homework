@@ -60,7 +60,7 @@ exports.commentsService = {
             };
         });
     },
-    updateComment(id, newContent) {
+    updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(id);
             if (!comment) {
@@ -71,7 +71,15 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const updatedComment = yield comments_repository_1.commentsRepository.updateComment(id, newContent);
+            if (comment.commentatorInfo.userId.toString() !== userId) {
+                return {
+                    status: result_status_1.ResultStatus.Forbidden,
+                    errorMessage: 'User is not own this comment',
+                    extensions: [],
+                    data: null
+                };
+            }
+            const updatedComment = yield comments_repository_1.commentsRepository.updateComment(commentId, newContent);
             if (!updatedComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
