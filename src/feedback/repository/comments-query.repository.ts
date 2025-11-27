@@ -9,6 +9,7 @@ import {InputPaginationForRepo} from "../../common/types/input/input-pagination-
 
 export const commentsQueryRepository = {
   async getCommentById(postId: string): Promise<CommentOutput | null> {
+    if(ObjectId.isValid(postId)) return null;
     const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})
 
     if (!comment) {
