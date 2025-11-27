@@ -18,11 +18,12 @@ export const commentsRepository = {
     return  true
   },
 
-  async deleteComment(id: string): Promise<void | null>  {
+  async deleteComment(id: string)  {
     const deletedComment = await commentsCollection.deleteOne({_id: new ObjectId(id)});
     if (deletedComment.deletedCount < 1) {
       return null
     }
+    return true
   },
 
   async createCommentForPost(comment: CommentForPostInput): Promise<CommentOutput | null> {

@@ -124,7 +124,6 @@ exports.commentsService = {
                 createdAt: new Date().toISOString()
             };
             const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
-            console.log('Result from Repository:', createdComment);
             if (!createdComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,

@@ -32,6 +32,7 @@ exports.commentsRepository = {
             if (deletedComment.deletedCount < 1) {
                 return null;
             }
+            return true;
         });
     },
     createCommentForPost(comment) {

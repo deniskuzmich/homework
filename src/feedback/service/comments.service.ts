@@ -117,7 +117,7 @@ export const commentsService = {
       createdAt: new Date().toISOString()
     }
     const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
-    console.log('Result from Repository:', createdComment);
+
     if (!createdComment) {
       return {
         status: ResultStatus.BadRequest,
