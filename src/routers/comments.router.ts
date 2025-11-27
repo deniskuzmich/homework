@@ -4,14 +4,15 @@ import {getCommentByIdHandler} from "../feedback/handler/get-comment.handler";
 import {updateCommentsHandler} from "../feedback/handler/update-comments.handler";
 import {commentInputValidation} from "../feedback/validation/comments-validation";
 import {deleteCommentHandler} from "../feedback/handler/delete-comment.handler";
+import {inputValidationResultMiddleware} from "../core/middleware-validation/input.validation-result.middleware";
 
 
 export const commentsRouter = Router()
   .get('/:id', getCommentByIdHandler)
 
-  .put('/:commentId', authMiddleware, commentInputValidation, updateCommentsHandler)
+  .put('/:commentId', authMiddleware, commentInputValidation,inputValidationResultMiddleware, updateCommentsHandler)
 
-  .delete('/:commentId', authMiddleware, deleteCommentHandler)
+  .delete('/:commentId', authMiddleware, inputValidationResultMiddleware, deleteCommentHandler)
 
 
 

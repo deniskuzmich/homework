@@ -46,7 +46,7 @@ postRouter
   )
 
   .get('/:id/comments', idValidation, paginationValidation, getCommentForPostHandler)
-  .post('/:id/comments', authMiddleware, contentValidation, createCommentForPostHandler)
+  .post('/:id/comments', authMiddleware, contentValidation, inputValidationResultMiddleware, createCommentForPostHandler)
 
 
 

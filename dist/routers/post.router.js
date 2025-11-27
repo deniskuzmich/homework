@@ -24,4 +24,4 @@ exports.postRouter
     .post("", super_admin_guard_middleware_1.superAdminGuardMiddleware, posts_input_validation_middleware_1.postInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, create_posts_hanlder_1.postPostsHandler)
     .delete("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_post_hanlder_1.deletePostHanlder)
     .get('/:id/comments', id_validation_middleware_1.idValidation, pagination_validation_1.paginationValidation, get_comment_from_post_handler_1.getCommentForPostHandler)
-    .post('/:id/comments', auth_middleware_1.authMiddleware, comments_validation_1.contentValidation, create_comment_for_post_handler_1.createCommentForPostHandler);
+    .post('/:id/comments', auth_middleware_1.authMiddleware, comments_validation_1.contentValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, create_comment_for_post_handler_1.createCommentForPostHandler);
