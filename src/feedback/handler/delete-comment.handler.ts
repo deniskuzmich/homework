@@ -5,6 +5,7 @@ import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToH
 
 
 export async function deleteCommentHandler(req: Request, res: Response) {
+
   const deletedComment = await commentsService.getCommentById(req.params.id);
   if(deletedComment.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(deletedComment.status))

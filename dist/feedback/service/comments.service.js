@@ -18,6 +18,13 @@ const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper"
 exports.commentsService = {
     getCommentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
+            if (!id) {
+                return {
+                    status: result_status_1.ResultStatus.NotFound,
+                    extensions: [],
+                    data: null
+                };
+            }
             const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(id);
             if (!comment) {
                 return {

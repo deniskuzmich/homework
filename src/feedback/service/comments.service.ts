@@ -12,6 +12,13 @@ import {QueryInputForPagination} from "../../common/types/input/query-input-for-
 
 export const commentsService = {
   async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
+    if(!id) {
+      return {
+        status: ResultStatus.NotFound,
+        extensions: [],
+        data: null
+      }
+    }
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {
       return {
