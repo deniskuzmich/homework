@@ -125,7 +125,7 @@ export const commentsService = {
     }
   },
 
-  async deleteComment(id: string): Promise<ResultType<null>> {
+  async deleteComment(id: string): Promise<ResultType> {
    const deletedComment = await commentsRepository.deleteComment(id);
    if(!deletedComment) {
      return {
