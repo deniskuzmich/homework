@@ -15,9 +15,9 @@ const mongodb_1 = require("mongodb");
 const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
 const final_comment_mapper_1 = require("../mapper/final-comment-mapper");
 exports.commentsQueryRepository = {
-    getCommentById(id) {
+    getCommentById(postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
             if (!comment) {
                 return null;
             }

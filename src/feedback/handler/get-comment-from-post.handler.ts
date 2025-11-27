@@ -6,7 +6,9 @@ import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToH
 
 export async function getCommentForPostHandler(req: Request, res: Response) {
   const query = req.query;
-  const comment = await commentsService.getCommentByPostId(req.params.postId, query);
+  const postId = req.params.id;
+
+  const comment = await commentsService.getCommentByPostId(postId, query);
   if(comment.status === ResultStatus.NotFound) {
     return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.extensions)
   }

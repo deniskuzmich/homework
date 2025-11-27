@@ -8,8 +8,8 @@ import {InputPaginationForRepo} from "../../common/types/input/input-pagination-
 
 
 export const commentsQueryRepository = {
-  async getCommentById(id: string): Promise<CommentOutput | null> {
-    const comment = await commentsCollection.findOne({_id: new ObjectId(id)})
+  async getCommentById(postId: string): Promise<CommentOutput | null> {
+    const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})
 
     if (!comment) {
       return null;

@@ -27,8 +27,8 @@ export const commentsService = {
     }
   },
 
-  async getCommentByPostId(id:string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
-    const post = await postsQueryRepository.getPostById(id)
+  async getCommentByPostId(postId:string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
+    const post = await postsQueryRepository.getPostById(postId)
     if(!post) {
       return {
         status: ResultStatus.NotFound,
@@ -38,7 +38,7 @@ export const commentsService = {
       }
     }
     const values = valuesPaginationMaper(query);
-    const commentForPost = await commentsQueryRepository.getCommentByPostId(id, values)
+    const commentForPost = await commentsQueryRepository.getCommentByPostId(postId, values)
     return {
       status: ResultStatus.Success,
       extensions: [],

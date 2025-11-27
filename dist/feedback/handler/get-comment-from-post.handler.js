@@ -16,7 +16,8 @@ const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCod
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const query = req.query;
-        const comment = yield comments_service_1.commentsService.getCommentByPostId(req.params.postId, query);
+        const postId = req.params.id;
+        const comment = yield comments_service_1.commentsService.getCommentByPostId(postId, query);
         if (comment.status === result_status_1.ResultStatus.NotFound) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.extensions);
         }

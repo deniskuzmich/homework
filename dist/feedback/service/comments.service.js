@@ -33,9 +33,9 @@ exports.commentsService = {
             };
         });
     },
-    getCommentByPostId(id, query) {
+    getCommentByPostId(postId, query) {
         return __awaiter(this, void 0, void 0, function* () {
-            const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
+            const post = yield posts_query_repository_1.postsQueryRepository.getPostById(postId);
             if (!post) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -45,7 +45,7 @@ exports.commentsService = {
                 };
             }
             const values = (0, post_for_blog_mapper_1.valuesPaginationMaper)(query);
-            const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(id, values);
+            const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(postId, values);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],
