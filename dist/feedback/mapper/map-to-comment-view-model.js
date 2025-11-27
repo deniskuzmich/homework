@@ -6,8 +6,8 @@ function mapToCommentViewModel(data) {
         id: data._id.toString(),
         content: data.content,
         commentatorInfo: {
-            userId: data.userId.toString(),
-            userLogin: data.userLogin,
+            userId: data.commentatorInfo.userId.toString(),
+            userLogin: data.commentatorInfo.userLogin,
         },
         createdAt: data.createdAt
     };
