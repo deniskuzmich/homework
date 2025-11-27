@@ -21,5 +21,5 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
   if (createdComment.status !== ResultStatus.Created) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
   }
-  return res.status(HttpStatuses.Created).send(createdComment)
+  return res.status(HttpStatuses.Created).send(createdComment.data)
 }
