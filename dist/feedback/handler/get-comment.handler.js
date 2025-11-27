@@ -19,6 +19,6 @@ function getCommentByIdHandler(req, res) {
         if (comment.status !== result_status_1.ResultStatus.Success) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.extensions);
         }
-        res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment);
+        res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.data);
     });
 }

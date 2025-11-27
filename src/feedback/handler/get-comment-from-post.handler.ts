@@ -8,9 +8,9 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const query = req.query;
   const postId = req.params.id;
 
-  const comment = await commentsService.getCommentByPostId(postId, query);
-  if(comment.status === ResultStatus.NotFound) {
-    return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.extensions)
+  const commentForPost = await commentsService.getCommentByPostId(postId, query);
+  if(commentForPost.status === ResultStatus.NotFound) {
+    return res.status(mapResultCodeToHttpExtension(commentForPost.status)).send(commentForPost.extensions)
   }
-  return res.status(mapResultCodeToHttpExtension(comment.status)).send(comment.data)
+  return res.status(mapResultCodeToHttpExtension(commentForPost.status)).send(commentForPost.data)
 }
