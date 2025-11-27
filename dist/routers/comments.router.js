@@ -9,6 +9,6 @@ const comments_validation_1 = require("../feedback/validation/comments-validatio
 const delete_comment_handler_1 = require("../feedback/handler/delete-comment.handler");
 const input_validation_result_middleware_1 = require("../core/middleware-validation/input.validation-result.middleware");
 exports.commentsRouter = (0, express_1.Router)()
-    .get('/:id', get_comment_handler_1.getCommentByIdHandler)
+    .get('/:id', input_validation_result_middleware_1.inputValidationResultMiddleware, get_comment_handler_1.getCommentByIdHandler)
     .put('/:commentId', auth_middleware_1.authMiddleware, comments_validation_1.commentInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, update_comments_handler_1.updateCommentsHandler)
     .delete('/:commentId', auth_middleware_1.authMiddleware, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_comment_handler_1.deleteCommentHandler);

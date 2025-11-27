@@ -8,7 +8,7 @@ import {inputValidationResultMiddleware} from "../core/middleware-validation/inp
 
 
 export const commentsRouter = Router()
-  .get('/:id', getCommentByIdHandler)
+  .get('/:id',inputValidationResultMiddleware, getCommentByIdHandler)
 
   .put('/:commentId', authMiddleware, commentInputValidation,inputValidationResultMiddleware, updateCommentsHandler)
 

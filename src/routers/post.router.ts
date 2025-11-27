@@ -45,7 +45,7 @@ postRouter
     deletePostHanlder,
   )
 
-  .get('/:id/comments', idValidation, paginationValidation, getCommentForPostHandler)
+  .get('/:id/comments', idValidation, paginationValidation,inputValidationResultMiddleware, getCommentForPostHandler)
   .post('/:id/comments', authMiddleware, contentValidation, inputValidationResultMiddleware, createCommentForPostHandler)
 
 
