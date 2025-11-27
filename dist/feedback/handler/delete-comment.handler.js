@@ -13,14 +13,13 @@ exports.deleteCommentHandler = deleteCommentHandler;
 const comments_service_1 = require("../service/comments.service");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-const http_statuses_1 = require("../../common/types/http-statuses");
 function deleteCommentHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const deletedComment = yield comments_service_1.commentsService.getCommentById(req.params.id);
         if (deletedComment.status !== result_status_1.ResultStatus.NoContent) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status)).send(deletedComment.extensions);
+            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
         }
         yield comments_service_1.commentsService.deleteComment(req.params.id);
-        return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
     });
 }
