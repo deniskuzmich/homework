@@ -53,7 +53,7 @@ export const commentsService = {
     }
   },
 
-  async updateComment(id: string, newContent: string): Promise<ResultType<null>> {
+  async updateComment(id: string, newContent: string): Promise<ResultType> {
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {
       return {

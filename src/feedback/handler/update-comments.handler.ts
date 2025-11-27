@@ -10,9 +10,8 @@ export async function updateCommentsHandler(req: Request, res: Response) {
 
   const comment = await commentsQueryRepository.getCommentById(req.params.commentId);
   if (!comment) {
-    return
+    return res.sendStatus(HttpStatuses.NotFound);
   }
-
   const userDb = await usersService.getUserById(req.user!.userId)
   if (!userDb) {
     return res.sendStatus(HttpStatuses.NotFound);
@@ -26,5 +25,5 @@ export async function updateCommentsHandler(req: Request, res: Response) {
   if (updatedComment.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(updatedComment.status)).send(updatedComment.extensions)
   }
-  res.sendStatus(HttpStatuses.NoContent);
+  return res.sendStatus(mapResultCodeToHttpExtension(updatedComment.status));
 }

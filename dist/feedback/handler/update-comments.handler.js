@@ -20,7 +20,7 @@ function updateCommentsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(req.params.commentId);
         if (!comment) {
-            return;
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
         const userDb = yield users_service_1.usersService.getUserById(req.user.userId);
         if (!userDb) {
@@ -33,6 +33,6 @@ function updateCommentsHandler(req, res) {
         if (updatedComment.status !== result_status_1.ResultStatus.NoContent) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status)).send(updatedComment.extensions);
         }
-        res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status));
     });
 }
