@@ -12,7 +12,7 @@ import {QueryInputForPagination} from "../../common/types/input/query-input-for-
 
 export const commentsService = {
   async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
-    if(!id) {
+    if (!id) {
       return {
         status: ResultStatus.NotFound,
         extensions: [],
@@ -34,9 +34,9 @@ export const commentsService = {
     }
   },
 
-  async getCommentByPostId(postId:string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
+  async getCommentByPostId(postId: string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
     const post = await postsQueryRepository.getPostById(postId)
-    if(!post) {
+    if (!post) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: 'Post not found',
@@ -64,7 +64,7 @@ export const commentsService = {
       }
     }
     const updatedComment = await commentsRepository.updateComment(id, newContent);
-    if(!updatedComment) {
+    if (!updatedComment) {
       return {
         status: ResultStatus.BadRequest,
         errorMessage: 'Bad request',
@@ -79,9 +79,9 @@ export const commentsService = {
     }
   },
 
-  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentOutput | null>>  {
+  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentOutput | null>> {
     const isPostExists = await postsQueryRepository.getPostById(postId);
-    if(!isPostExists) {
+    if (!isPostExists) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: 'Post not found',
@@ -90,10 +90,10 @@ export const commentsService = {
       }
     }
 
-    if(!user.userId) {
+    if (!user.userId) {
       return {
         status: ResultStatus.NotFound,
-        errorMessage: 'UserId not found' ,
+        errorMessage: 'UserId not found',
         extensions: [{field: 'comment', message: 'UserId not found'}],
         data: null
       }
@@ -110,10 +110,10 @@ export const commentsService = {
     }
     const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
     console.log('Result from Repository:', createdComment);
-    if(!createdComment) {
+    if (!createdComment) {
       return {
         status: ResultStatus.BadRequest,
-        errorMessage: 'Bad request to create comment' ,
+        errorMessage: 'Bad request to create comment',
         extensions: [{field: 'comment', message: 'Bad request to create comment'}],
         data: null
       }
@@ -125,20 +125,29 @@ export const commentsService = {
     }
   },
 
-  async deleteComment(id: string): Promise<ResultType> {
-   const deletedComment = await commentsRepository.deleteComment(id);
-   if(!deletedComment) {
-     return {
-       status: ResultStatus.NotFound,
-       errorMessage: 'Comment not found',
-       extensions: [],
-       data: null
-     }
-   }
-   return {
-     status: ResultStatus.NoContent,
-     extensions: [],
-     data: null
-   }
+  async deleteComment(commentId: string, userId: string): Promise<ResultType> {
+    const deletedComment = await commentsRepository.deleteComment(commentId);
+
+    if (deletedComment.commentatorInfo.userId.toString() !== userId) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: 'User is not own this comment',
+        extensions: [],
+        data: null
+      }
+    }
+    if (!deletedComment) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: 'Comment not found',
+        extensions: [],
+        data: null
+      }
+    }
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: null
+    }
   }
 }

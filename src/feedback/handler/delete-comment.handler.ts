@@ -5,12 +5,14 @@ import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToH
 
 
 export async function deleteCommentHandler(req: Request, res: Response) {
+  const commentId = req.params.commentId;
+  const userId = req.user!.userId
 
-  const deletedComment = await commentsService.getCommentById(req.params.id);
+
+  const deletedComment = await commentsService.deleteComment(commentId, userId);
   if(deletedComment.status !== ResultStatus.NoContent) {
-    return res.status(mapResultCodeToHttpExtension(deletedComment.status))
+    return res.sendStatus(mapResultCodeToHttpExtension(deletedComment.status))
   }
 
-  await commentsService.deleteComment(req.params.id);
   return res.sendStatus(mapResultCodeToHttpExtension(deletedComment.status));
 }
