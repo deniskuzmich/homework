@@ -71,7 +71,7 @@ export const commentsService = {
         data: null
       }
     }
-    const updatedComment = await commentsRepository.updateComment(commentId, newContent);
+    const updatedComment = await commentsRepository.updateComment(id, newContent);
     if (!updatedComment) {
       return {
         status: ResultStatus.BadRequest,

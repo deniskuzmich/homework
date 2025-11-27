@@ -79,7 +79,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const updatedComment = yield comments_repository_1.commentsRepository.updateComment(commentId, newContent);
+            const updatedComment = yield comments_repository_1.commentsRepository.updateComment(id, newContent);
             if (!updatedComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
