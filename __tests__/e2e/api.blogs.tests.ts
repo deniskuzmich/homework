@@ -1,4 +1,4 @@
-import {ResultStatus} from "../../src/common/types/result.status";
+import {HttpStatuses} from "../../src/common/types/http-statuses";
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
@@ -6,6 +6,9 @@ import request from "supertest";
 import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
+import {dataWithPagination, paginationWithoutData, testBlogData
+} from "../../src/utils-for-tests/utils-for-blog-tests";
+
 
 describe("Blogs API", () => {
   let app: Express
@@ -19,30 +22,23 @@ describe("Blogs API", () => {
 
     await request(app)
       .delete(`${TESTING_PATH}/${'all-data'}`)
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
   })
 
   afterAll(async () => {
     await stopDb();
   })
 
-  const testBlogData = {
-    id: "3",
-    name: "someName",
-    description: "loloooloo",
-    websiteUrl: "string",
-  };
-
   it('should return 200 and empty array', async () => {
     await request(app)
       .get(BLOGS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   it('should return 404 for not existing blog', async () => {
     await request(app)
       .get(`${TESTING_PATH}/${testBlogData.id}`)
-      .expect(ResultStatus.NotFound)
+      .expect(HttpStatuses.NotFound)
   })
 
   it(`should'nt create a blog with incorrect input data`, async () => {
@@ -55,11 +51,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   it(`should'nt create a blog without Authorization`, async () => {
@@ -71,11 +67,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "",
       })
-      .expect(ResultStatus.UNAUTHORIZED_401)
+      .expect(HttpStatuses.Unauthorized)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   let createdBlog: any = null
@@ -89,13 +85,13 @@ describe("Blogs API", () => {
         description: "asdawdafsafsdgesg",
         websiteUrl: "https://www.example.com",
       })
-      .expect(ResultStatus.CREATED_201)
+      .expect(HttpStatuses.Created)
 
     createdBlog = createResponse.body
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(ResultStatus.Success, [createdBlog])
+      .expect(HttpStatuses.Success, dataWithPagination([createdBlog]))
   })
 
   it(`should'nt update blog with incorrect input data`, async () => {
@@ -108,11 +104,11 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "string",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
 
     await request(app)
       .get(`${BLOGS_PATH}/${createdBlog.id}`)
-      .expect(ResultStatus.Success, createdBlog)
+      .expect(HttpStatuses.Success, createdBlog)
   })
 
   it(`should'nt update blog that not exist`, async () => {
@@ -125,7 +121,7 @@ describe("Blogs API", () => {
         description: "",
         websiteUrl: "https://www.example.com",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
   })
 
   it(`should update blog with correct input data`, async () => {
@@ -138,21 +134,21 @@ describe("Blogs API", () => {
         description: "asdawdafsafsdgesg",
         websiteUrl: "https://www.example.com",
       })
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
   })
 
   it(`should delete blog`, async () => {
     await request(app)
       .delete(`${BLOGS_PATH}/${createdBlog.id}`)
       .set('Authorization', adminToken)
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
 
     await request(app)
       .get(`${BLOGS_PATH}/${createdBlog.id}`)
-      .expect(ResultStatus.NotFound)
+      .expect(HttpStatuses.NotFound)
 
     await request(app)
       .get(BLOGS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 })

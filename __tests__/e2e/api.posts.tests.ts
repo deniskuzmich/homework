@@ -1,4 +1,3 @@
-import {ResultStatus} from "../../src/common/types/result.status";
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
@@ -6,6 +5,8 @@ import request from "supertest";
 import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
+import {HttpStatuses} from "../../src/common/types/http-statuses";
+import {dataWithPagination, paginationWithoutData, testPostData} from "../../src/utils-for-tests/utils-for-posts-tests";
 
 describe("Posts API", () => {
   let app: Express;
@@ -19,31 +20,23 @@ describe("Posts API", () => {
 
     await request(app)
       .delete(`${TESTING_PATH}/${'all-data'}`)
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
   })
 
   afterAll(async () => {
     await stopDb();
   })
-  const testPostData = {
-    id: "5",
-    title: "string",
-    shortDescription: "string",
-    content: "string",
-    blogId: "string",
-    blogName: "string",
-  };
 
   it('should return 200 and empty array', async () => {
     await request(app)
       .get(POSTS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   it('should return 404 for not existing post', async () => {
     await request(app)
       .get(`${TESTING_PATH}/${testPostData.id}`)
-      .expect(ResultStatus.NotFound)
+      .expect(HttpStatuses.NotFound)
   })
 
   it(`should'nt create a post with incorrect input data`, async () => {
@@ -56,11 +49,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   it(`should'nt create a post without Authorization`, async () => {
@@ -72,11 +65,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "",
       })
-      .expect(ResultStatus.UNAUTHORIZED_401)
+      .expect(HttpStatuses.Unauthorized)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 
   let createdPost: any = null
@@ -92,7 +85,7 @@ describe("Posts API", () => {
         description: "Some description",
         websiteUrl: "https://example.com"
       })
-      .expect(ResultStatus.CREATED_201)
+      .expect(HttpStatuses.Created)
 
     createdBlog = blogResponse.body
   })
@@ -109,13 +102,13 @@ describe("Posts API", () => {
         blogId: createdBlog.id,
         blogName: "string",
       })
-      .expect(ResultStatus.CREATED_201)
+      .expect(HttpStatuses.Created)
 
     createdPost = createResponse.body
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(ResultStatus.Success, [createdPost])
+      .expect(HttpStatuses.Success, dataWithPagination([createdPost]))
   })
 
   it(`should'nt update post with incorrect input data`, async () => {
@@ -128,11 +121,11 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "adawdasdd",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
 
     await request(app)
       .get(`${POSTS_PATH}/${createdPost.id}`)
-      .expect(ResultStatus.Success, createdPost)
+      .expect(HttpStatuses.Success, createdPost)
   })
 
   it(`should'nt update post that not exist`, async () => {
@@ -145,7 +138,7 @@ describe("Posts API", () => {
         shortDescription: "",
         content: "adawdasdd",
       })
-      .expect(ResultStatus.BAD_REQUEST_400)
+      .expect(HttpStatuses.BadRequest)
   })
 
   it(`should update post with correct input data`, async () => {
@@ -154,25 +147,25 @@ describe("Posts API", () => {
       .set('Authorization', adminToken)
       .send({
         ...testPostData,
-        title: "adsadawdasd",
+        title: "adsadaw",
         shortDescription: "adsdawdasdadwad",
-        content: "adawdasdd",
+        content: "adawdasdsggdglkhkiumh,ojiojk",
       })
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
   })
 
   it(`should delete post`, async () => {
     await request(app)
       .delete(`${POSTS_PATH}/${createdPost.id}`)
       .set('Authorization', adminToken)
-      .expect(ResultStatus.NoContent)
+      .expect(HttpStatuses.NoContent)
 
     await request(app)
       .get(`${POSTS_PATH}/${createdPost.id}`)
-      .expect(ResultStatus.NotFound)
+      .expect(HttpStatuses.NotFound)
 
     await request(app)
       .get(POSTS_PATH)
-      .expect(ResultStatus.Success, [])
+      .expect(HttpStatuses.Success, paginationWithoutData)
   })
 })
