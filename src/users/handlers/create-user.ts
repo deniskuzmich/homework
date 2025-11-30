@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {ResultStatus} from "../../common/types/result.status";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {usersService} from "../service/users.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
