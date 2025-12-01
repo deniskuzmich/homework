@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { ResultStatus } from "../../common/types/result.status";
 import {blogsService} from "../service/blogs.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
 

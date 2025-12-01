@@ -4,6 +4,10 @@ import {blogsCollection} from "../../db/mongo.db";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
 
 export const blogsRepository = {
+
+  async getBlogById(id: string): Promise<WithId<Blog> | null> {
+    return blogsCollection.findOne({_id: new ObjectId(id)});
+  },
   async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
     const updatedBlog = await blogsCollection.updateOne(
       {_id: new ObjectId(id)},

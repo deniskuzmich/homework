@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getBlogsListHandler } from "../blogs/handlers/get-blogs-list.hanlder";
 import { updateBlogHandler } from "../blogs/handlers/update-blog.hanlder";
-import { postBlogHanlder } from "../blogs/handlers/post-blog.hanlder";
+import { createBlogHanlder } from "../blogs/handlers/create-blog.hanlder";
 import { deleteBlogHandler } from "../blogs/handlers/delete-blog.hanlder";
 import { getBlogHandler } from "../blogs/handlers/get-blog.handler";
 import { idValidation } from "../core/middleware-validation/id.validation-middleware";
@@ -35,7 +35,7 @@ blogRouter
     superAdminGuardMiddleware,
     blogsInputValidation,
     inputValidationResultMiddleware,
-    postBlogHanlder,
+    createBlogHanlder,
   )
 
   .delete(

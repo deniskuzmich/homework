@@ -1,5 +1,4 @@
-import {ObjectId, WithId} from "mongodb";
-import {Blog} from "../types/main-types/blog-db.type";
+import {ObjectId} from "mongodb";
 import {blogsCollection} from "../../db/mongo.db";
 import {BlogInput} from "../types/main-types/blog-input.type";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
@@ -41,6 +40,11 @@ export const blogsQueryRepository = {
 
   },
 
-  async getBlogById(id: string): Promise<WithId<Blog> | null> {
-    return blogsCollection.findOne({_id: new ObjectId(id)});
-  },}
+  async getBlogById(id: string): Promise<BlogOutput | null> {
+    const blog = await blogsCollection.findOne({_id: new ObjectId(id)});
+    if (!blog) {
+      return null
+    }
+    return mapToBlogViewModel(blog)
+  }
+}

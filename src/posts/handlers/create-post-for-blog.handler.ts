@@ -1,12 +1,15 @@
 import {Request, Response} from "express";
 import {blogsService} from "../../blogs/service/blogs.service";
-import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {HttpStatuses} from "../../common/types/http-statuses";
+import {postsQueryRepository} from "../repository/posts-query-repository";
+import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
+import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 
 export async function createPostForBlogHandler(
   req: Request<{ id: string }>,
   res: Response
 ) {
+    const query = valuesPaginationMaper(req.query);
     const blogId = req.params.id;
 
     const blog = await blogsService.getBlogById(blogId);
@@ -16,7 +19,8 @@ export async function createPostForBlogHandler(
 
     const createdPost = await blogsService.createPostForBlog(blog, req.body);
 
-    const postForBlog = mapToPostViewModel(createdPost);
+    const postForBlog = await postsQueryRepository.getPostByBlogId(createdPost.blogId.toString(), query)
 
     return res.status(HttpStatuses.Created).send(postForBlog);
 }
+// mapToPostViewModel(createdPost);

@@ -13,6 +13,11 @@ exports.blogsRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
 exports.blogsRepository = {
+    getBlogById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+        });
+    },
     updateBlog(id, newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const updatedBlog = yield mongo_db_1.blogsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {

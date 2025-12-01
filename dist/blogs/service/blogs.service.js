@@ -12,35 +12,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.blogsService = void 0;
 const blogs_repository_1 = require("../repository/blogs-repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
-const post_for_blog_mapper_1 = require("../mapper/post-for-blog-mapper");
-const blogs_query_repository_1 = require("../repository/blogs-query-repository");
-const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
 exports.blogsService = {
-    findBlogs(queryDto) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const foundBlogs = {
-                pageNumber: queryDto.pageNumber ? Number(queryDto.pageNumber) : 1,
-                pageSize: queryDto.pageSize ? Number(queryDto.pageSize) : 10,
-                sortBy: queryDto.sortBy ? queryDto.sortBy : 'createdAt',
-                sortDirection: queryDto.sortDirection ? queryDto.sortDirection : 'desc',
-                searchNameTerm: queryDto.searchNameTerm ? queryDto.searchNameTerm : null,
-            };
-            return blogs_query_repository_1.blogsQueryRepository.findBlogs(foundBlogs);
-        });
-    },
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_query_repository_1.blogsQueryRepository.getBlogById(id);
+            return blogs_repository_1.blogsRepository.getBlogById(id);
         });
     },
-    getPostByBlogId(id, query) {
+    getPostByBlogId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(id);
+            const blog = yield blogs_repository_1.blogsRepository.getBlogById(id);
             if (!blog) {
                 return null;
             }
-            const values = (0, post_for_blog_mapper_1.valuesPaginationMaper)(query);
-            return yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(id, values);
+            return yield posts_repository_1.postsRepository.getPostByBlogId(blog._id.toString());
+            // const values: BlogInputWithoutSearch = valuesPaginationMaper(query);
+            // return await postsQueryRepository.getPostByBlogId(id, values)
         });
     },
     createPostForBlog(blog, inputInfo) {
@@ -71,8 +57,7 @@ exports.blogsService = {
                 createdAt: new Date().toISOString(),
                 isMembership: false
             };
-            const createdBlog = yield blogs_repository_1.blogsRepository.createBlog(newBlog);
-            return createdBlog;
+            return yield blogs_repository_1.blogsRepository.createBlog(newBlog);
         });
     },
     deleteBlog(id) {

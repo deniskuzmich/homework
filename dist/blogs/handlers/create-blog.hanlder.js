@@ -9,17 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPostByBlogIdHanlder = getPostByBlogIdHanlder;
+exports.createBlogHanlder = createBlogHanlder;
+const blogs_service_1 = require("../service/blogs.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
-const posts_query_repository_1 = require("../repository/posts-query-repository");
-const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
-function getPostByBlogIdHanlder(req, res) {
+const blogs_query_repository_1 = require("../repository/blogs-query-repository");
+function createBlogHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
-        const post = yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(req.params.id, query);
-        if (!post) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        const createdBlog = yield blogs_service_1.blogsService.createBlog(req.body);
+        if (!createdBlog) {
+            res.status(http_statuses_1.HttpStatuses.BadRequest);
         }
-        res.status(http_statuses_1.HttpStatuses.Success).send(post);
+        const blogViewModel = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(createdBlog._id.toString());
+        res.status(http_statuses_1.HttpStatuses.Created).send(blogViewModel);
     });
 }

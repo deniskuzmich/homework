@@ -1,9 +1,20 @@
 import {Post} from "../types/main-types/posts-db.type";
-import {ObjectId, SortDirection, WithId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
 import {PostInputDto} from "../types/main-types/post.input-dto";
+import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
+import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
+import {PostOutput} from "../types/main-types/post-output.type";
+import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
+import {finalPostMapper} from "../mapper/final-post-map";
 
 export const postsRepository = {
+  async getPostByBlogId(id: string): Promise<WithId<Post> | null> {
+
+    const post = await postsCollection.findOne({blogId: new ObjectId(id)})
+    if(!post) return null
+    return post
+  },
   async updatePost(id: string, newData: PostInputDto): Promise<void> {
     const updatedPost = await postsCollection.updateOne(
       {_id: new ObjectId(id)},

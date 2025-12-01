@@ -10,16 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getBlogHandler = getBlogHandler;
-const map_to_blog_view_model_1 = require("../mapper/map-to-blog-view-model");
-const blogs_service_1 = require("../service/blogs.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
+const blogs_query_repository_1 = require("../repository/blogs-query-repository");
 function getBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const blog = yield blogs_service_1.blogsService.getBlogById(req.params.id);
+        const blog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(req.params.id);
         if (!blog) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        const blogViewModel = (0, map_to_blog_view_model_1.mapToBlogViewModel)(blog);
-        res.status(http_statuses_1.HttpStatuses.Success).send(blogViewModel);
+        res.status(http_statuses_1.HttpStatuses.Success).send(blog);
     });
 }

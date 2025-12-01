@@ -43,7 +43,11 @@ exports.blogsQueryRepository = {
     },
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const blog = yield mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            if (!blog) {
+                return null;
+            }
+            return (0, map_to_blog_view_model_1.mapToBlogViewModel)(blog);
         });
-    },
+    }
 };
