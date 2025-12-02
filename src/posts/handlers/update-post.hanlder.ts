@@ -1,5 +1,4 @@
 import {Request, Response} from "express";
-import {ResultStatus} from "../../common/types/result.status";
 import {PostInputDto} from "../types/main-types/post.input-dto";
 import {postsService} from "../service/posts.service";
 import {HttpStatuses} from "../../common/types/http-statuses";

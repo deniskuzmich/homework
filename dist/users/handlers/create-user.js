@@ -23,3 +23,11 @@ function createUserHandler(req, res) {
         return res.status(http_statuses_1.HttpStatuses.Created).send(userViewModel);
     });
 }
+//create export const valuesPaginationMaperForUsers = (query: QueryInputForPagination): BlogInputWithoutSearch => {
+//   return {
+//     pageNumber: query.pageNumber ? Number(query.pageNumber) : 1,
+//     pageSize: query.pageSize ? Number(query.pageSize) : 10,
+//     sortBy: query.sortBy ?? 'createdAt',
+//     sortDirection: query.sortDirection ?? 'desc',
+//   }
+// }

@@ -10,9 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.postPostsHandler = postPostsHandler;
-const map_to_post_view_model_1 = require("../mapper/map-to-post-view-model");
 const posts_service_1 = require("../service/posts.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
+const posts_query_repository_1 = require("../repository/posts-query-repository");
 function postPostsHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -20,7 +20,7 @@ function postPostsHandler(req, res) {
             if (!createdPost) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
             }
-            const postViewModel = (0, map_to_post_view_model_1.mapToPostViewModel)(createdPost);
+            const postViewModel = yield posts_query_repository_1.postsQueryRepository.getPostById(createdPost._id.toString());
             res.status(http_statuses_1.HttpStatuses.Created).send(postViewModel);
         }
         catch (e) {

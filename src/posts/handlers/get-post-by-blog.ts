@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import {blogsService} from "../../blogs/service/blogs.service";
-import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {postsQueryRepository} from "../repository/posts-query-repository";
 import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";

@@ -25,8 +25,6 @@ exports.blogsService = {
                 return null;
             }
             return yield posts_repository_1.postsRepository.getPostByBlogId(blog._id.toString());
-            // const values: BlogInputWithoutSearch = valuesPaginationMaper(query);
-            // return await postsQueryRepository.getPostByBlogId(id, values)
         });
     },
     createPostForBlog(blog, inputInfo) {

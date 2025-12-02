@@ -39,8 +39,10 @@ export const postsQueryRepository = {
     return finalPostMapper(postsForFront, paramsForFront);
   },
 
-  async getPostById(id: string): Promise<WithId<Post> | null> {
-    return postsCollection.findOne({_id: new ObjectId(id)});
+  async getPostById(id: string): Promise<PostOutput | null> {
+    const post = await postsCollection.findOne({_id: new ObjectId(id)});
+    if (!post) return null
+    return  mapToPostViewModel(post)
   },
 
   async getPostByBlogId(id: string, query: BlogInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {

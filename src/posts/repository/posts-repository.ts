@@ -9,6 +9,9 @@ import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {finalPostMapper} from "../mapper/final-post-map";
 
 export const postsRepository = {
+  async getPostById(id: string): Promise<WithId<Post> | null> {
+    return postsCollection.findOne({_id: new ObjectId(id)});
+  },
   async getPostByBlogId(id: string): Promise<WithId<Post> | null> {
 
     const post = await postsCollection.findOne({blogId: new ObjectId(id)})

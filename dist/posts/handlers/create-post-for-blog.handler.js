@@ -27,4 +27,3 @@ function createPostForBlogHandler(req, res) {
         return res.status(http_statuses_1.HttpStatuses.Created).send(postForBlog);
     });
 }
-// mapToPostViewModel(createdPost);

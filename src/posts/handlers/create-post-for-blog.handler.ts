@@ -2,7 +2,6 @@ import {Request, Response} from "express";
 import {blogsService} from "../../blogs/service/blogs.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {postsQueryRepository} from "../repository/posts-query-repository";
-import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
 import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 
 export async function createPostForBlogHandler(
@@ -23,4 +22,3 @@ export async function createPostForBlogHandler(
 
     return res.status(HttpStatuses.Created).send(postForBlog);
 }
-// mapToPostViewModel(createdPost);

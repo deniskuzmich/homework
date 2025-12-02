@@ -1,9 +1,8 @@
 import { Request, Response } from "express";
-import { ResultStatus } from "../../common/types/result.status";
 import {PostInputDto} from "../types/main-types/post.input-dto";
-import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {postsService} from "../service/posts.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
+import {postsQueryRepository} from "../repository/posts-query-repository";
 
 export async function postPostsHandler(req: Request <{},{}, PostInputDto>, res: Response) {
   try {
@@ -12,7 +11,7 @@ export async function postPostsHandler(req: Request <{},{}, PostInputDto>, res: 
       return res.sendStatus(HttpStatuses.BadRequest);
     }
 
-    const postViewModel = mapToPostViewModel(createdPost)
+    const postViewModel = await postsQueryRepository.getPostById(createdPost._id.toString())
     res.status(HttpStatuses.Created).send(postViewModel);
 
   } catch (e: unknown) {

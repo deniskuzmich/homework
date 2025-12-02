@@ -2,16 +2,10 @@ import {Blog} from "../types/main-types/blog-db.type";
 import {WithId} from "mongodb";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {blogsRepository} from "../repository/blogs-repository";
-import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {postsRepository} from "../../posts/repository/posts-repository";
 import {Post} from "../../posts/types/main-types/posts-db.type";
-import {BlogInputWithoutSearch} from "../types/input-types/blog-input-without-search";
-import {PostOutput} from "../../posts/types/main-types/post-output.type";
-import {valuesPaginationMaper} from "../mapper/post-for-blog-mapper";
-import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
-import {blogsQueryRepository} from "../repository/blogs-query-repository";
-import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
+
 
 export const blogsService = {
   async getBlogById(id: string): Promise<WithId<Blog> | null> {
@@ -24,8 +18,6 @@ export const blogsService = {
       return null;
     }
     return await postsRepository.getPostByBlogId(blog._id.toString())
-    // const values: BlogInputWithoutSearch = valuesPaginationMaper(query);
-    // return await postsQueryRepository.getPostByBlogId(id, values)
   },
 
   async createPostForBlog(blog: WithId<Blog>, inputInfo: PostInputDtoForBlog): Promise<WithId<Post>> {

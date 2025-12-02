@@ -38,7 +38,10 @@ exports.postsQueryRepository = {
     },
     getPostById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const post = yield mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            if (!post)
+                return null;
+            return (0, map_to_post_view_model_1.mapToPostViewModel)(post);
         });
     },
     getPostByBlogId(id, query) {
