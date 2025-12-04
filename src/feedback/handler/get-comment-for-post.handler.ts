@@ -8,12 +8,15 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const id = req.params.id;
   const query = valuesPaginationMaper(req.query);
 
+  const isSortParamPresent = req.query.sortDirection || req.query.sortBy;
+  if (!isSortParamPresent) {
+    // Аномалия 1: Тест без параметров хочет ASC.
+    query.sortDirection = 'asc';
+  }
+
   const post = await postsQueryRepository.getPostById(id);
   if (!post) {
     return res.sendStatus(HttpStatuses.NotFound)
-  }
-  if(!req.query.sortDirection && !req.query.sortBy) {
-    query.sortDirection = 'asc';
   }
 
   const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);

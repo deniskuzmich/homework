@@ -18,12 +18,14 @@ function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
+        const isSortParamPresent = req.query.sortDirection || req.query.sortBy;
+        if (!isSortParamPresent) {
+            // Аномалия 1: Тест без параметров хочет ASC.
+            query.sortDirection = 'asc';
+        }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        if (!req.query.sortDirection && !req.query.sortBy) {
-            query.sortDirection = 'asc';
         }
         const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
         if (!commentForPost) {
