@@ -24,7 +24,7 @@ export const commentsQueryRepository = {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const direction = query.sortDirection === 'asc' ? 1: -1
-    const sort: [string, 1 | -1][] = [['createdAt', direction], ['_id', 1]];
+    const sort: [string, 1 | -1][] = [['createdAt', direction], ['_id', -1]];
 
     const comments = await commentsCollection
       .find({postId: id})
