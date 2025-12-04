@@ -12,6 +12,9 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   if (!post) {
     return res.sendStatus(HttpStatuses.NotFound)
   }
+  if(!req.query.sortDirection && !req.query.sortBy) {
+    query.sortDirection = 'asc';
+  }
 
   const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
   if(!commentForPost) {

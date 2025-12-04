@@ -22,6 +22,9 @@ function getCommentForPostHandler(req, res) {
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
+        if (!req.query.sortDirection && !req.query.sortBy) {
+            query.sortDirection = 'asc';
+        }
         const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
