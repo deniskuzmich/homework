@@ -33,8 +33,14 @@ export const commentsQueryRepository = {
       .find({postId: id})
       .skip(skip)
       .limit(query.pageSize)
-      .sort(sort)
+      // .sort(sort)
       .toArray();
+
+    comments.sort((a, b) => {
+      const dateDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // DESC
+      if (dateDiff !== 0) return dateDiff;
+      return a._id.toString().localeCompare(b._id.toString()); // ASC для одинаковых createdAt
+    });
 
     const totalCount = await commentsCollection.countDocuments({postId: id});
 
