@@ -25,7 +25,8 @@ export const commentsQueryRepository = {
 
     const direction = query.sortDirection === 'asc' ? 1 : -1;
     const sort: [string, 1 | -1][] = [
-      [query.sortBy, direction]
+      [query.sortBy, direction],
+      ['_id', direction] // Сортируем _id в том же направлении, что и основное поле.
     ];
 
     const comments = await commentsCollection

@@ -36,7 +36,8 @@ exports.commentsQueryRepository = {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
             const direction = query.sortDirection === 'asc' ? 1 : -1;
             const sort = [
-                [query.sortBy, direction]
+                [query.sortBy, direction],
+                ['_id', direction] // Сортируем _id в том же направлении, что и основное поле.
             ];
             const comments = yield mongo_db_1.commentsCollection
                 .find({ postId: id })
