@@ -17,7 +17,7 @@ function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const postId = req.params.id;
         const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(postId, query);
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }

@@ -3,7 +3,7 @@ import {HttpStatuses} from "../../common/types/http-statuses";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {commentsService} from "../service/comments.service";
-import {commentsRepository} from "../repository/comments.repository";
+import {commentsQueryRepository} from "../repository/comments-query.repository";
 
 export async function createCommentForPostHandler(req: Request, res: Response) {
   const user = req.user
@@ -23,7 +23,7 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
   }
 
-  const commentForPost = await commentsRepository.getCommentByPostId(createdComment.data!.postId)
+  const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
 
   return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(commentForPost)
 }

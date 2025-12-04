@@ -1,10 +1,11 @@
 import {commentsCollection} from "../../db/mongo.db";
-import {ObjectId} from "mongodb";
+import {ObjectId, WithId} from "mongodb";
 import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 import {CommentOutput} from "../types/main-types/comment-output.type";
 import {finalCommentMapper} from "../mapper/final-comment-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
+import {CommentDbType} from "../types/main-types/comment-db.type";
 
 
 export const commentsQueryRepository = {
@@ -16,8 +17,13 @@ export const commentsQueryRepository = {
     }
     return mapToCommentViewModel(comment)
   },
+  async getCommentByPostId(id: string): Promise<WithId<CommentDbType> | null> {
+    const commentForPost = await commentsCollection.findOne({postId: new ObjectId(id)})
+    if(!commentForPost) return null
+    return commentForPost
+  },
 
-  async getCommentByPostId(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
+  async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const sort = {[query.sortBy]: query.sortDirection}

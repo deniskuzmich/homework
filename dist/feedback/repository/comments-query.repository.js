@@ -24,7 +24,15 @@ exports.commentsQueryRepository = {
             return (0, map_to_comment_view_model_1.mapToCommentViewModel)(comment);
         });
     },
-    getCommentByPostId(id, query) {
+    getCommentByPostId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: new mongodb_1.ObjectId(id) });
+            if (!commentForPost)
+                return null;
+            return commentForPost;
+        });
+    },
+    getCommentByPostIdWithPagination(id, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
             const sort = { [query.sortBy]: query.sortDirection };
