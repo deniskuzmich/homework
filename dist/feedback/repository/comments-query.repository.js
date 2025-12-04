@@ -18,15 +18,14 @@ exports.commentsQueryRepository = {
     getCommentById(postId) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
-            if (!comment) {
+            if (!comment)
                 return null;
-            }
             return (0, map_to_comment_view_model_1.mapToCommentViewModel)(comment);
         });
     },
     getCommentByPostId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: new mongodb_1.ObjectId(id) });
+            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: id });
             if (!commentForPost)
                 return null;
             return (0, map_to_comment_view_model_1.mapToCommentViewModel)(commentForPost);

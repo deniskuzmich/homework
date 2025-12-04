@@ -11,14 +11,11 @@ import {CommentDbType} from "../types/main-types/comment-db.type";
 export const commentsQueryRepository = {
   async getCommentById(postId: string): Promise<CommentOutput | null> {
     const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})
-
-    if (!comment) {
-      return null;
-    }
+    if (!comment) return null;
     return mapToCommentViewModel(comment)
   },
   async getCommentByPostId(id: string): Promise<CommentDbType | null> {
-    const commentForPost = await commentsCollection.findOne({postId: new ObjectId(id)})
+    const commentForPost = await commentsCollection.findOne({postId: id})
     if(!commentForPost) return null
     return mapToCommentViewModel(commentForPost)
   },
