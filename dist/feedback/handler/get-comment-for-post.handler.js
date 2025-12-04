@@ -18,6 +18,12 @@ function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
+        if (!req.query.sortBy) {
+            query.sortBy = '_id'; // ⬅️ Устанавливаем _id
+        }
+        if (!req.query.sortDirection) {
+            query.sortDirection = 'asc'; // ⬅️ Устанавливаем ASC
+        }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
