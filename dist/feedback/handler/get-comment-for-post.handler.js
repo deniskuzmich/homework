@@ -18,7 +18,7 @@ function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-        if (!req.query.sortDirection && !req.query.sortBy && !req.query.pageSize && !req.query.pageNumber) {
+        if (!req.query.sortDirection) {
             query.sortDirection = 'asc';
         }
         const post = yield posts_service_1.postsService.getPostById(id);
