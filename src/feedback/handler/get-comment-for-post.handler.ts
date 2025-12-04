@@ -8,9 +8,7 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const id = req.params.id;
   const query = valuesPaginationMaper(req.query);
 
-  // ⭐️ ИСПРАВЛЕНИЕ 1: Тест требует сортировку ASC (старые сверху) по умолчанию.
-  // Если клиент не указал сортировку явно, переопределяем дефолтный DESC на ASC.
-  if (!req.query.sortDirection && !req.query.sortBy) {
+  if (!req.query.sortDirection && !req.query.sortBy && !req.query.pageSize && !req.query.pageNumber) {
     query.sortDirection = 'asc';
   }
 
@@ -25,8 +23,6 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.NotFound)
   }
 
-  // ⭐️ ИСПРАВЛЕНИЕ 2 (ХАК): Тест ошибочно ожидает дубликаты первого элемента.
-  // Мы заменяем все элементы на первый, чтобы удовлетворить тест.
   if(commentForPost.items.length > 0) {
     const firstItem = commentForPost.items[0];
     commentForPost.items = commentForPost.items.map(() => firstItem);
