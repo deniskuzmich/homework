@@ -29,7 +29,7 @@ exports.commentsQueryRepository = {
             const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: new mongodb_1.ObjectId(id) });
             if (!commentForPost)
                 return null;
-            return commentForPost;
+            return (0, map_to_comment_view_model_1.mapToCommentViewModel)(commentForPost);
         });
     },
     getCommentByPostIdWithPagination(id, query) {

@@ -17,10 +17,10 @@ export const commentsQueryRepository = {
     }
     return mapToCommentViewModel(comment)
   },
-  async getCommentByPostId(id: string): Promise<WithId<CommentDbType> | null> {
+  async getCommentByPostId(id: string): Promise<CommentDbType | null> {
     const commentForPost = await commentsCollection.findOne({postId: new ObjectId(id)})
     if(!commentForPost) return null
-    return commentForPost
+    return mapToCommentViewModel(commentForPost)
   },
 
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
