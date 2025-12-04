@@ -14,14 +14,12 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const comments_service_1 = require("../service/comments.service");
-const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 const comments_repository_1 = require("../repository/comments.repository");
 function createCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.user;
         const content = req.body.content;
         const postId = req.params.id;
-        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
         if (!content || !user) {
             return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
         }

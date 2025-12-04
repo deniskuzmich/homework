@@ -20,7 +20,7 @@ exports.commentsRepository = {
     },
     getCommentByPostId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ blogId: new mongodb_1.ObjectId(id) });
+            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: new mongodb_1.ObjectId(id) });
             if (!commentForPost)
                 return null;
             return commentForPost;

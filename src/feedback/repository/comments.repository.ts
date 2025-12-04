@@ -11,7 +11,7 @@ export const commentsRepository = {
   },
 
   async getCommentByPostId(id: string): Promise<WithId<CommentDbType> | null> {
-    const commentForPost = await commentsCollection.findOne({blogId: new ObjectId(id)})
+    const commentForPost = await commentsCollection.findOne({postId: new ObjectId(id)})
     if(!commentForPost) return null
     return commentForPost
   },
