@@ -13,8 +13,7 @@ exports.commentsService = void 0;
 const comments_query_repository_1 = require("../repository/comments-query.repository");
 const result_status_1 = require("../../common/types/result.status");
 const comments_repository_1 = require("../repository/comments.repository");
-const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
-const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
+const posts_repository_1 = require("../../posts/repository/posts-repository");
 exports.commentsService = {
     getCommentById(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -40,9 +39,9 @@ exports.commentsService = {
             };
         });
     },
-    getCommentByPostId(postId, query) {
+    getCommentByPostId(postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const post = yield posts_query_repository_1.postsQueryRepository.getPostById(postId);
+            const post = yield posts_repository_1.postsRepository.getPostById(postId);
             if (!post) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -51,8 +50,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const values = (0, post_for_blog_mapper_1.valuesPaginationMaper)(query);
-            const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(postId, values);
+            const commentForPost = yield comments_repository_1.commentsRepository.getCommentByPostId(postId);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],
@@ -98,7 +96,7 @@ exports.commentsService = {
     },
     createCommentForPost(user, content, postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isPostExists = yield posts_query_repository_1.postsQueryRepository.getPostById(postId);
+            const isPostExists = yield posts_repository_1.postsRepository.getPostById(postId);
             if (!isPostExists) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -142,7 +140,7 @@ exports.commentsService = {
     },
     deleteComment(commentId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(commentId);
+            const comment = yield comments_repository_1.commentsRepository.getCommentById(commentId);
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,

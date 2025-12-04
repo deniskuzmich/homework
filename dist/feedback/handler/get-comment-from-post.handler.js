@@ -10,17 +10,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCommentForPostHandler = getCommentForPostHandler;
-const comments_service_1 = require("../service/comments.service");
-const result_status_1 = require("../../common/types/result.status");
-const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
+const http_statuses_1 = require("../../common/types/http-statuses");
+const comments_query_repository_1 = require("../repository/comments-query.repository");
+const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const query = req.query;
         const postId = req.params.id;
-        const commentForPost = yield comments_service_1.commentsService.getCommentByPostId(postId, query);
-        if (commentForPost.status === result_status_1.ResultStatus.NotFound) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(commentForPost.status)).send(commentForPost.extensions);
+        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(postId, query);
+        if (!commentForPost) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(commentForPost.status)).send(commentForPost.data);
+        return res.status(http_statuses_1.HttpStatuses.Success).send(commentForPost);
     });
 }

@@ -14,11 +14,14 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const comments_service_1 = require("../service/comments.service");
+const comments_query_repository_1 = require("../repository/comments-query.repository");
+const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 function createCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.user;
         const content = req.body.content;
         const postId = req.params.id;
+        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
         if (!content || !user) {
             return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
         }
@@ -29,6 +32,7 @@ function createCommentForPostHandler(req, res) {
         if (createdComment.status !== result_status_1.ResultStatus.Created) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }
-        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.data);
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(createdComment.data.postId, query);
+        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(commentForPost);
     });
 }

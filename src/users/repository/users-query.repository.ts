@@ -46,22 +46,11 @@ export const usersQueryRepository = {
     return userForFrontMapper(userForFront, paramsForFront);
   },
 
-  async getUserById(id: string): Promise<WithId<UserDbType> | null> {
+  async getUserById(id: string): Promise<UserOutput | null> {
     if(!ObjectId.isValid(id)) return null;
-    return usersCollection.findOne({_id: new ObjectId(id)});
+    const user = await usersCollection.findOne({id});
+    if(!user) return null;
+    return mapToUserViewModel(user);
   },
-
-  async getLoginUser(login: string): Promise<WithId<UserDbType> | null> {
-    return usersCollection.findOne({login: login})
-  },
-
-  async getEmailUser(email: string): Promise<WithId<UserDbType> | null> {
-    return usersCollection.findOne({email: email})
-  },
-
-  async getUserByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserDbType> | null> {
-    const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]});
-    return user;
-  }
 }
 

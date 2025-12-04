@@ -1,13 +1,22 @@
-import {commentsCollection} from "../../db/mongo.db";
+import {commentsCollection, postsCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
-import {CommentOutput} from "../types/main-types/comment-output.type";
-import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
+import {CommentDbType} from "../types/main-types/comment-db.type";
+
 
 
 export const commentsRepository = {
-  async updateComment(id: string, newContent: string) {
+  async getCommentById(postId: string): Promise<WithId<CommentDbType> | null> {
+    return commentsCollection.findOne({_id: new ObjectId(postId)})
+  },
 
+  async getCommentByPostId(id: string): Promise<WithId<CommentDbType> | null> {
+    const commentForPost = await commentsCollection.findOne({blogId: new ObjectId(id)})
+    if(!commentForPost) return null
+    return commentForPost
+  },
+
+  async updateComment(id: string, newContent: string) {
     const updatedComment = await commentsCollection.updateOne(
       {_id: new ObjectId(id)},
       {
@@ -27,7 +36,7 @@ export const commentsRepository = {
     return true
   },
 
-  async createCommentForPost(comment: CommentForPostInput): Promise<CommentOutput | null> {
+  async createCommentForPost(comment: CommentForPostInput): Promise<WithId<CommentForPostInput> | null> {
       const insertResult = await commentsCollection.insertOne(comment)
       if (!insertResult.acknowledged) return null;
 
@@ -35,7 +44,6 @@ export const commentsRepository = {
         {_id: insertResult.insertedId}
       )
       if (!newComment) return null;
-
-      return mapToCommentViewModel(newComment)
+      return newComment
   }
 }

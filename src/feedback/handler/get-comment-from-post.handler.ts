@@ -1,16 +1,15 @@
 import {Request, Response} from "express";
-import {commentsService} from "../service/comments.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {ResultStatus} from "../../common/types/result.status";
-import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {commentsQueryRepository} from "../repository/comments-query.repository";
+import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
 
 export async function getCommentForPostHandler(req: Request, res: Response) {
-  const query = req.query;
   const postId = req.params.id;
+  const query = valuesPaginationMaper(req.query);
 
-  const commentForPost = await commentsService.getCommentByPostId(postId, query);
-  if(commentForPost.status === ResultStatus.NotFound) {
-    return res.status(mapResultCodeToHttpExtension(commentForPost.status)).send(commentForPost.extensions)
+  const commentForPost = await commentsQueryRepository.getCommentByPostId(postId, query);
+  if(!commentForPost) {
+    return res.sendStatus(HttpStatuses.NotFound)
   }
-  return res.status(mapResultCodeToHttpExtension(commentForPost.status)).send(commentForPost.data)
+  return res.status(HttpStatuses.Success).send(commentForPost)
 }

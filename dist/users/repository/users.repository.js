@@ -13,6 +13,23 @@ exports.usersRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
 exports.usersRepository = {
+    getUserById(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!mongodb_1.ObjectId.isValid(id))
+                return null;
+            return mongo_db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+        });
+    },
+    getLoginUser(login) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.findOne({ login: login });
+        });
+    },
+    getEmailUser(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.findOne({ email: email });
+        });
+    },
     createUser(newUser) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.usersCollection.insertOne(newUser);
@@ -32,6 +49,12 @@ exports.usersRepository = {
             if (deletedUser.deletedCount < 1) {
                 throw new Error("Blog not exist");
             }
+        });
+    },
+    getUserByLoginOrEmail(loginOrEmail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
+            return user;
         });
     }
 };

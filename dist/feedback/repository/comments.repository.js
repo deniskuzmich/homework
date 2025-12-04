@@ -12,8 +12,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.commentsRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
-const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
 exports.commentsRepository = {
+    getCommentById(postId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
+        });
+    },
+    getCommentByPostId(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const commentForPost = yield mongo_db_1.commentsCollection.findOne({ blogId: new mongodb_1.ObjectId(id) });
+            if (!commentForPost)
+                return null;
+            return commentForPost;
+        });
+    },
     updateComment(id, newContent) {
         return __awaiter(this, void 0, void 0, function* () {
             const updatedComment = yield mongo_db_1.commentsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
@@ -43,7 +55,7 @@ exports.commentsRepository = {
             const newComment = yield mongo_db_1.commentsCollection.findOne({ _id: insertResult.insertedId });
             if (!newComment)
                 return null;
-            return (0, map_to_comment_view_model_1.mapToCommentViewModel)(newComment);
+            return newComment;
         });
     }
 };

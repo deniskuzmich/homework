@@ -10,15 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCommentByIdHandler = getCommentByIdHandler;
-const comments_service_1 = require("../service/comments.service");
-const result_status_1 = require("../../common/types/result.status");
-const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
+const comments_query_repository_1 = require("../repository/comments-query.repository");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function getCommentByIdHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const comment = yield comments_service_1.commentsService.getCommentById(req.params.id);
-        if (comment.status !== result_status_1.ResultStatus.Success) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.extensions);
+        const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(req.params.id);
+        if (!comment) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(comment.status)).send(comment.data);
+        res.status(http_statuses_1.HttpStatuses.Success).send(comment);
     });
 }

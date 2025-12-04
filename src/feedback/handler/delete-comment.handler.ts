@@ -13,6 +13,5 @@ export async function deleteCommentHandler(req: Request, res: Response) {
   if(deletedComment.status !== ResultStatus.NoContent) {
     return res.sendStatus(mapResultCodeToHttpExtension(deletedComment.status))
   }
-
   return res.sendStatus(mapResultCodeToHttpExtension(deletedComment.status));
 }

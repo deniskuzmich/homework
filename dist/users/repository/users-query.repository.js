@@ -54,23 +54,10 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             if (!mongodb_1.ObjectId.isValid(id))
                 return null;
-            return mongo_db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
+            const user = yield mongo_db_1.usersCollection.findOne({ id });
+            if (!user)
+                return null;
+            return (0, map_to_user_view_model_1.mapToUserViewModel)(user);
         });
     },
-    getLoginUser(login) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.usersCollection.findOne({ login: login });
-        });
-    },
-    getEmailUser(email) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.usersCollection.findOne({ email: email });
-        });
-    },
-    getUserByLoginOrEmail(loginOrEmail) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
-            return user;
-        });
-    }
 };

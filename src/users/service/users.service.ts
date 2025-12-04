@@ -6,28 +6,15 @@ import {usersRepository} from "../repository/users.repository";
 import {UserDbType} from "../types/main-types/user-db-type";
 import {UserInputDto} from "../types/input-types/user-input-dto.type";
 import {WithId} from "mongodb";
-import {usersQueryRepository} from "../repository/users-query.repository";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
 import {bcryptService} from "../../common/services/bcrypt.service";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 
-
 export const usersService = {
-  async getAllUsers(queryDto: UserQueryInput): Promise<OutputTypeWithPagination<UserOutput>> {
-    const foundUsers: UsersInput = {
-      sortBy: queryDto.sortBy ?? 'createdAt',
-      sortDirection: queryDto.sortDirection ?? 'desc',
-      pageNumber: queryDto.pageNumber ? Number(queryDto.pageNumber) : 1,
-      pageSize: queryDto.pageSize ? Number(queryDto.pageSize) : 10,
-      searchLoginTerm: queryDto.searchLoginTerm ?? null,
-      searchEmailTerm: queryDto.searchEmailTerm ?? null
-    }
-    return usersQueryRepository.getAllUsers(foundUsers);
-  },
   async createUser(queryDto: UserInputDto): Promise<UserDbType | ErrorTypeOutput> {
-    const isLoginExists = await usersQueryRepository.getLoginUser(queryDto.login)
+    const isLoginExists = await usersRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {
       return {
         errorsMessages: [
@@ -36,7 +23,7 @@ export const usersService = {
       }
     }
 
-    const isEmailExists = await usersQueryRepository.getEmailUser(queryDto.email)
+    const isEmailExists = await usersRepository.getEmailUser(queryDto.email)
     if (isEmailExists) {
       return {
         errorsMessages: [
@@ -57,7 +44,7 @@ export const usersService = {
 
   async getUserById(id: string): Promise<WithId<UserDbType> | null> {
     if (!id) return null
-    return usersQueryRepository.getUserById(id);
+    return usersRepository.getUserById(id);
   },
 
   async deleteUser(id: string): Promise<void> {
@@ -65,7 +52,7 @@ export const usersService = {
   },
 
   async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
-    const user = await usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
+    const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
       return {
         status: ResultStatus.Unauthorized,

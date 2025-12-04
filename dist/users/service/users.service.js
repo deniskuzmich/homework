@@ -11,28 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersService = void 0;
 const users_repository_1 = require("../repository/users.repository");
-const users_query_repository_1 = require("../repository/users-query.repository");
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const bcrypt_service_1 = require("../../common/services/bcrypt.service");
 const result_status_1 = require("../../common/types/result.status");
 exports.usersService = {
-    getAllUsers(queryDto) {
-        return __awaiter(this, void 0, void 0, function* () {
-            var _a, _b, _c, _d;
-            const foundUsers = {
-                sortBy: (_a = queryDto.sortBy) !== null && _a !== void 0 ? _a : 'createdAt',
-                sortDirection: (_b = queryDto.sortDirection) !== null && _b !== void 0 ? _b : 'desc',
-                pageNumber: queryDto.pageNumber ? Number(queryDto.pageNumber) : 1,
-                pageSize: queryDto.pageSize ? Number(queryDto.pageSize) : 10,
-                searchLoginTerm: (_c = queryDto.searchLoginTerm) !== null && _c !== void 0 ? _c : null,
-                searchEmailTerm: (_d = queryDto.searchEmailTerm) !== null && _d !== void 0 ? _d : null
-            };
-            return users_query_repository_1.usersQueryRepository.getAllUsers(foundUsers);
-        });
-    },
     createUser(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isLoginExists = yield users_query_repository_1.usersQueryRepository.getLoginUser(queryDto.login);
+            const isLoginExists = yield users_repository_1.usersRepository.getLoginUser(queryDto.login);
             if (isLoginExists) {
                 return {
                     errorsMessages: [
@@ -40,7 +25,7 @@ exports.usersService = {
                     ]
                 };
             }
-            const isEmailExists = yield users_query_repository_1.usersQueryRepository.getEmailUser(queryDto.email);
+            const isEmailExists = yield users_repository_1.usersRepository.getEmailUser(queryDto.email);
             if (isEmailExists) {
                 return {
                     errorsMessages: [
@@ -62,7 +47,7 @@ exports.usersService = {
         return __awaiter(this, void 0, void 0, function* () {
             if (!id)
                 return null;
-            return users_query_repository_1.usersQueryRepository.getUserById(id);
+            return users_repository_1.usersRepository.getUserById(id);
         });
     },
     deleteUser(id) {
@@ -72,7 +57,7 @@ exports.usersService = {
     },
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_query_repository_1.usersQueryRepository.getUserByLoginOrEmail(loginOrEmail);
+            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,

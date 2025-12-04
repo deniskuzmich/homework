@@ -4,6 +4,19 @@ import {UserDbType} from "../types/main-types/user-db-type";
 import {UserCreateType} from "../types/input-types/user-create-type";
 
 export const usersRepository = {
+  async getUserById(id: string): Promise<WithId<UserDbType> | null> {
+    if(!ObjectId.isValid(id)) return null;
+    return usersCollection.findOne({_id: new ObjectId(id)});
+  },
+
+  async getLoginUser(login: string): Promise<WithId<UserDbType> | null> {
+    return usersCollection.findOne({login: login})
+  },
+
+  async getEmailUser(email: string): Promise<WithId<UserDbType> | null> {
+    return usersCollection.findOne({email: email})
+  },
+
   async createUser(newUser: UserCreateType): Promise<UserDbType> {
     const insertResult = await usersCollection.insertOne(newUser);
     const createdUser: UserDbType = {
@@ -22,5 +35,10 @@ export const usersRepository = {
     if (deletedUser.deletedCount < 1) {
       throw new Error("Blog not exist");
     }
+  },
+
+  async getUserByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserDbType> | null> {
+    const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]});
+    return user;
   }
 }

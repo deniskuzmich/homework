@@ -4,10 +4,10 @@ import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 import {commentsRepository} from "../repository/comments.repository";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
-import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
-import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
-import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
-import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
+import {postsRepository} from "../../posts/repository/posts-repository";
+import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
+import {WithId} from "mongodb";
+import {CommentDbType} from "../types/main-types/comment-db.type";
 
 
 export const commentsService = {
@@ -34,8 +34,8 @@ export const commentsService = {
     }
   },
 
-  async getCommentByPostId(postId: string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
-    const post = await postsQueryRepository.getPostById(postId)
+  async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
+    const post = await postsRepository.getPostById(postId)
     if (!post) {
       return {
         status: ResultStatus.NotFound,
@@ -44,8 +44,7 @@ export const commentsService = {
         data: null
       }
     }
-    const values = valuesPaginationMaper(query);
-    const commentForPost = await commentsQueryRepository.getCommentByPostId(postId, values)
+    const commentForPost = await commentsRepository.getCommentByPostId(postId)
     return {
       status: ResultStatus.Success,
       extensions: [],
@@ -88,8 +87,8 @@ export const commentsService = {
     }
   },
 
-  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentOutput | null>> {
-    const isPostExists = await postsQueryRepository.getPostById(postId);
+  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentForPostInput | null>> {
+    const isPostExists = await postsRepository.getPostById(postId);
     if (!isPostExists) {
       return {
         status: ResultStatus.NotFound,
@@ -135,7 +134,7 @@ export const commentsService = {
   },
 
   async deleteComment(commentId: string, userId: string): Promise<ResultType> {
-    const comment = await commentsQueryRepository.getCommentById(commentId);
+    const comment = await commentsRepository.getCommentById(commentId);
     if(!comment) {
       return {
         status: ResultStatus.NotFound,
@@ -154,7 +153,6 @@ export const commentsService = {
     }
 
     const deletedComment = await commentsRepository.deleteComment(commentId);
-
     return {
       status: ResultStatus.NoContent,
       extensions: [],

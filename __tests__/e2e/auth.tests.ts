@@ -31,11 +31,6 @@ describe('Auth', () => {
         email: 'mail@example.com'
       });
 
-    testUserLogin = createdUser.body.login;
-    testUserId = createdUser.body.id;
-  }, 60000)
-
-  beforeEach(async () => {
     const auth = await request(app)
       .post(`${AUTH_PATH}/login`)
       .send({
@@ -45,7 +40,14 @@ describe('Auth', () => {
       .expect(HttpStatuses.Success)
 
     token = auth.body.accessToken;
-  })
+
+    testUserLogin = createdUser.body.login;
+    testUserId = createdUser.body.id;
+  }, 60000)
+
+  // beforeEach(async () => {
+  //
+  // })
   afterAll(async () => {
     await stopDb()
   })
