@@ -23,7 +23,7 @@ export const commentsQueryRepository = {
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
-    const sort = {[query.sortBy]: query.sortDirection}
+    const sort = {[query.sortBy]: query.sortDirection};
 
     const comments = await commentsCollection
       .find({postId: id})

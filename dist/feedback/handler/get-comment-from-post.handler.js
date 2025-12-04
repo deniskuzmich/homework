@@ -12,11 +12,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getCommentForPostHandler = getCommentForPostHandler;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const comments_query_repository_1 = require("../repository/comments-query.repository");
-const query_validation_maper_1 = require("../mapper/query-validation-maper");
+const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const postId = req.params.id;
-        const query = (0, query_validation_maper_1.valuesPaginationMaperAsc)(req.query);
+        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
         const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
