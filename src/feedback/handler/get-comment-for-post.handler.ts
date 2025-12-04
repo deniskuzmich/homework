@@ -8,8 +8,8 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const id = req.params.id;
   const query = valuesPaginationMaper(req.query);
 
-  const isSortParamPresent = req.query.sortDirection || req.query.sortBy;
-  if (!isSortParamPresent) {
+  const hasAnyQueryParams = req.query.sortDirection || req.query.sortBy || req.query.pageNumber || req.query.pageSize;
+  if (!hasAnyQueryParams) {
     // Аномалия 1: Тест без параметров хочет ASC.
     query.sortDirection = 'asc';
   }
