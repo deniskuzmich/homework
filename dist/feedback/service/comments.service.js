@@ -15,30 +15,28 @@ const result_status_1 = require("../../common/types/result.status");
 const comments_repository_1 = require("../repository/comments.repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
 exports.commentsService = {
-    getCommentById(id) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (!id) {
-                return {
-                    status: result_status_1.ResultStatus.NotFound,
-                    extensions: [],
-                    data: null
-                };
-            }
-            const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(id);
-            if (!comment) {
-                return {
-                    status: result_status_1.ResultStatus.NotFound,
-                    extensions: [],
-                    data: null
-                };
-            }
-            return {
-                status: result_status_1.ResultStatus.Success,
-                extensions: [],
-                data: comment
-            };
-        });
-    },
+    // async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
+    //   if (!id) {
+    //     return {
+    //       status: ResultStatus.NotFound,
+    //       extensions: [],
+    //       data: null
+    //     }
+    //   }
+    //   const comment = await commentsQueryRepository.getCommentById(id);
+    //   if (!comment) {
+    //     return {
+    //       status: ResultStatus.NotFound,
+    //       extensions: [],
+    //       data: null
+    //     }
+    //   }
+    //   return {
+    //     status: ResultStatus.Success,
+    //     extensions: [],
+    //     data: comment
+    //   }
+    // },
     getCommentByPostId(postId) {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield posts_repository_1.postsRepository.getPostById(postId);

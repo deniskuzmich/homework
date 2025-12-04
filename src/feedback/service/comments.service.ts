@@ -11,28 +11,28 @@ import {CommentDbType} from "../types/main-types/comment-db.type";
 
 
 export const commentsService = {
-  async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
-    if (!id) {
-      return {
-        status: ResultStatus.NotFound,
-        extensions: [],
-        data: null
-      }
-    }
-    const comment = await commentsQueryRepository.getCommentById(id);
-    if (!comment) {
-      return {
-        status: ResultStatus.NotFound,
-        extensions: [],
-        data: null
-      }
-    }
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: comment
-    }
-  },
+  // async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
+  //   if (!id) {
+  //     return {
+  //       status: ResultStatus.NotFound,
+  //       extensions: [],
+  //       data: null
+  //     }
+  //   }
+  //   const comment = await commentsQueryRepository.getCommentById(id);
+  //   if (!comment) {
+  //     return {
+  //       status: ResultStatus.NotFound,
+  //       extensions: [],
+  //       data: null
+  //     }
+  //   }
+  //   return {
+  //     status: ResultStatus.Success,
+  //     extensions: [],
+  //     data: comment
+  //   }
+  // },
 
   async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
     const post = await postsRepository.getPostById(postId)
