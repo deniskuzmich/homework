@@ -8,9 +8,8 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const id = req.params.id;
   const query = valuesPaginationMaper(req.query);
 
-  if (!req.query.sortDirection && !req.query.sortBy) {
-    query.sortDirection = 'asc';
-  }
+  if (!query.sortBy) query.sortBy = 'createdAt';
+  if (!query.sortDirection) query.sortDirection = 'asc';
 
   const post = await postsQueryRepository.getPostById(id);
   if (!post) {
@@ -20,10 +19,6 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
   if(!commentForPost) {
     return res.sendStatus(HttpStatuses.NotFound)
-  }
-  if(commentForPost.items.length > 0) {
-    const firstItem = commentForPost.items[0];
-    commentForPost.items = commentForPost.items.map(() => firstItem)
   }
   return res.status(HttpStatuses.Success).send(commentForPost)
 }
