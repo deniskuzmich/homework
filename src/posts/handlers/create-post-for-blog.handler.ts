@@ -8,7 +8,7 @@ export async function createPostForBlogHandler(
   req: Request<{ id: string }>,
   res: Response
 ) {
-    const query = valuesPaginationMaper(req.query);
+    // const query = valuesPaginationMaper(req.query);
     const blogId = req.params.id;
 
     const blog = await blogsService.getBlogById(blogId);
@@ -18,7 +18,7 @@ export async function createPostForBlogHandler(
 
     const createdPost = await blogsService.createPostForBlog(blog, req.body);
 
-    const postForBlog = await postsQueryRepository.getPostById(createdPost.blogId.toString())
+    const postForBlog = await postsQueryRepository.getPostById(createdPost._id.toString())
 
     return res.status(HttpStatuses.Created).send(postForBlog);
 }

@@ -13,17 +13,16 @@ exports.createPostForBlogHandler = createPostForBlogHandler;
 const blogs_service_1 = require("../../blogs/service/blogs.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
 const posts_query_repository_1 = require("../repository/posts-query-repository");
-const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
 function createPostForBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
+        // const query = valuesPaginationMaper(req.query);
         const blogId = req.params.id;
         const blog = yield blogs_service_1.blogsService.getBlogById(blogId);
         if (!blog) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
         const createdPost = yield blogs_service_1.blogsService.createPostForBlog(blog, req.body);
-        const postForBlog = yield posts_query_repository_1.postsQueryRepository.getPostById(createdPost.blogId.toString());
+        const postForBlog = yield posts_query_repository_1.postsQueryRepository.getPostById(createdPost._id.toString());
         return res.status(http_statuses_1.HttpStatuses.Created).send(postForBlog);
     });
 }
