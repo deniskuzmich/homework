@@ -23,12 +23,12 @@ export const commentsQueryRepository = {
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
-    // const direction = query.sortDirection === 'asc' ? 1 : -1;
-    // const sort: [string, 1 | -1][] = [
-    //   [query.sortBy || 'createdAt', direction],
-    //   ['_id', 1] // всегда asc для стабильного порядка
-    // ];
-    const sort = {[query.sortBy]: query.sortDirection}
+    const direction = query.sortDirection === 'asc' ? 1 : -1;
+    const sort: [string, 1 | -1][] = [
+      [query.sortBy || 'createdAt', direction],
+      ['_id', 1] // всегда asc для стабильного порядка
+    ];
+
     const comments = await commentsCollection
       .find({postId: id})
       .skip(skip)
