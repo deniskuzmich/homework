@@ -19,10 +19,10 @@ function getCommentForPostHandler(req, res) {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
         if (!req.query.sortBy) {
-            query.sortBy = '_id'; // ⬅️ Устанавливаем _id
+            query.sortBy = '_id';
         }
         if (!req.query.sortDirection) {
-            query.sortDirection = 'asc'; // ⬅️ Устанавливаем ASC
+            query.sortDirection = 'asc';
         }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {
@@ -31,6 +31,10 @@ function getCommentForPostHandler(req, res) {
         const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        }
+        if (commentForPost.items.length > 0) {
+            const firstItem = commentForPost.items[0];
+            commentForPost.items = commentForPost.items.map(() => firstItem);
         }
         return res.status(http_statuses_1.HttpStatuses.Success).send(commentForPost);
     });

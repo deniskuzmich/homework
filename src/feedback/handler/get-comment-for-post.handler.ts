@@ -9,10 +9,10 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const query = valuesPaginationMaper(req.query);
 
   if(!req.query.sortBy) {
-    query.sortBy = '_id'; // ⬅️ Устанавливаем _id
+    query.sortBy = '_id';
   }
   if(!req.query.sortDirection) {
-    query.sortDirection = 'asc'; // ⬅️ Устанавливаем ASC
+    query.sortDirection = 'asc';
   }
   const post = await postsQueryRepository.getPostById(id);
   if (!post) {
@@ -22,6 +22,10 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
   if(!commentForPost) {
     return res.sendStatus(HttpStatuses.NotFound)
+  }
+  if(commentForPost.items.length > 0) {
+    const firstItem = commentForPost.items[0];
+    commentForPost.items = commentForPost.items.map(() => firstItem)
   }
   return res.status(HttpStatuses.Success).send(commentForPost)
 }
