@@ -13,11 +13,16 @@ exports.getCommentForPostHandler = getCommentForPostHandler;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const comments_query_repository_1 = require("../repository/comments-query.repository");
 const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
+const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const postId = req.params.id;
+        const id = req.params.id;
         const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query);
+        const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
+        if (!post) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        }
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }

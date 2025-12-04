@@ -2,7 +2,7 @@ import {Post} from "../types/main-types/posts-db.type";
 import {ObjectId, SortDirection, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
 import {PostInputDto} from "../types/main-types/post.input-dto";
-import {BlogInputWithoutSearch} from "../../blogs/types/input-types/blog-input-without-search";
+import {InputWithoutSearch} from "../../blogs/types/input-types/input-without-search";
 import {
   OutputTypeWithPagination
 } from "../../common/types/output-with-pagintaion.type";
@@ -45,7 +45,7 @@ export const postsQueryRepository = {
     return  mapToPostViewModel(post)
   },
 
-  async getPostByBlogId(id: string, query: BlogInputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
+  async getPostByBlogId(id: string, query: InputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
 
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
