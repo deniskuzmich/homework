@@ -26,7 +26,7 @@ export const commentsQueryRepository = {
     const direction = query.sortDirection === 'asc' ? 1 : -1;
     const sort: [string, 1 | -1][] = [
       [query.sortBy || 'createdAt', direction],
-      ['_id', 1] // всегда asc для стабильного порядка
+      ['_id', 1] // ASC для стабильности
     ];
 
     const comments = await commentsCollection
