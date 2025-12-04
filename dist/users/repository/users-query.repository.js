@@ -54,7 +54,7 @@ exports.usersQueryRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             if (!mongodb_1.ObjectId.isValid(id))
                 return null;
-            const user = yield mongo_db_1.usersCollection.findOne({ id });
+            const user = yield mongo_db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
             if (!user)
                 return null;
             return (0, map_to_user_view_model_1.mapToUserViewModel)(user);

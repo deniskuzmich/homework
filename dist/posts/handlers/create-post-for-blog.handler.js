@@ -15,7 +15,6 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const posts_query_repository_1 = require("../repository/posts-query-repository");
 function createPostForBlogHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const query = valuesPaginationMaper(req.query);
         const blogId = req.params.id;
         const blog = yield blogs_service_1.blogsService.getBlogById(blogId);
         if (!blog) {

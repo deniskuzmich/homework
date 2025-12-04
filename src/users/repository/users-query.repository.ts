@@ -48,7 +48,7 @@ export const usersQueryRepository = {
 
   async getUserById(id: string): Promise<UserOutput | null> {
     if(!ObjectId.isValid(id)) return null;
-    const user = await usersCollection.findOne({id});
+    const user = await usersCollection.findOne({_id: new ObjectId(id)});
     if(!user) return null;
     return mapToUserViewModel(user);
   },
