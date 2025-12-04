@@ -34,8 +34,9 @@ exports.commentsQueryRepository = {
     getCommentByPostIdWithPagination(id, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
+            const direction = query.sortDirection === 'asc' ? 1 : -1;
             const sort = [
-                [query.sortBy, query.sortDirection === 'asc' ? 1 : -1]
+                [query.sortBy, direction], ['_id', direction]
             ];
             const comments = yield mongo_db_1.commentsCollection
                 .find({ postId: id })
