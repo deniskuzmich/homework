@@ -23,11 +23,7 @@ export const commentsQueryRepository = {
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
-    const direction = query.sortDirection === 'asc' ? 1 : -1;
-    const sort: [string, 1 | -1][] = [
-      [query.sortBy, direction],
-      ['_id', direction] // Сортируем _id в том же направлении, что и основное поле.
-    ];
+    const sort = {[query.sortBy]: query.sortDirection}
 
     const comments = await commentsCollection
       .find({postId: id})
@@ -35,7 +31,6 @@ export const commentsQueryRepository = {
       .limit(query.pageSize)
       .sort(sort)
       .toArray();
-
 
     const totalCount = await commentsCollection.countDocuments({postId: id});
 
