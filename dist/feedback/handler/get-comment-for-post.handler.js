@@ -13,20 +13,16 @@ exports.getCommentForPostHandler = getCommentForPostHandler;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const comments_query_repository_1 = require("../repository/comments-query.repository");
 const values_pagination_mapper_1 = require("../../common/mapper/values-pagination.mapper");
-const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
+const posts_repository_1 = require("../../posts/repository/posts-repository");
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-        if (!query.sortBy)
-            query.sortBy = 'createdAt';
-        if (!query.sortDirection)
-            query.sortDirection = 'desc';
-        const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
+        const post = yield posts_repository_1.postsRepository.getPostById(id);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post.id, query);
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post._id.toString(), query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
