@@ -19,7 +19,9 @@ function getCommentForPostHandler(req, res) {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
         if (!req.query.sortDirection && !req.query.sortBy) {
+            // ⭐️ ИСПРАВЛЕНИЕ: Устанавливаем ASC по _id для стабильного порядка.
             query.sortDirection = 'asc';
+            query.sortBy = '_id';
         }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {

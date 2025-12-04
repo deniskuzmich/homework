@@ -9,7 +9,9 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const query = valuesPaginationMaper(req.query);
 
   if (!req.query.sortDirection && !req.query.sortBy) {
+    // ⭐️ ИСПРАВЛЕНИЕ: Устанавливаем ASC по _id для стабильного порядка.
     query.sortDirection = 'asc';
+    query.sortBy = '_id';
   }
 
   const post = await postsQueryRepository.getPostById(id);
