@@ -1,5 +1,5 @@
-import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
-import {InputWithoutSearch} from "../types/input-types/input-without-search";
+import {QueryInputForPagination} from "../types/input/query-input-for-pagination";
+import {InputWithoutSearch} from "../../blogs/types/input-types/input-without-search";
 
 export const valuesPaginationMaper = (query: QueryInputForPagination): InputWithoutSearch => {
   return {

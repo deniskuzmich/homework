@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {PostOutput} from "../types/main-types/post-output.type";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
+import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 import {postsQueryRepository} from "../repository/posts-query-repository";
 
 export async function getPostsListHanlder(req: Request, res: Response) {

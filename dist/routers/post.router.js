@@ -15,7 +15,7 @@ const pagination_validation_1 = require("../common/validation/pagination-validat
 const auth_middleware_1 = require("../auth/middleware/auth.middleware");
 const create_comment_for_post_handler_1 = require("../feedback/handler/create-comment-for-post.handler");
 const comments_validation_1 = require("../feedback/validation/comments-validation");
-const get_comment_from_post_handler_1 = require("../feedback/handler/get-comment-from-post.handler");
+const get_comment_for_post_handler_1 = require("../feedback/handler/get-comment-for-post.handler");
 exports.postRouter = (0, express_1.Router)();
 exports.postRouter
     .get("", pagination_validation_1.paginationValidation, get_posts_list_hanlder_1.getPostsListHanlder)
@@ -23,5 +23,5 @@ exports.postRouter
     .put("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, posts_input_validation_middleware_1.postInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, update_post_hanlder_1.updatePostHanlder)
     .post("", super_admin_guard_middleware_1.superAdminGuardMiddleware, posts_input_validation_middleware_1.postInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, create_posts_hanlder_1.postPostsHandler)
     .delete("/:id", super_admin_guard_middleware_1.superAdminGuardMiddleware, id_validation_middleware_1.idValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, delete_post_hanlder_1.deletePostHanlder)
-    .get('/:id/comments', id_validation_middleware_1.idValidation, pagination_validation_1.paginationValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_comment_from_post_handler_1.getCommentForPostHandler)
+    .get('/:id/comments', id_validation_middleware_1.idValidation, pagination_validation_1.paginationValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, get_comment_for_post_handler_1.getCommentForPostHandler)
     .post('/:id/comments', auth_middleware_1.authMiddleware, comments_validation_1.contentValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, create_comment_for_post_handler_1.createCommentForPostHandler);

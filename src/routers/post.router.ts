@@ -12,7 +12,7 @@ import {paginationValidation} from "../common/validation/pagination-validation";
 import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {createCommentForPostHandler} from "../feedback/handler/create-comment-for-post.handler";
 import {contentValidation} from "../feedback/validation/comments-validation";
-import {getCommentForPostHandler} from "../feedback/handler/get-comment-from-post.handler";
+import {getCommentForPostHandler} from "../feedback/handler/get-comment-for-post.handler";
 
 export const postRouter = Router();
 postRouter

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {postsQueryRepository} from "../repository/posts-query-repository";
-import {valuesPaginationMaper} from "../../blogs/mapper/post-for-blog-mapper";
+import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 import {blogsService} from "../../blogs/service/blogs.service";
 
 export async function getPostByBlogIdHanlder(req: Request, res:Response) {
