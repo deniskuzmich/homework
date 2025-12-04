@@ -37,7 +37,7 @@ exports.commentsQueryRepository = {
             const direction = query.sortDirection === 'asc' ? 1 : -1;
             const sort = [
                 [query.sortBy || 'createdAt', direction],
-                ['_id', 1] // всегда asc для стабильности
+                ['_id', 1] // всегда asc для стабильного порядка
             ];
             const comments = yield mongo_db_1.commentsCollection
                 .find({ postId: id })

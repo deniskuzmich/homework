@@ -9,7 +9,7 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
   const query = valuesPaginationMaper(req.query);
 
   if (!query.sortBy) query.sortBy = 'createdAt';
-  if (!query.sortDirection) query.sortDirection = 'asc';
+  if (!query.sortDirection) query.sortDirection = 'desc';
 
   const post = await postsQueryRepository.getPostById(id);
   if (!post) {

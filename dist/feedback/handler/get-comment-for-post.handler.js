@@ -21,7 +21,7 @@ function getCommentForPostHandler(req, res) {
         if (!query.sortBy)
             query.sortBy = 'createdAt';
         if (!query.sortDirection)
-            query.sortDirection = 'asc';
+            query.sortDirection = 'desc';
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
