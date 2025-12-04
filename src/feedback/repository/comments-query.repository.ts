@@ -25,22 +25,16 @@ export const commentsQueryRepository = {
 
     const direction = query.sortDirection === 'asc' ? 1 : -1;
     const sort: [string, 1 | -1][] = [
-      [query.sortBy || 'createdAt', direction],
-      ['_id', 1] // ASC для стабильности
+      [query.sortBy, direction]
     ];
 
     const comments = await commentsCollection
       .find({postId: id})
       .skip(skip)
       .limit(query.pageSize)
-      // .sort(sort)
+      .sort(sort)
       .toArray();
 
-    comments.sort((a, b) => {
-      const dateDiff = new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(); // DESC
-      if (dateDiff !== 0) return dateDiff;
-      return a._id.toString().localeCompare(b._id.toString()); // ASC для одинаковых createdAt
-    });
 
     const totalCount = await commentsCollection.countDocuments({postId: id});
 
