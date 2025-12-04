@@ -18,7 +18,7 @@ export async function createPostForBlogHandler(
 
     const createdPost = await blogsService.createPostForBlog(blog, req.body);
 
-    const postForBlog = await postsQueryRepository.getPostByBlogId(createdPost.blogId.toString(), query)
+    const postForBlog = await postsQueryRepository.getPostById(createdPost.blogId.toString())
 
     return res.status(HttpStatuses.Created).send(postForBlog);
 }

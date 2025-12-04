@@ -23,7 +23,7 @@ function createPostForBlogHandler(req, res) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
         const createdPost = yield blogs_service_1.blogsService.createPostForBlog(blog, req.body);
-        const postForBlog = yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(createdPost.blogId.toString(), query);
+        const postForBlog = yield posts_query_repository_1.postsQueryRepository.getPostById(createdPost.blogId.toString());
         return res.status(http_statuses_1.HttpStatuses.Created).send(postForBlog);
     });
 }
