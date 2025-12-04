@@ -16,10 +16,11 @@ const values_pagination_mapper_1 = require("../../common/mapper/values-paginatio
 const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
 function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        var _a;
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-        query.sortDirection = (_a = query.sortDirection) !== null && _a !== void 0 ? _a : 'asc';
+        if (!req.query.sortDirection) {
+            query.sortDirection = 'asc';
+        }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
