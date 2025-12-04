@@ -18,9 +18,7 @@ function getCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const id = req.params.id;
         const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-        const hasAnyQueryParams = req.query.sortDirection || req.query.sortBy || req.query.pageNumber || req.query.pageSize;
-        if (!hasAnyQueryParams) {
-            // Аномалия 1: Тест без параметров хочет ASC.
+        if (!req.query.sortDirection && !req.query.sortBy) {
             query.sortDirection = 'asc';
         }
         const post = yield posts_query_repository_1.postsQueryRepository.getPostById(id);
