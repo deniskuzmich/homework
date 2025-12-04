@@ -34,7 +34,8 @@ exports.commentsQueryRepository = {
     getCommentByPostIdWithPagination(id, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
-            const sort = [['_id', 1]];
+            const direction = query.sortDirection === 'asc' ? 1 : -1;
+            const sort = [['createdAt', direction], ['_id', 1]];
             const comments = yield mongo_db_1.commentsCollection
                 .find({ postId: id })
                 .skip(skip)
