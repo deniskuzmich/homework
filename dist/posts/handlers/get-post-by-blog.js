@@ -13,12 +13,15 @@ exports.getPostByBlogIdHanlder = getPostByBlogIdHanlder;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const posts_query_repository_1 = require("../repository/posts-query-repository");
 const post_for_blog_mapper_1 = require("../../blogs/mapper/post-for-blog-mapper");
+const blogs_service_1 = require("../../blogs/service/blogs.service");
 function getPostByBlogIdHanlder(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const query = (0, post_for_blog_mapper_1.valuesPaginationMaper)(req.query);
-        if (!req.params.id)
-            return null;
-        const post = yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(req.params.id, query);
+        const blog = yield blogs_service_1.blogsService.getBlogById(req.params.id);
+        if (!blog) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+        }
+        const post = yield posts_query_repository_1.postsQueryRepository.getPostByBlogId(blog._id.toString(), query);
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
