@@ -110,7 +110,7 @@ export const commentsService = {
         data: null
       }
     }
-
+    const timestamp = new Date().toISOString();
     const newCommentForPost = {
       postId,
       content,
@@ -118,7 +118,7 @@ export const commentsService = {
         userId: user.userId.toString(),
         userLogin: user.login,
       },
-      createdAt: new Date().toISOString()
+      createdAt: timestamp
     }
     const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
 

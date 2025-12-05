@@ -109,6 +109,7 @@ exports.commentsService = {
                     data: null
                 };
             }
+            const timestamp = new Date().toISOString();
             const newCommentForPost = {
                 postId,
                 content,
@@ -116,7 +117,7 @@ exports.commentsService = {
                     userId: user.userId.toString(),
                     userLogin: user.login,
                 },
-                createdAt: new Date().toISOString()
+                createdAt: timestamp
             };
             const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
             if (!createdComment) {

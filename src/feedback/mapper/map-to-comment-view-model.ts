@@ -10,6 +10,6 @@ export function mapToCommentViewModel (data: WithId<CommentDbType>): CommentOutp
       userId: data.commentatorInfo.userId.toString(),
       userLogin: data.commentatorInfo.userLogin,
     },
-    createdAt: data.createdAt.toString()
+    createdAt: data.createdAt
   }
 }
