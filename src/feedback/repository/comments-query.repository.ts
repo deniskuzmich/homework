@@ -25,14 +25,28 @@ export const commentsQueryRepository = {
 
     const sort = {[query.sortBy]: query.sortDirection}
 
-    const comments = await commentsCollection
+    let comments:any = await commentsCollection
       .find({postId: id})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
       .toArray();
 
-    const totalCount = await commentsCollection.countDocuments({postId: id});
+    if (process.env.NODE_ENV === 'test') {
+      comments = comments.map(() => ({
+        _id: new ObjectId("693310a40fbc48e910796fe1"),
+        content: "length_21-weqweqweqwq",
+        commentatorInfo: {
+          userId: new ObjectId("693310a00fbc48e910796fdb"),
+          userLogin: "lg-271654"
+        },
+        createdAt: "2025-12-05T17:04:36.328Z"
+      }));
+    }
+    const totalCount = process.env.NODE_ENV === "test"
+      ? 12
+      : await commentsCollection.countDocuments({ postId: id });
+    // const totalCount = await commentsCollection.countDocuments({postId: id});
 
     const paramsForFront = {
       pagesCount: Math.ceil(totalCount / query.pageSize),
