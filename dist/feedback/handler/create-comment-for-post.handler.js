@@ -30,6 +30,6 @@ function createCommentForPostHandler(req, res) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }
         // const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
-        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment);
+        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.data);
     });
 }
