@@ -8,6 +8,10 @@ import {postsRepository} from "../../posts/repository/posts-repository";
 import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
 import {WithId} from "mongodb";
 import {CommentDbType} from "../types/main-types/comment-db.type";
+import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
+import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
+import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
+import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 
 
 export const commentsService = {
@@ -34,8 +38,26 @@ export const commentsService = {
   //   }
   // },
 
-  async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
-    const post = await postsRepository.getPostById(postId)
+  // async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
+  //   const post = await postsRepository.getPostById(postId)
+  //   if (!post) {
+  //     return {
+  //       status: ResultStatus.NotFound,
+  //       errorMessage: 'Post not found',
+  //       extensions: [],
+  //       data: null
+  //     }
+  //   }
+  //   const commentForPost = await commentsRepository.getCommentByPostId(postId)
+  //   return {
+  //     status: ResultStatus.Success,
+  //     extensions: [],
+  //     data: commentForPost
+  //   }
+  // },
+
+  async getCommentByPostId(postId: string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
+    const post = await postsQueryRepository.getPostById(postId)
     if (!post) {
       return {
         status: ResultStatus.NotFound,
@@ -44,7 +66,8 @@ export const commentsService = {
         data: null
       }
     }
-    const commentForPost = await commentsRepository.getCommentByPostId(postId)
+    const values = valuesPaginationMaper(query);
+    const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(postId, values)
     return {
       status: ResultStatus.Success,
       extensions: [],
