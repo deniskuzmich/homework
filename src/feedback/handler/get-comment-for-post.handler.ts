@@ -13,7 +13,7 @@ export async function getCommentForPostHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.NotFound)
   }
 
-  const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(post._id.toString(), query);
+  const commentForPost = await commentsQueryRepository.getCommentByPostId(post._id.toString());
 
   if(!commentForPost) {
     return res.sendStatus(HttpStatuses.NotFound)
