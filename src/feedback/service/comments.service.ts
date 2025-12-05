@@ -56,25 +56,6 @@ export const commentsService = {
   //   }
   // },
 
-  async getCommentByPostId(postId: string, query: QueryInputForPagination): Promise<ResultType<OutputTypeWithPagination<CommentOutput> | null>> {
-    const post = await postsQueryRepository.getPostById(postId)
-    if (!post) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: 'Post not found',
-        extensions: [],
-        data: null
-      }
-    }
-    const values = valuesPaginationMaper(query);
-    const commentForPost = await commentsQueryRepository.getCommentByPostIdWithPagination(postId, values)
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: commentForPost
-    }
-  },
-
   async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {
