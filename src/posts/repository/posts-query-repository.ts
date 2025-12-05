@@ -1,7 +1,6 @@
-import {Post} from "../types/main-types/posts-db.type";
+
 import {ObjectId, SortDirection, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
-import {PostInputDto} from "../types/main-types/post.input-dto";
 import {InputWithoutSearch} from "../../blogs/types/input-types/input-without-search";
 import {
   OutputTypeWithPagination
@@ -10,7 +9,7 @@ import {PostOutput} from "../types/main-types/post-output.type";
 import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {finalPostMapper} from "../mapper/final-post-map";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
-import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
+
 
 export const postsQueryRepository = {
   async findPosts(query: InputPaginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {
