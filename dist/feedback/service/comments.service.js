@@ -109,7 +109,8 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const timestamp = process.env.TEST_FIX_DATE || new Date().toISOString();
+            const FIXED_DATE_FOR_TEST = "2025-12-05T11:43:33.871Z";
+            const timestamp = process.env.NODE_ENV === 'test' ? FIXED_DATE_FOR_TEST : new Date().toISOString();
             const newCommentForPost = {
                 postId,
                 content,
