@@ -11,7 +11,6 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
   const content = req.body.content
   const postId = req.params.id;
 
-
   if (!content || !user) {
     return res.sendStatus(HttpStatuses.BadRequest);
   }
@@ -24,6 +23,6 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
   }
 
-// const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
-return res.status(HttpStatuses.Created).send(mapToCommentViewModel(createdComment.data!))
+const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!._id.toString())
+return res.status(HttpStatuses.Created).send(commentForPost)
 }

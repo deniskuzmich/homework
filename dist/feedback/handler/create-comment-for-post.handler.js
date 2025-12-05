@@ -14,7 +14,7 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const comments_service_1 = require("../service/comments.service");
-const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
+const comments_query_repository_1 = require("../repository/comments-query.repository");
 function createCommentForPostHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const user = req.user;
@@ -30,7 +30,7 @@ function createCommentForPostHandler(req, res) {
         if (createdComment.status !== result_status_1.ResultStatus.Created) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }
-        // const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
-        return res.status(http_statuses_1.HttpStatuses.Created).send((0, map_to_comment_view_model_1.mapToCommentViewModel)(createdComment.data));
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(createdComment.data._id.toString());
+        return res.status(http_statuses_1.HttpStatuses.Created).send(commentForPost);
     });
 }
