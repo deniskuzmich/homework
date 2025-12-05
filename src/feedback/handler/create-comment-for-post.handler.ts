@@ -23,7 +23,7 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
   }
 
-  // const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
+  const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
 
-  return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.data)
+  return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(commentForPost)
 }
