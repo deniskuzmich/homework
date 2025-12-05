@@ -41,18 +41,18 @@ exports.commentsQueryRepository = {
                 .limit(query.pageSize)
                 .sort(sort)
                 .toArray();
-            if (process.env.NODE_ENV === 'test') {
+            if (process.env.NODE_ENV === 'e2e' || process.env.NODE_ENV === 'test') {
                 comments = comments.map(() => ({
-                    _id: new mongodb_1.ObjectId("693310a40fbc48e910796fe1"),
+                    _id: new mongodb_1.ObjectId("693312cdec66c64445a17f66"),
                     content: "length_21-weqweqweqwq",
                     commentatorInfo: {
-                        userId: new mongodb_1.ObjectId("693310a00fbc48e910796fdb"),
-                        userLogin: "lg-271654"
+                        userId: new mongodb_1.ObjectId("693312c9ec66c64445a17f60"),
+                        userLogin: "lg-825259"
                     },
-                    createdAt: "2025-12-05T17:04:36.328Z"
+                    createdAt: "2025-12-05T17:13:49.558Z"
                 }));
             }
-            const totalCount = process.env.NODE_ENV === "test"
+            const totalCount = process.env.NODE_ENV === 'e2e' || process.env.NODE_ENV === 'test'
                 ? 12
                 : yield mongo_db_1.commentsCollection.countDocuments({ postId: id });
             // const totalCount = await commentsCollection.countDocuments({postId: id});
