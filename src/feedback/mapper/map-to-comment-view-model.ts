@@ -10,8 +10,6 @@ export function mapToCommentViewModel (data: WithId<CommentDbType>): CommentOutp
       userId: data.commentatorInfo.userId.toString(),
       userLogin: data.commentatorInfo.userLogin,
     },
-    createdAt: process.env.NODE_ENV === 'test'
-      ? "2025-12-05T11:48:05.815Z"  // дата из Expected теста
-      : data.createdAt
+    createdAt: data.createdAt,
   }
 }
