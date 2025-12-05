@@ -14,8 +14,6 @@ const comments_query_repository_1 = require("../repository/comments-query.reposi
 const result_status_1 = require("../../common/types/result.status");
 const comments_repository_1 = require("../repository/comments.repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
-const posts_query_repository_1 = require("../../posts/repository/posts-query-repository");
-const values_pagination_mapper_1 = require("../../common/mapper/values-pagination.mapper");
 exports.commentsService = {
     // async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
     //   if (!id) {
@@ -56,26 +54,6 @@ exports.commentsService = {
     //     data: commentForPost
     //   }
     // },
-    getCommentByPostId(postId, query) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const post = yield posts_query_repository_1.postsQueryRepository.getPostById(postId);
-            if (!post) {
-                return {
-                    status: result_status_1.ResultStatus.NotFound,
-                    errorMessage: 'Post not found',
-                    extensions: [],
-                    data: null
-                };
-            }
-            const values = (0, values_pagination_mapper_1.valuesPaginationMaper)(query);
-            const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(postId, values);
-            return {
-                status: result_status_1.ResultStatus.Success,
-                extensions: [],
-                data: commentForPost
-            };
-        });
-    },
     updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
