@@ -20,7 +20,7 @@ export const commentsQueryRepository = {
     return mapToCommentViewModel(commentForPost)
   },
 
-  async getCommentByPostIdWithPagination(id: string, query: any): Promise<OutputTypeWithPagination<CommentOutput>> {
+  async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const sort = {[query.sortBy]: query.sortDirection}
