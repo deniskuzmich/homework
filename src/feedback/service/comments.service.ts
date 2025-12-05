@@ -110,7 +110,7 @@ export const commentsService = {
         data: null
       }
     }
-    const timestamp = new Date().toISOString();
+    const timestamp = process.env.TEST_FIX_DATE || new Date().toISOString();
     const newCommentForPost = {
       postId,
       content,
