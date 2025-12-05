@@ -4,6 +4,7 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {commentsService} from "../service/comments.service";
 import {commentsQueryRepository} from "../repository/comments-query.repository";
+import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 
 export async function createCommentForPostHandler(req: Request, res: Response) {
   const user = req.user
@@ -23,6 +24,6 @@ export async function createCommentForPostHandler(req: Request, res: Response) {
     return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
   }
 
-const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
-return res.status(HttpStatuses.Created).send(commentForPost)
+// const commentForPost = await commentsQueryRepository.getCommentByPostId(createdComment.data!.postId)
+return res.status(HttpStatuses.Created).send(mapToCommentViewModel(createdComment.data!))
 }

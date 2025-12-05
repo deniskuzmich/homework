@@ -36,7 +36,7 @@ export const commentsRepository = {
     return true
   },
 
-  async createCommentForPost(comment: CommentForPostInput): Promise<WithId<CommentForPostInput> | null> {
+  async createCommentForPost(comment: CommentDbType): Promise<WithId<CommentDbType> | null> {
       const insertResult = await commentsCollection.insertOne(comment)
       if (!insertResult.acknowledged) return null;
 

@@ -91,7 +91,7 @@ export const commentsService = {
     }
   },
 
-  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentForPostInput | null>> {
+  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
     const isPostExists = await postsRepository.getPostById(postId);
     if (!isPostExists) {
       return {
