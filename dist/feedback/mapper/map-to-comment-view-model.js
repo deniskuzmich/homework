@@ -9,6 +9,6 @@ function mapToCommentViewModel(data) {
             userId: data.commentatorInfo.userId.toString(),
             userLogin: data.commentatorInfo.userLogin,
         },
-        createdAt: new Date().toISOString()
+        createdAt: data.createdAt
     };
 }
