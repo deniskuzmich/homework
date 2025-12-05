@@ -14,12 +14,6 @@ export const commentsQueryRepository = {
     if (!comment) return null;
     return mapToCommentViewModel(comment)
   },
-  async getCommentByPostId(id: string): Promise<CommentDbType | null> {
-    const commentForPost = await commentsCollection.findOne({postId: id})
-    if(!commentForPost) return null
-    return mapToCommentViewModel(commentForPost)
-  },
-
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 

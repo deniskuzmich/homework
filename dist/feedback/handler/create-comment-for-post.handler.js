@@ -30,7 +30,7 @@ function createCommentForPostHandler(req, res) {
         if (createdComment.status !== result_status_1.ResultStatus.Created) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
         }
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(createdComment.data._id.toString());
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentById(createdComment.data._id.toString());
         return res.status(http_statuses_1.HttpStatuses.Created).send(commentForPost);
     });
 }
