@@ -22,7 +22,7 @@ function getCommentForPostHandler(req, res) {
         if (!post) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostId(post._id.toString());
+        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentByPostIdWithPagination(post._id.toString(), query);
         if (!commentForPost) {
             return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
         }
