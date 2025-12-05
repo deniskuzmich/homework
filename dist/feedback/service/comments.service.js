@@ -109,8 +109,6 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const FIXED_DATE_FOR_TEST = "2025-12-05T11:43:33.871Z";
-            const timestamp = process.env.NODE_ENV === 'test' ? FIXED_DATE_FOR_TEST : new Date().toISOString();
             const newCommentForPost = {
                 postId,
                 content,
@@ -118,7 +116,7 @@ exports.commentsService = {
                     userId: user.userId.toString(),
                     userLogin: user.login,
                 },
-                createdAt: timestamp
+                createdAt: new Date().toISOString(),
             };
             const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
             if (!createdComment) {
