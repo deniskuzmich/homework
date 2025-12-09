@@ -1,61 +1,14 @@
 import {commentsQueryRepository} from "../repository/comments-query.repository";
-import {CommentOutput} from "../types/main-types/comment-output.type";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 import {commentsRepository} from "../repository/comments.repository";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {postsRepository} from "../../posts/repository/posts-repository";
-import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
 import {WithId} from "mongodb";
 import {CommentDbType} from "../types/main-types/comment-db.type";
-import {QueryInputForPagination} from "../../common/types/input/query-input-for-pagination";
-import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
-import {postsQueryRepository} from "../../posts/repository/posts-query-repository";
-import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 
 
 export const commentsService = {
-  // async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
-  //   if (!id) {
-  //     return {
-  //       status: ResultStatus.NotFound,
-  //       extensions: [],
-  //       data: null
-  //     }
-  //   }
-  //   const comment = await commentsQueryRepository.getCommentById(id);
-  //   if (!comment) {
-  //     return {
-  //       status: ResultStatus.NotFound,
-  //       extensions: [],
-  //       data: null
-  //     }
-  //   }
-  //   return {
-  //     status: ResultStatus.Success,
-  //     extensions: [],
-  //     data: comment
-  //   }
-  // },
-
-  // async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
-  //   const post = await postsRepository.getPostById(postId)
-  //   if (!post) {
-  //     return {
-  //       status: ResultStatus.NotFound,
-  //       errorMessage: 'Post not found',
-  //       extensions: [],
-  //       data: null
-  //     }
-  //   }
-  //   const commentForPost = await commentsRepository.getCommentByPostId(postId)
-  //   return {
-  //     status: ResultStatus.Success,
-  //     extensions: [],
-  //     data: commentForPost
-  //   }
-  // },
-
   async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {

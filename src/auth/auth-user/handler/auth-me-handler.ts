@@ -1,6 +1,6 @@
 import {Request, Response} from "express";
-import {HttpStatuses} from "../../common/types/http-statuses";
-import {authService} from "../service/auth-service";
+import {HttpStatuses} from "../../../common/types/http-statuses";
+import {authService} from "../../service/auth-service";
 
 export async function aboutMeHandler(req: Request, res: Response) {
   if(!req.user) {

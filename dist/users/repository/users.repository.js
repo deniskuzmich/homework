@@ -30,17 +30,16 @@ exports.usersRepository = {
             return mongo_db_1.usersCollection.findOne({ email: email });
         });
     },
+    getUserByLoginOrEmail(loginOrEmail) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
+            return user;
+        });
+    },
     createUser(newUser) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.usersCollection.insertOne(newUser);
-            const createdUser = {
-                _id: insertResult.insertedId,
-                login: newUser.login,
-                email: newUser.email,
-                passwordHash: newUser.passwordHash,
-                createdAt: newUser.createdAt,
-            };
-            return createdUser;
+            return Object.assign(Object.assign({}, newUser), { _id: insertResult.insertedId });
         });
     },
     deleteUser(id) {
@@ -51,10 +50,10 @@ exports.usersRepository = {
             }
         });
     },
-    getUserByLoginOrEmail(loginOrEmail) {
+    updateConfirmation(_id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
-            return user;
+            let result = yield mongo_db_1.usersCollection.updateOne({ _id }, { $set: { 'emailConfirmation.isConfirmed': true } });
+            return result.modifiedCount === 1;
         });
     }
 };

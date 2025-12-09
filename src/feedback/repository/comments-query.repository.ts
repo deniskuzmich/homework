@@ -1,11 +1,10 @@
 import {commentsCollection} from "../../db/mongo.db";
-import {ObjectId, WithId} from "mongodb";
+import {ObjectId} from "mongodb";
 import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 import {CommentOutput} from "../types/main-types/comment-output.type";
 import {finalCommentMapper} from "../mapper/final-comment-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
-import {CommentDbType} from "../types/main-types/comment-db.type";
 
 
 export const commentsQueryRepository = {

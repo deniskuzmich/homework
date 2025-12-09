@@ -15,45 +15,6 @@ const result_status_1 = require("../../common/types/result.status");
 const comments_repository_1 = require("../repository/comments.repository");
 const posts_repository_1 = require("../../posts/repository/posts-repository");
 exports.commentsService = {
-    // async getCommentById(id: string): Promise<ResultType<CommentOutput | null>> {
-    //   if (!id) {
-    //     return {
-    //       status: ResultStatus.NotFound,
-    //       extensions: [],
-    //       data: null
-    //     }
-    //   }
-    //   const comment = await commentsQueryRepository.getCommentById(id);
-    //   if (!comment) {
-    //     return {
-    //       status: ResultStatus.NotFound,
-    //       extensions: [],
-    //       data: null
-    //     }
-    //   }
-    //   return {
-    //     status: ResultStatus.Success,
-    //     extensions: [],
-    //     data: comment
-    //   }
-    // },
-    // async getCommentByPostId(postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
-    //   const post = await postsRepository.getPostById(postId)
-    //   if (!post) {
-    //     return {
-    //       status: ResultStatus.NotFound,
-    //       errorMessage: 'Post not found',
-    //       extensions: [],
-    //       data: null
-    //     }
-    //   }
-    //   const commentForPost = await commentsRepository.getCommentByPostId(postId)
-    //   return {
-    //     status: ResultStatus.Success,
-    //     extensions: [],
-    //     data: commentForPost
-    //   }
-    // },
     updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;

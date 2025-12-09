@@ -2,11 +2,20 @@ import express, { Express } from "express";
 import { testingRouter } from "./routers/testing-router/testing.router";
 import { blogRouter } from "./routers/blog.router";
 import { postRouter } from "./routers/post.router";
-import {AUTH_PATH, BLOGS_PATH, COMMENTS_PATH, POSTS_PATH, TESTING_PATH, USERS_PATH} from "./core/paths/paths";
+import {
+  AUTH_PATH,
+  BLOGS_PATH,
+  COMMENTS_PATH,
+  EMAIL_PATH,
+  POSTS_PATH,
+  TESTING_PATH,
+  USERS_PATH
+} from "./core/paths/paths";
 import {usersRouter} from "./routers/users.router";
 import {authRouter} from "./routers/auth.router";
 import {commentsRouter} from "./routers/comments.router";
 import {HttpStatuses} from "./common/types/http-statuses";
+import {emailRouter} from "./routers/email.router";
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
@@ -14,6 +23,7 @@ export const setupApp = (app: Express) => {
     res.status(HttpStatuses.Success).send("Blogs and Posts");
   });
 
+  app.use(EMAIL_PATH, emailRouter)
   app.use(AUTH_PATH, authRouter);
   app.use(COMMENTS_PATH, commentsRouter);
   app.use(USERS_PATH, usersRouter)

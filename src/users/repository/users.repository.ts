@@ -1,11 +1,11 @@
 import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../types/main-types/user-db-type";
-import {UserCreateType} from "../types/input-types/user-create-type";
+
 
 export const usersRepository = {
   async getUserById(id: string): Promise<WithId<UserDbType> | null> {
-    if(!ObjectId.isValid(id)) return null;
+    if (!ObjectId.isValid(id)) return null;
     return usersCollection.findOne({_id: new ObjectId(id)});
   },
 
@@ -17,17 +17,14 @@ export const usersRepository = {
     return usersCollection.findOne({email: email})
   },
 
-  async createUser(newUser: UserCreateType): Promise<UserDbType> {
-    const insertResult = await usersCollection.insertOne(newUser);
-    const createdUser: UserDbType = {
-      _id: insertResult.insertedId,
-      login: newUser.login,
-      email: newUser.email,
-      passwordHash: newUser.passwordHash,
-      createdAt: newUser.createdAt,
-    };
+  async getUserByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserDbType> | null> {
+    const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]});
+    return user;
+  },
 
-    return createdUser;
+  async createUser(newUser: UserDbType): Promise <WithId<UserDbType>> {
+    const insertResult = await usersCollection.insertOne(newUser);
+    return {...newUser, _id: insertResult.insertedId}
   },
 
   async deleteUser(id: string): Promise<void> {
@@ -37,8 +34,8 @@ export const usersRepository = {
     }
   },
 
-  async getUserByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserDbType> | null> {
-    const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]});
-    return user;
+  async updateConfirmation(_id: ObjectId) {
+    let result = await usersCollection.updateOne({_id}, {$set: {'emailConfirmation.isConfirmed': true}});
+    return result.modifiedCount === 1
   }
 }

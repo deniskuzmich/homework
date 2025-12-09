@@ -1,6 +1,3 @@
-import {UsersInput} from "../types/main-types/user-Input.type";
-import {UserQueryInput} from "../types/input-types/user-query-input.type";
-import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {UserOutput} from "../types/main-types/user-output.type";
 import {usersRepository} from "../repository/users.repository";
 import {UserDbType} from "../types/main-types/user-db-type";
@@ -11,9 +8,10 @@ import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
 import {bcryptService} from "../../common/services/bcrypt.service";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
+import {mapRegisterUser} from "../mapper/map-register-user";
 
 export const usersService = {
-  async createUser(queryDto: UserInputDto): Promise<UserDbType | ErrorTypeOutput> {
+  async createUser(queryDto: UserInputDto): Promise<WithId<UserDbType> | ErrorTypeOutput> {
     const isLoginExists = await usersRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {
       return {
@@ -33,13 +31,15 @@ export const usersService = {
     }
 
     const passwordHash = await bcryptService.generateHash(queryDto.password);
+
     const newUser = {
       login: queryDto.login,
       email: queryDto.email,
       passwordHash,
-      createdAt: new Date().toISOString()
+      createdAt: new Date()
     }
-    return await usersRepository.createUser(newUser);
+    const mappedUser = mapRegisterUser(newUser)
+    return await usersRepository.createUser(mappedUser);
   },
 
   async getUserById(id: string): Promise<WithId<UserDbType> | null> {
@@ -60,6 +60,13 @@ export const usersService = {
         data: null
       }
     }
+
+    if(user.emailConfirmation.isConfirmed)
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
+        data: null
+      }
 
     const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
     if(!isPassCorrect) {

@@ -1,9 +1,9 @@
 import {Request, Response} from "express";
-import {usersService} from "../../users/service/users.service";
-import {HttpStatuses} from "../../common/types/http-statuses";
-import {jwtService} from "../../common/services/jwt.service";
-import {ResultStatus} from "../../common/types/result.status";
-import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {usersService} from "../../../users/service/users.service";
+import {HttpStatuses} from "../../../common/types/http-statuses";
+import {jwtService} from "../../../common/services/jwt.service";
+import {ResultStatus} from "../../../common/types/result.status";
+import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
 
 export async function authUserHandler(req: Request, res: Response) {
   const { loginOrEmail, password } = req.body;

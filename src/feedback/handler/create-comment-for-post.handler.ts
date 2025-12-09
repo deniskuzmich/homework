@@ -1,10 +1,9 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {commentsService} from "../service/comments.service";
 import {commentsQueryRepository} from "../repository/comments-query.repository";
-import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 
 export async function createCommentForPostHandler(req: Request, res: Response) {
   const user = req.user

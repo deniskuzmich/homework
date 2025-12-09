@@ -1,9 +1,11 @@
-import {ObjectId} from "mongodb";
-
 export type UserDbType = {
-  _id: ObjectId
   login: string;
   email: string;
-  createdAt: string;
+  createdAt: Date;
   passwordHash: string;
+  emailConfirmation: {
+    confirmationCode: string,
+    expirationDate: Date,
+    isConfirmed: boolean,
+  }
 }

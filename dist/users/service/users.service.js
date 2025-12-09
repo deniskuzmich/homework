@@ -14,6 +14,7 @@ const users_repository_1 = require("../repository/users.repository");
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const bcrypt_service_1 = require("../../common/services/bcrypt.service");
 const result_status_1 = require("../../common/types/result.status");
+const map_register_user_1 = require("../mapper/map-register-user");
 exports.usersService = {
     createUser(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -38,9 +39,10 @@ exports.usersService = {
                 login: queryDto.login,
                 email: queryDto.email,
                 passwordHash,
-                createdAt: new Date().toISOString()
+                createdAt: new Date()
             };
-            return yield users_repository_1.usersRepository.createUser(newUser);
+            const mappedUser = (0, map_register_user_1.mapRegisterUser)(newUser);
+            return yield users_repository_1.usersRepository.createUser(mappedUser);
         });
     },
     getUserById(id) {
@@ -65,6 +67,12 @@ exports.usersService = {
                     data: null
                 };
             }
+            if (user.emailConfirmation.isConfirmed)
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirmation', message: "email is already confirmed" }],
+                    data: null
+                };
             const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
