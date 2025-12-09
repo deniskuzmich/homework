@@ -9,13 +9,15 @@ exports.loginValidation = (0, express_validator_1.body)("login")
     .withMessage('login should not be empty')
     .isLength({ min: 3, max: 10 })
     .withMessage("login length is not correct")
-    .matches(`^[a-zA-Z0-9_-]*$`);
+    .matches(`^[a-zA-Z0-9_-]*$`)
+    .withMessage("login is not valid");
 exports.emailValidation = (0, express_validator_1.body)("email")
     .isString()
     .withMessage("email is not correct")
     .notEmpty()
     .withMessage('email should not be empty')
-    .matches(`^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$`);
+    .matches(`^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$`)
+    .withMessage("email is not valid");
 exports.passwordValidation = (0, express_validator_1.body)("password")
     .isString()
     .withMessage("password is not correct")

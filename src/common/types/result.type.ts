@@ -5,7 +5,7 @@ type ExtentionType = {
   message: string
 }
 
-export type ResultType<T = null> = {
+export type ResultType<T = null | boolean> = {
   status: ResultStatus;
   errorMessage?: string;
   extensions: ExtentionType[]

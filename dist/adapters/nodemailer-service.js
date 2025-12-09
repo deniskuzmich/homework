@@ -15,19 +15,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.nodemailerService = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 exports.nodemailerService = {
-    sendEmail(email, subject, message) {
+    sendEmail(email, code, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
-                service: 'Mail.ru',
+                service: 'gmail',
                 auth: {
-                    user: 'kuzmich-denis@mail.ru',
+                    user: 'kuzmichdenis21@gmail.com',
                     pass: 'rtgh765iop90',
                 }
             });
             let info = yield transport.sendMail({
                 from: 'Denis',
                 to: email,
-                subject: subject,
+                subject: code,
                 html: message
             });
             return info;

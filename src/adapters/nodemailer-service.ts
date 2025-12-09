@@ -1,11 +1,11 @@
 import nodemailer from "nodemailer";
 
 export const nodemailerService = {
-  async sendEmail(email: string, subject: string, message: string) {
+  async sendEmail(email: string, code: string, message: string) {
     let transport = nodemailer.createTransport({
-      service: 'Mail.ru',
+      service: 'gmail',
       auth: {
-        user: 'kuzmich-denis@mail.ru',
+        user: 'kuzmichdenis21@gmail.com',
         pass: 'rtgh765iop90',
       }
     });
@@ -13,7 +13,7 @@ export const nodemailerService = {
     let info = await transport.sendMail({
       from: 'Denis',
       to: email,
-      subject: subject,
+      subject: code,
       html: message
     });
     return info

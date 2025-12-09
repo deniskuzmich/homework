@@ -49,7 +49,7 @@ export const authService = {
       await nodemailerService.sendEmail(
         newUser.email,
         newUser.emailConfirmation.confirmationCode,
-        emailExamples.registrationEmail()
+        emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
       )
     } catch (e) {
       console.log('Send email error', e)
@@ -60,15 +60,43 @@ export const authService = {
       data: newUser,
     }
   },
-  async confirmEmail(code: string, email: string): Promise<boolean> {
+  async confirmEmail(code: string, email: string): Promise<ResultType<boolean>> {
     const user = await usersRepository.getUserByLoginOrEmail(email)
-    if (!user) return false
-    if(user.emailConfirmation.isConfirmed) return false
-    if (user.emailConfirmation.confirmationCode !== code) return false
-    if (user.emailConfirmation.expirationDate < new Date()) return false
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirm', message: 'The user data in not correct'}],
+        data: false,
+      }
+    }
+    if(user.emailConfirmation.isConfirmed) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirm', message: 'The code is already applied'}],
+        data: false,
+      }
+    }
+    if (user.emailConfirmation.confirmationCode !== code) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirm', message: 'The code is incorrect'}],
+        data: false,
+      }
+    }
+    if (user.emailConfirmation.expirationDate < new Date()) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirm', message: 'The code is expired'}],
+        data: false,
+      }
+    }
 
     let result = await usersRepository.updateConfirmation(user._id)
-    return result
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: true,
+    }
   },
   async resendEmail(email: string) {
     const user = await usersRepository.getUserByLoginOrEmail(email)
@@ -77,7 +105,7 @@ export const authService = {
       await nodemailerService.sendEmail(
         user.email,
         user.emailConfirmation.confirmationCode,
-        emailExamples.registrationEmail()
+        emailExamples.registrationEmail(user.emailConfirmation.confirmationCode)
       )
     } catch (e) {
       console.log('Send email error', e)

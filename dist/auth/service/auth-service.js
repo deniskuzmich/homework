@@ -54,7 +54,7 @@ exports.authService = {
             };
             yield users_repository_1.usersRepository.createUser(newUser);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail());
+                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);
@@ -69,16 +69,40 @@ exports.authService = {
     confirmEmail(code, email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(email);
-            if (!user)
-                return false;
-            if (user.emailConfirmation.isConfirmed)
-                return false;
-            if (user.emailConfirmation.confirmationCode !== code)
-                return false;
-            if (user.emailConfirmation.expirationDate < new Date())
-                return false;
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirm', message: 'The user data in not correct' }],
+                    data: false,
+                };
+            }
+            if (user.emailConfirmation.isConfirmed) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirm', message: 'The code is already applied' }],
+                    data: false,
+                };
+            }
+            if (user.emailConfirmation.confirmationCode !== code) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirm', message: 'The code is incorrect' }],
+                    data: false,
+                };
+            }
+            if (user.emailConfirmation.expirationDate < new Date()) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirm', message: 'The code is expired' }],
+                    data: false,
+                };
+            }
             let result = yield users_repository_1.usersRepository.updateConfirmation(user._id);
-            return result;
+            return {
+                status: result_status_1.ResultStatus.Success,
+                extensions: [],
+                data: true,
+            };
         });
     },
     resendEmail(email) {
@@ -87,7 +111,7 @@ exports.authService = {
             if (!user)
                 return false;
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, user.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail());
+                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, user.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);

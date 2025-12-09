@@ -13,13 +13,11 @@ const users_router_1 = require("./routers/users.router");
 const auth_router_1 = require("./routers/auth.router");
 const comments_router_1 = require("./routers/comments.router");
 const http_statuses_1 = require("./common/types/http-statuses");
-const email_router_1 = require("./routers/email.router");
 const setupApp = (app) => {
     app.use(express_1.default.json());
     app.get("/", (req, res) => {
         res.status(http_statuses_1.HttpStatuses.Success).send("Blogs and Posts");
     });
-    app.use(paths_1.EMAIL_PATH, email_router_1.emailRouter);
     app.use(paths_1.AUTH_PATH, auth_router_1.authRouter);
     app.use(paths_1.COMMENTS_PATH, comments_router_1.commentsRouter);
     app.use(paths_1.USERS_PATH, users_router_1.usersRouter);
