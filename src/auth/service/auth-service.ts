@@ -48,7 +48,6 @@ export const authService = {
     try {
       await nodemailerService.sendEmail(
         newUser.email,
-        newUser.emailConfirmation.confirmationCode,
         emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
       )
     } catch (e) {
@@ -104,7 +103,6 @@ export const authService = {
     try {
       await nodemailerService.sendEmail(
         user.email,
-        user.emailConfirmation.confirmationCode,
         emailExamples.registrationEmail(user.emailConfirmation.confirmationCode)
       )
     } catch (e) {

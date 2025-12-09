@@ -54,7 +54,7 @@ exports.authService = {
             };
             yield users_repository_1.usersRepository.createUser(newUser);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, newUser.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
+                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);
@@ -111,7 +111,7 @@ exports.authService = {
             if (!user)
                 return false;
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, user.emailConfirmation.confirmationCode, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
+                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);

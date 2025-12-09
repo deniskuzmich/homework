@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.nodemailerService = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 exports.nodemailerService = {
-    sendEmail(email, code, message) {
+    sendEmail(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
                 service: 'gmail',
@@ -27,7 +27,7 @@ exports.nodemailerService = {
             let info = yield transport.sendMail({
                 from: '"Denis" <kuzmichdenis21@gmail.com>',
                 to: email,
-                subject: code,
+                subject: 'Test Registration',
                 html: message
             });
             return info;
