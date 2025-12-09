@@ -22,6 +22,6 @@ function userRegistrationHandler(req, res) {
         if (user.status !== result_status_1.ResultStatus.NoContent) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status)).send(user.extensions);
         }
-        return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status));
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status));
     });
 }

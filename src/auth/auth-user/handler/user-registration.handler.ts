@@ -12,6 +12,6 @@ export async function userRegistrationHandler (req: Request, res: Response) {
   if (user.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(user.status)).send(user.extensions)
   }
-  return res.status(mapResultCodeToHttpExtension(user.status));
+  return res.sendStatus(mapResultCodeToHttpExtension(user.status));
 }
 
