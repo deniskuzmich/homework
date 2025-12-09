@@ -9,7 +9,7 @@ export async function userRegistrationHandler (req: Request, res: Response) {
   const password = req.body.password;
 
   const user = await authService.registerUser(login, email, password);
-  if (user.status !== ResultStatus.Success) {
+  if (user.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(user.status)).send(user.extensions)
   }
   return res.status(mapResultCodeToHttpExtension(user.status));

@@ -12,7 +12,7 @@ var ResultStatus;
     ResultStatus["Unauthorized"] = "Unauthorized";
 })(ResultStatus || (exports.ResultStatus = ResultStatus = {}));
 ;
-// OK_200: 200,
+//    OK_200: 200,
 //   CREATED_201: 201,
 //   NO_CONTENT_204: 204,
 //

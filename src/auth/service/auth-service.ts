@@ -57,7 +57,7 @@ export const authService = {
     return {
       status: ResultStatus.NoContent,
       extensions: [],
-      data: newUser,
+      data: null,
     }
   },
   async confirmEmail(code: string, email: string): Promise<ResultType<boolean>> {

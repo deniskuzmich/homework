@@ -62,7 +62,7 @@ exports.authService = {
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
-                data: newUser,
+                data: null,
             };
         });
     },
