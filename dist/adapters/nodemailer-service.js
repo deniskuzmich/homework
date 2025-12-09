@@ -18,14 +18,14 @@ exports.nodemailerService = {
     sendEmail(email, code, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
-                service: 'Mail.ru',
+                service: 'gmail',
                 auth: {
-                    user: 'kuzmich-denis@mail.ru',
-                    pass: 'rtgh765iop90',
+                    user: 'kuzmichdenis21@gmail.com',
+                    pass: 'utzglaowipftlbsr',
                 }
             });
             let info = yield transport.sendMail({
-                from: 'Denis',
+                from: '"Denis" <kuzmichdenis21@gmail.com>',
                 to: email,
                 subject: code,
                 html: message
@@ -34,8 +34,3 @@ exports.nodemailerService = {
         });
     }
 };
-// `<div>
-//            <h1>HI MAN, YO</h1>
-//            <a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
-//       </div>
-//     `,

@@ -3,15 +3,15 @@ import nodemailer from "nodemailer";
 export const nodemailerService = {
   async sendEmail(email: string, code: string, message: string) {
     let transport = nodemailer.createTransport({
-      service: 'Mail.ru',
+      service: 'gmail',
       auth: {
-        user: 'kuzmich-denis@mail.ru',
-        pass: 'rtgh765iop90',
+        user: 'kuzmichdenis21@gmail.com',
+        pass: 'utzglaowipftlbsr',
       }
     });
 
     let info = await transport.sendMail({
-      from: 'Denis',
+      from: '"Denis" <kuzmichdenis21@gmail.com>',
       to: email,
       subject: code,
       html: message
@@ -19,9 +19,3 @@ export const nodemailerService = {
     return info
   }
 }
-
-// `<div>
-//            <h1>HI MAN, YO</h1>
-//            <a href='https://somesite.com/confirm-email?code=${code}'>complete registration</a>
-//       </div>
-//     `,
