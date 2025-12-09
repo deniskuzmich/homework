@@ -97,7 +97,7 @@ exports.authService = {
                     data: false,
                 };
             }
-            let result = yield users_repository_1.usersRepository.updateConfirmation(user._id);
+            yield users_repository_1.usersRepository.updateConfirmation(user._id);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],

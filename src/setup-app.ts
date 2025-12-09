@@ -1,16 +1,8 @@
-import express, { Express } from "express";
-import { testingRouter } from "./routers/testing-router/testing.router";
-import { blogRouter } from "./routers/blog.router";
-import { postRouter } from "./routers/post.router";
-import {
-  AUTH_PATH,
-  BLOGS_PATH,
-  COMMENTS_PATH,
-  EMAIL_PATH,
-  POSTS_PATH,
-  TESTING_PATH,
-  USERS_PATH
-} from "./core/paths/paths";
+import express, {Express} from "express";
+import {testingRouter} from "./routers/testing-router/testing.router";
+import {blogRouter} from "./routers/blog.router";
+import {postRouter} from "./routers/post.router";
+import {AUTH_PATH, BLOGS_PATH, COMMENTS_PATH, POSTS_PATH, TESTING_PATH, USERS_PATH} from "./core/paths/paths";
 import {usersRouter} from "./routers/users.router";
 import {authRouter} from "./routers/auth.router";
 import {commentsRouter} from "./routers/comments.router";
