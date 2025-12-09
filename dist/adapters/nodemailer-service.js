@@ -18,9 +18,9 @@ exports.nodemailerService = {
     sendEmail(email, code, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
-                service: 'gmail',
+                service: 'Mail.ru',
                 auth: {
-                    user: 'kuzmichdenis21@gmail.com',
+                    user: 'kuzmich-denis@mail.ru',
                     pass: 'rtgh765iop90',
                 }
             });
