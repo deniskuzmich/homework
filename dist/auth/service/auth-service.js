@@ -17,7 +17,7 @@ const result_status_1 = require("../../common/types/result.status");
 const node_crypto_1 = require("node:crypto");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
-const map_register_user_1 = require("../../users/mapper/map-register-user");
+const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
 exports.authService = {
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -85,12 +85,12 @@ exports.authService = {
                     data: null
                 };
             }
-            if (user.emailConfirmation.isConfirmed)
-                return {
-                    status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email', message: "email is already confirmed" }],
-                    data: null
-                };
+            // if(user.emailConfirmation.isConfirmed)
+            //   return {
+            //     status: ResultStatus.BadRequest,
+            //     extensions: [{field: 'email', message: "email is already confirmed"}],
+            //     data: null
+            //   }
             const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
@@ -99,8 +99,8 @@ exports.authService = {
                     data: null
                 };
             }
-            // const result =  mapToUserViewModel(user)
-            const result = (0, map_register_user_1.mapRegisterUser)(user);
+            const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            // const result =  mapRegisterUser(user)
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],

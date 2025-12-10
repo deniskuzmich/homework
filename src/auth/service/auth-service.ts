@@ -70,7 +70,7 @@ export const authService = {
     }
   },
                                                                           ///UserOutputtype
-  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserDbType | null>> {
+  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
     const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
       return {
@@ -79,12 +79,12 @@ export const authService = {
         data: null
       }
     }
-    if(user.emailConfirmation.isConfirmed)
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: [{field: 'email', message: "email is already confirmed"}],
-        data: null
-      }
+    // if(user.emailConfirmation.isConfirmed)
+    //   return {
+    //     status: ResultStatus.BadRequest,
+    //     extensions: [{field: 'email', message: "email is already confirmed"}],
+    //     data: null
+    //   }
 
     const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
     if(!isPassCorrect) {
@@ -94,8 +94,8 @@ export const authService = {
         data: null
       }
     }
-    // const result =  mapToUserViewModel(user)
-    const result =  mapRegisterUser(user)
+    const result =  mapToUserViewModel(user)
+    // const result =  mapRegisterUser(user)
     return {
       status: ResultStatus.Success,
       extensions: [],
