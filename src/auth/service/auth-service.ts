@@ -134,7 +134,7 @@ export const authService = {
 
     let result = await usersRepository.updateConfirmation(user._id)
     return {
-      status: ResultStatus.Success,
+      status: ResultStatus.NoContent,
       extensions: [],
       data: result,
     }

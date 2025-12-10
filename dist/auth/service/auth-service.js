@@ -139,7 +139,7 @@ exports.authService = {
             }
             let result = yield users_repository_1.usersRepository.updateConfirmation(user._id);
             return {
-                status: result_status_1.ResultStatus.Success,
+                status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
                 data: result,
             };

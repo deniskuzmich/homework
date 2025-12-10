@@ -5,7 +5,7 @@ import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCode
 
 export async function registrationConfirmHandler (req: Request, res: Response) {
   const result = await authService.confirmEmail(req.body.code);
-  if (result.status !== ResultStatus.Success) {
+  if (result.status !== ResultStatus.NoContent) {
     return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions})
   }
   return res.sendStatus(mapResultCodeToHttpExtension(result.status))
