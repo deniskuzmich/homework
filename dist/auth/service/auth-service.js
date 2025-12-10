@@ -17,7 +17,7 @@ const result_status_1 = require("../../common/types/result.status");
 const node_crypto_1 = require("node:crypto");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
-const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
+const map_register_user_1 = require("../../users/mapper/map-register-user");
 exports.authService = {
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -74,6 +74,7 @@ exports.authService = {
             };
         });
     },
+    ///UserOutputtype
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
@@ -98,7 +99,8 @@ exports.authService = {
                     data: null
                 };
             }
-            const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            // const result =  mapToUserViewModel(user)
+            const result = (0, map_register_user_1.mapRegisterUser)(user);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],

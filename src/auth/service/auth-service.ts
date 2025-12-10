@@ -10,6 +10,7 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
+import {mapRegisterUser} from "../../users/mapper/map-register-user";
 
 export const authService = {
   async getInfo(user: UserInfoType): Promise<UserInfoType> {
@@ -68,8 +69,8 @@ export const authService = {
       data: null,
     }
   },
-
-  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+                                                                          ///UserOutputtype
+  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserDbType | null>> {
     const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
       return {
@@ -93,7 +94,8 @@ export const authService = {
         data: null
       }
     }
-    const result =  mapToUserViewModel(user)
+    // const result =  mapToUserViewModel(user)
+    const result =  mapRegisterUser(user)
     return {
       status: ResultStatus.Success,
       extensions: [],
