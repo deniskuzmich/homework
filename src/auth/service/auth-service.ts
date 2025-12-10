@@ -156,7 +156,7 @@ export const authService = {
     try {
       await nodemailerService.sendEmail(
         user.email,
-        emailExamples.registrationEmail(user.emailConfirmation.confirmationCode)
+        emailExamples.registrationEmail(newCode)
       )
     } catch (e) {
       console.log('Send email error', e)

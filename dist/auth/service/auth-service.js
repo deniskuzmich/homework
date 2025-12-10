@@ -158,7 +158,7 @@ exports.authService = {
             const newCode = (0, node_crypto_1.randomUUID)();
             yield users_repository_1.usersRepository.updateConfirmationCode(user._id, newCode);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
+                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
             }
             catch (e) {
                 console.log('Send email error', e);
