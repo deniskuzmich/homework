@@ -20,7 +20,7 @@ function userRegistrationHandler(req, res) {
         const password = req.body.password;
         const user = yield auth_service_1.authService.registerUser(login, email, password);
         if (user.status !== result_status_1.ResultStatus.NoContent) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status)).send(user.extensions);
+            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status)).send({ errorsMessages: user.extensions });
         }
         return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status));
     });
