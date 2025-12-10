@@ -19,6 +19,6 @@ function registrationConfirmHandler(req, res) {
         if (result.status !== result_status_1.ResultStatus.Success) {
             return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
         }
-        return res.sendStatus(204);
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
     });
 }

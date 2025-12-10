@@ -162,6 +162,10 @@ export const authService = {
     } catch (e) {
       console.log('Send email error', e)
     }
-    return
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: true,
+    }
   }
 }

@@ -8,5 +8,5 @@ export async function registrationConfirmHandler (req: Request, res: Response) {
   if (result.status !== ResultStatus.Success) {
     return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions})
   }
-  return res.sendStatus(204)
+  return res.sendStatus(mapResultCodeToHttpExtension(result.status))
 }

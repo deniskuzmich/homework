@@ -167,7 +167,11 @@ exports.authService = {
             catch (e) {
                 console.log('Send email error', e);
             }
-            return;
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: true,
+            };
         });
     }
 };

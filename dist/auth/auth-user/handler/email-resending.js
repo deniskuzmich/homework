@@ -11,9 +11,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emailResendingHandler = emailResendingHandler;
 const auth_service_1 = require("../../service/auth-service");
+const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
+const result_status_1 = require("../../../common/types/result.status");
 function emailResendingHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield auth_service_1.authService.resendEmail(req.body.email);
-        return res.sendStatus(204);
+        if (result.status !== result_status_1.ResultStatus.NoContent) {
+            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
+        }
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
     });
 }
