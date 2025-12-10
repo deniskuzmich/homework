@@ -81,7 +81,7 @@ export const authService = {
     if(user.emailConfirmation.isConfirmed)
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
+        extensions: [{field: 'email', message: "email is already confirmed"}],
         data: null
       }
 
@@ -106,28 +106,28 @@ export const authService = {
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirm', message: 'The user data in not correct'}],
+        extensions: [{field: 'email', message: 'The user data in not correct'}],
         data: false,
       }
     }
     if(user.emailConfirmation.isConfirmed) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirm', message: 'The code is already applied'}],
+        extensions: [{field: 'email', message: 'The code is already applied'}],
         data: false,
       }
     }
     if (user.emailConfirmation.confirmationCode !== code) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirm', message: 'The code is incorrect'}],
+        extensions: [{field: 'email', message: 'The code is incorrect'}],
         data: false,
       }
     }
     if (user.emailConfirmation.expirationDate < new Date()) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirm', message: 'The code is expired'}],
+        extensions: [{field: 'email', message: 'The code is expired'}],
         data: false,
       }
     }
@@ -141,7 +141,19 @@ export const authService = {
   },
   async resendEmail(email: string) {
     const user = await usersRepository.getUserByLoginOrEmail(email)
-    if (!user) return false
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [],
+        data: false,
+      }
+    }
+    if (user.emailConfirmation.isConfirmed)
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email', message: 'The email is already confirmed'}],
+        data: false,
+      }
     try {
       await nodemailerService.sendEmail(
         user.email,

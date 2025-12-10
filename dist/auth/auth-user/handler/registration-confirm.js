@@ -17,7 +17,7 @@ function registrationConfirmHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const result = yield auth_service_1.authService.confirmEmail(req.body.code);
         if (result.status !== result_status_1.ResultStatus.Success) {
-            return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
+            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
         }
         return res.sendStatus(204);
     });

@@ -87,7 +87,7 @@ exports.authService = {
             if (user.emailConfirmation.isConfirmed)
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirmation', message: "email is already confirmed" }],
+                    extensions: [{ field: 'email', message: "email is already confirmed" }],
                     data: null
                 };
             const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
@@ -112,28 +112,28 @@ exports.authService = {
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirm', message: 'The user data in not correct' }],
+                    extensions: [{ field: 'email', message: 'The user data in not correct' }],
                     data: false,
                 };
             }
             if (user.emailConfirmation.isConfirmed) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirm', message: 'The code is already applied' }],
+                    extensions: [{ field: 'email', message: 'The code is already applied' }],
                     data: false,
                 };
             }
             if (user.emailConfirmation.confirmationCode !== code) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirm', message: 'The code is incorrect' }],
+                    extensions: [{ field: 'email', message: 'The code is incorrect' }],
                     data: false,
                 };
             }
             if (user.emailConfirmation.expirationDate < new Date()) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirm', message: 'The code is expired' }],
+                    extensions: [{ field: 'email', message: 'The code is expired' }],
                     data: false,
                 };
             }
@@ -148,8 +148,19 @@ exports.authService = {
     resendEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(email);
-            if (!user)
-                return false;
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [],
+                    data: false,
+                };
+            }
+            if (user.emailConfirmation.isConfirmed)
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email', message: 'The email is already confirmed' }],
+                    data: false,
+                };
             try {
                 yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
             }
