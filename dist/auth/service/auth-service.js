@@ -112,7 +112,7 @@ exports.authService = {
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email', message: 'The user data in not correct' }],
+                    extensions: [{ field: 'code', message: 'The user data in not correct' }],
                     data: false,
                 };
             }
@@ -133,7 +133,7 @@ exports.authService = {
             if (user.emailConfirmation.expirationDate < new Date()) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email', message: 'The code is expired' }],
+                    extensions: [{ field: 'code', message: 'The code is expired' }],
                     data: false,
                 };
             }
@@ -151,14 +151,14 @@ exports.authService = {
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [],
+                    extensions: [{ field: 'email', message: 'This email is not exist' }],
                     data: false,
                 };
             }
             if (user.emailConfirmation.isConfirmed)
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email', message: 'The email is already confirmed' }],
+                    extensions: [{ field: 'email', message: 'This email is already confirmed' }],
                     data: false,
                 };
             try {
