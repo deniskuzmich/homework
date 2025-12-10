@@ -29,12 +29,19 @@ exports.authService = {
     },
     registerUser(login, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const checkUser = yield users_repository_1.usersRepository.getUserByLoginOrEmail(login);
-            if (checkUser) {
+            const isLoginExists = yield users_repository_1.usersRepository.getLoginUser(login);
+            if (isLoginExists) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    errorMessage: 'User is already exists',
-                    extensions: [{ field: 'Auth User', message: 'User is already exists' }],
+                    extensions: [{ field: 'login register', message: "login is already exists" }],
+                    data: null
+                };
+            }
+            const isEmailExists = yield users_repository_1.usersRepository.getEmailUser(email);
+            if (isEmailExists) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email register', message: "email is already exists" }],
                     data: null
                 };
             }

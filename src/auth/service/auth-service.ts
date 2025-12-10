@@ -19,12 +19,19 @@ export const authService = {
     }
   },
   async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
-    const checkUser = await usersRepository.getUserByLoginOrEmail(login)
-    if (checkUser) {
+    const isLoginExists = await usersRepository.getLoginUser(login)
+    if (isLoginExists) {
       return {
         status: ResultStatus.BadRequest,
-        errorMessage: 'User is already exists',
-        extensions: [{field: 'Auth User', message: 'User is already exists'}],
+        extensions: [{field: 'login register', message: "login is already exists"}],
+        data: null
+      }
+    }
+    const isEmailExists = await usersRepository.getEmailUser(email)
+    if (isEmailExists) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email register', message: "email is already exists"}],
         data: null
       }
     }
