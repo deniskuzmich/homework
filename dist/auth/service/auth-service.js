@@ -74,7 +74,6 @@ exports.authService = {
             };
         });
     },
-    ///UserOutputtype
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
@@ -85,12 +84,6 @@ exports.authService = {
                     data: null
                 };
             }
-            // if(user.emailConfirmation.isConfirmed)
-            //   return {
-            //     status: ResultStatus.BadRequest,
-            //     extensions: [{field: 'email', message: "email is already confirmed"}],
-            //     data: null
-            //   }
             const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
@@ -100,7 +93,6 @@ exports.authService = {
                 };
             }
             const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
-            // const result =  mapRegisterUser(user)
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],
@@ -163,8 +155,9 @@ exports.authService = {
                     extensions: [{ field: 'email', message: 'This email is already confirmed' }],
                     data: false,
                 };
+            const newCode = (0, node_crypto_1.randomUUID)();
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
+                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
             }
             catch (e) {
                 console.log('Send email error', e);

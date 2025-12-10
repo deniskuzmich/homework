@@ -69,7 +69,7 @@ export const authService = {
       data: null,
     }
   },
-                                                                          ///UserOutputtype
+
   async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
     const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
@@ -79,13 +79,6 @@ export const authService = {
         data: null
       }
     }
-    // if(user.emailConfirmation.isConfirmed)
-    //   return {
-    //     status: ResultStatus.BadRequest,
-    //     extensions: [{field: 'email', message: "email is already confirmed"}],
-    //     data: null
-    //   }
-
     const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
     if(!isPassCorrect) {
       return {
@@ -94,8 +87,8 @@ export const authService = {
         data: null
       }
     }
+
     const result =  mapToUserViewModel(user)
-    // const result =  mapRegisterUser(user)
     return {
       status: ResultStatus.Success,
       extensions: [],
@@ -156,10 +149,12 @@ export const authService = {
         extensions: [{field: 'email', message: 'This email is already confirmed'}],
         data: false,
       }
+
+    const newCode = randomUUID()
     try {
       await nodemailerService.sendEmail(
         user.email,
-        emailExamples.registrationEmail(user.emailConfirmation.confirmationCode)
+        emailExamples.registrationEmail(newCode)
       )
     } catch (e) {
       console.log('Send email error', e)
