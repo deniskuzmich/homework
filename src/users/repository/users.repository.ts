@@ -1,6 +1,7 @@
 import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../types/main-types/user-db-type";
+import {add} from "date-fns/add";
 
 
 export const usersRepository = {
@@ -27,7 +28,7 @@ export const usersRepository = {
     return user;
   },
 
-  async createUser(newUser: UserDbType): Promise <WithId<UserDbType>> {
+  async createUser(newUser: UserDbType): Promise<WithId<UserDbType>> {
     const insertResult = await usersCollection.insertOne(newUser);
     return {...newUser, _id: insertResult.insertedId}
   },
@@ -42,5 +43,17 @@ export const usersRepository = {
   async updateConfirmation(_id: ObjectId) {
     let result = await usersCollection.updateOne({_id}, {$set: {'emailConfirmation.isConfirmed': true}});
     return result.modifiedCount === 1
+  },
+
+  async updateConfirmationCode(_id: ObjectId, newCode: string) {
+    return usersCollection.updateOne({_id}, {
+      $set: {
+        'emailConfirmation.confirmationCode': newCode,
+        'emailConfirmation.expirationDate': add(new Date(), {
+          hours: 3,
+          minutes: 30,
+        })
+      }
+    })
   }
 }

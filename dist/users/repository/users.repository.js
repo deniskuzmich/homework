@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
+const add_1 = require("date-fns/add");
 exports.usersRepository = {
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -60,6 +61,19 @@ exports.usersRepository = {
         return __awaiter(this, void 0, void 0, function* () {
             let result = yield mongo_db_1.usersCollection.updateOne({ _id }, { $set: { 'emailConfirmation.isConfirmed': true } });
             return result.modifiedCount === 1;
+        });
+    },
+    updateConfirmationCode(_id, newCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.updateOne({ _id }, {
+                $set: {
+                    'emailConfirmation.confirmationCode': newCode,
+                    'emailConfirmation.expirationDate': (0, add_1.add)(new Date(), {
+                        hours: 3,
+                        minutes: 30,
+                    })
+                }
+            });
         });
     }
 };

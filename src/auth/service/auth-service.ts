@@ -139,7 +139,7 @@ export const authService = {
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email', message: 'This email is not exist'}],
+        extensions: [{field: 'email', message: 'This login or email is not exist'}],
         data: false,
       }
     }
@@ -151,10 +151,12 @@ export const authService = {
       }
 
     const newCode = randomUUID()
+
+    await usersRepository.updateConfirmationCode(user._id, newCode)
     try {
       await nodemailerService.sendEmail(
         user.email,
-        emailExamples.registrationEmail(newCode)
+        emailExamples.registrationEmail(user.emailConfirmation.confirmationCode)
       )
     } catch (e) {
       console.log('Send email error', e)

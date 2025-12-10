@@ -145,7 +145,7 @@ exports.authService = {
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email', message: 'This email is not exist' }],
+                    extensions: [{ field: 'email', message: 'This login or email is not exist' }],
                     data: false,
                 };
             }
@@ -156,8 +156,9 @@ exports.authService = {
                     data: false,
                 };
             const newCode = (0, node_crypto_1.randomUUID)();
+            yield users_repository_1.usersRepository.updateConfirmationCode(user._id, newCode);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
+                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(user.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);
