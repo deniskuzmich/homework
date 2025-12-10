@@ -10,6 +10,7 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
+import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
 
 export const authService = {
   async getInfo(user: UserInfoType): Promise<UserInfoType> {
@@ -18,21 +19,21 @@ export const authService = {
       login: user.login,
     }
   },
-  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
+  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null> | ErrorTypeOutput> {
     const isLoginExists = await usersRepository.getLoginUser(login)
     if (isLoginExists) {
       return {
-        status: ResultStatus.BadRequest,
-        extensions: [{field: 'login register', message: "login is already exists"}],
-        data: null
+        errorsMessages: [
+          {field: "login", message: "login is already exists"}
+        ]
       }
     }
     const isEmailExists = await usersRepository.getEmailUser(email)
     if (isEmailExists) {
       return {
-        status: ResultStatus.BadRequest,
-        extensions: [{field: 'email register', message: "email is already exists"}],
-        data: null
+        errorsMessages: [
+          {field: "email", message: "email is already exists"}
+        ]
       }
     }
 
