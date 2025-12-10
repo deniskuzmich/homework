@@ -11,9 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.usersService = void 0;
 const users_repository_1 = require("../repository/users.repository");
-const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const bcrypt_service_1 = require("../../common/services/bcrypt.service");
-const result_status_1 = require("../../common/types/result.status");
 const map_register_user_1 = require("../mapper/map-register-user");
 exports.usersService = {
     createUser(queryDto) {
@@ -57,36 +55,36 @@ exports.usersService = {
             const deletedUser = yield users_repository_1.usersRepository.deleteUser(id);
         });
     },
-    checkCredentials(loginOrEmail, password) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
-            if (!user) {
-                return {
-                    status: result_status_1.ResultStatus.Unauthorized,
-                    extensions: [],
-                    data: null
-                };
-            }
-            if (user.emailConfirmation.isConfirmed)
-                return {
-                    status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'email confirmation', message: "email is already confirmed" }],
-                    data: null
-                };
-            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
-            if (!isPassCorrect) {
-                return {
-                    status: result_status_1.ResultStatus.Unauthorized,
-                    extensions: [{ field: 'auth', message: 'Bad request to login' }],
-                    data: null
-                };
-            }
-            const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
-            return {
-                status: result_status_1.ResultStatus.Success,
-                extensions: [],
-                data: result
-            };
-        });
-    }
+    // async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+    //   const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
+    //   if (!user) {
+    //     return {
+    //       status: ResultStatus.Unauthorized,
+    //       extensions: [],
+    //       data: null
+    //     }
+    //   }
+    //
+    //   if(user.emailConfirmation.isConfirmed)
+    //     return {
+    //       status: ResultStatus.BadRequest,
+    //       extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
+    //       data: null
+    //     }
+    //
+    //   const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
+    //   if(!isPassCorrect) {
+    //     return {
+    //       status: ResultStatus.Unauthorized,
+    //       extensions: [{field: 'auth', message: 'Bad request to login'}],
+    //       data: null
+    //     }
+    //   }
+    //   const result =  mapToUserViewModel(user)
+    //   return {
+    //     status: ResultStatus.Success,
+    //     extensions: [],
+    //     data: result
+    //   }
+    // }
 };

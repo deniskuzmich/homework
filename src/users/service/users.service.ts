@@ -51,37 +51,37 @@ export const usersService = {
     const deletedUser = await usersRepository.deleteUser(id);
   },
 
-  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
-    const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
-    if (!user) {
-      return {
-        status: ResultStatus.Unauthorized,
-        extensions: [],
-        data: null
-      }
-    }
-
-    if(user.emailConfirmation.isConfirmed)
-      return {
-        status: ResultStatus.BadRequest,
-        extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
-        data: null
-      }
-
-    const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
-    if(!isPassCorrect) {
-      return {
-        status: ResultStatus.Unauthorized,
-        extensions: [{field: 'auth', message: 'Bad request to login'}],
-        data: null
-      }
-    }
-    const result =  mapToUserViewModel(user)
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: result
-    }
-  }
+  // async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+  //   const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
+  //   if (!user) {
+  //     return {
+  //       status: ResultStatus.Unauthorized,
+  //       extensions: [],
+  //       data: null
+  //     }
+  //   }
+  //
+  //   if(user.emailConfirmation.isConfirmed)
+  //     return {
+  //       status: ResultStatus.BadRequest,
+  //       extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
+  //       data: null
+  //     }
+  //
+  //   const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
+  //   if(!isPassCorrect) {
+  //     return {
+  //       status: ResultStatus.Unauthorized,
+  //       extensions: [{field: 'auth', message: 'Bad request to login'}],
+  //       data: null
+  //     }
+  //   }
+  //   const result =  mapToUserViewModel(user)
+  //   return {
+  //     status: ResultStatus.Success,
+  //     extensions: [],
+  //     data: result
+  //   }
+  // }
 }
 

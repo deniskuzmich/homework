@@ -8,6 +8,8 @@ import {UserDbType} from "../../users/types/main-types/user-db-type";
 import {ResultType} from "../../common/types/result.type";
 import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
+import {UserOutput} from "../../users/types/main-types/user-output.type";
+import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
 
 export const authService = {
   async getInfo(user: UserInfoType): Promise<UserInfoType> {
@@ -59,8 +61,41 @@ export const authService = {
       data: null,
     }
   },
-  async confirmEmail(code: string, email: string): Promise<ResultType<boolean>> {
-    const user = await usersRepository.getUserByLoginOrEmail(email)
+
+  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+    const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
+    if (!user) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [],
+        data: null
+      }
+    }
+    if(user.emailConfirmation.isConfirmed)
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'email confirmation', message: "email is already confirmed"}],
+        data: null
+      }
+
+    const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
+    if(!isPassCorrect) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [{field: 'auth', message: 'Bad request to login'}],
+        data: null
+      }
+    }
+    const result =  mapToUserViewModel(user)
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: result
+    }
+  },
+
+  async confirmEmail(code: string): Promise<ResultType<boolean>> {
+    const user = await usersRepository.getUserByConfirmationCode(code)
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -90,11 +125,11 @@ export const authService = {
       }
     }
 
-    await usersRepository.updateConfirmation(user._id)
+    let result = await usersRepository.updateConfirmation(user._id)
     return {
       status: ResultStatus.Success,
       extensions: [],
-      data: true,
+      data: result,
     }
   },
   async resendEmail(email: string) {

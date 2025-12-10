@@ -17,6 +17,7 @@ const result_status_1 = require("../../common/types/result.status");
 const node_crypto_1 = require("node:crypto");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
+const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
 exports.authService = {
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -66,9 +67,41 @@ exports.authService = {
             };
         });
     },
-    confirmEmail(code, email) {
+    checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(email);
+            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.Unauthorized,
+                    extensions: [],
+                    data: null
+                };
+            }
+            if (user.emailConfirmation.isConfirmed)
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email confirmation', message: "email is already confirmed" }],
+                    data: null
+                };
+            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
+            if (!isPassCorrect) {
+                return {
+                    status: result_status_1.ResultStatus.Unauthorized,
+                    extensions: [{ field: 'auth', message: 'Bad request to login' }],
+                    data: null
+                };
+            }
+            const result = (0, map_to_user_view_model_1.mapToUserViewModel)(user);
+            return {
+                status: result_status_1.ResultStatus.Success,
+                extensions: [],
+                data: result
+            };
+        });
+    },
+    confirmEmail(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield users_repository_1.usersRepository.getUserByConfirmationCode(code);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -97,11 +130,11 @@ exports.authService = {
                     data: false,
                 };
             }
-            yield users_repository_1.usersRepository.updateConfirmation(user._id);
+            let result = yield users_repository_1.usersRepository.updateConfirmation(user._id);
             return {
                 status: result_status_1.ResultStatus.Success,
                 extensions: [],
-                data: true,
+                data: result,
             };
         });
     },

@@ -10,16 +10,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.authUserHandler = authUserHandler;
-const users_service_1 = require("../../../users/service/users.service");
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
+const auth_service_1 = require("../../service/auth-service");
 function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { loginOrEmail, password } = req.body;
         try {
-            const authUser = yield users_service_1.usersService.checkCredentials(loginOrEmail, password);
+            const authUser = yield auth_service_1.authService.checkCredentials(loginOrEmail, password);
             if (authUser.status !== result_status_1.ResultStatus.Success) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }

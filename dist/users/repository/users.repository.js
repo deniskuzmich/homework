@@ -30,6 +30,12 @@ exports.usersRepository = {
             return mongo_db_1.usersCollection.findOne({ email: email });
         });
     },
+    getUserByConfirmationCode(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield mongo_db_1.usersCollection.findOne({ "emailConfirmation.confirmationCode": code });
+            return user;
+        });
+    },
     getUserByLoginOrEmail(loginOrEmail) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
