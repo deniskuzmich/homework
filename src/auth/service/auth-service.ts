@@ -113,14 +113,14 @@ export const authService = {
     if(user.emailConfirmation.isConfirmed) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email', message: 'The code is already applied'}],
+        extensions: [{field: 'code', message: 'The code is already applied'}],
         data: false,
       }
     }
     if (user.emailConfirmation.confirmationCode !== code) {
       return {
         status: ResultStatus.BadRequest,
-        extensions: [{field: 'email', message: 'The code is incorrect'}],
+        extensions: [{field: 'code', message: 'The code is incorrect'}],
         data: false,
       }
     }
