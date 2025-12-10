@@ -32,17 +32,17 @@ exports.authService = {
             const isLoginExists = yield users_repository_1.usersRepository.getLoginUser(login);
             if (isLoginExists) {
                 return {
-                    errorsMessages: [
-                        { field: "login", message: "login is already exists" }
-                    ]
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'login', message: "login is already exists" }],
+                    data: null
                 };
             }
             const isEmailExists = yield users_repository_1.usersRepository.getEmailUser(email);
             if (isEmailExists) {
                 return {
-                    errorsMessages: [
-                        { field: "email", message: "email is already exists" }
-                    ]
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'email', message: "email is already exists" }],
+                    data: null
                 };
             }
             const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(password);
