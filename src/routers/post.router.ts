@@ -10,9 +10,9 @@ import { postInputValidation } from "../posts/middleware-validation/posts.input.
 import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {authMiddleware} from "../auth/middleware/auth.middleware";
-import {createCommentForPostHandler} from "../feedback/handler/create-comment-for-post.handler";
-import {contentValidation} from "../feedback/validation/comments-validation";
-import {getCommentForPostHandler} from "../feedback/handler/get-comment-for-post.handler";
+import {createCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
+import {contentValidation} from "../comments/validation/comments-validation";
+import {getCommentForPostHandler} from "../comments/handler/get-comment-for-post.handler";
 
 export const postRouter = Router();
 postRouter

@@ -1,11 +1,9 @@
-import { Collection, Db, MongoClient } from 'mongodb';
+import {Collection, Db, MongoClient} from 'mongodb';
 import {SETTINGS} from "../core/settings/settings";
 import {Blog} from "../blogs/types/main-types/blog-db.type";
 import {Post} from "../posts/types/main-types/posts-db.type";
-import {CommentDbType} from "../feedback/types/main-types/comment-db.type";
-import {UserCreateType} from "../users/types/input-types/user-create-type";
+import {CommentDbType} from "../comments/types/main-types/comment-db.type";
 import {UserDbType} from "../users/types/main-types/user-db-type";
-
 
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';

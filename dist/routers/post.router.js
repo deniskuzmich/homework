@@ -13,9 +13,9 @@ const posts_input_validation_middleware_1 = require("../posts/middleware-validat
 const super_admin_guard_middleware_1 = require("../auth/auth-admin/super-admin.guard.middleware");
 const pagination_validation_1 = require("../common/validation/pagination-validation");
 const auth_middleware_1 = require("../auth/middleware/auth.middleware");
-const create_comment_for_post_handler_1 = require("../feedback/handler/create-comment-for-post.handler");
-const comments_validation_1 = require("../feedback/validation/comments-validation");
-const get_comment_for_post_handler_1 = require("../feedback/handler/get-comment-for-post.handler");
+const create_comment_for_post_handler_1 = require("../comments/handler/create-comment-for-post.handler");
+const comments_validation_1 = require("../comments/validation/comments-validation");
+const get_comment_for_post_handler_1 = require("../comments/handler/get-comment-for-post.handler");
 exports.postRouter = (0, express_1.Router)();
 exports.postRouter
     .get("", pagination_validation_1.paginationValidation, get_posts_list_hanlder_1.getPostsListHanlder)

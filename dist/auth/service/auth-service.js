@@ -88,7 +88,7 @@ exports.authService = {
             if (!isPassCorrect) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
-                    extensions: [{ field: 'auth', message: 'Bad request to login' }],
+                    extensions: [{ field: 'auth', message: 'Bad request to password' }],
                     data: null
                 };
             }

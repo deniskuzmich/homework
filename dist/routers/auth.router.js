@@ -16,25 +16,3 @@ exports.authRouter = (0, express_1.Router)()
     .post('/registration-confirmation', input_validation_result_middleware_1.inputValidationResultMiddleware, registration_confirm_1.registrationConfirmHandler)
     .post('/registration-email-resending', input_validation_result_middleware_1.inputValidationResultMiddleware, email_resending_1.emailResendingHandler)
     .get('/me', auth_middleware_1.authMiddleware, auth_me_handler_1.aboutMeHandler);
-// .post('/send', async (req: Request, res: Response) => {
-//   try {
-//     let transport = nodemailer.createTransport({
-//       service: 'gmail',
-//       auth: {
-//         user: 'kuzmichdenis21@gmail.com',
-//         pass: 'utzglaowipftlbsr',
-//       }
-//     });
-//
-//     let info = await transport.sendMail({
-//       from: '"Denis" <kuzmichdenis21@gmail.com>',
-//       to: req.body.email,
-//       subject: req.body.subject,
-//       html: req.body.message
-//     });
-//
-//     res.send({info})
-//   } catch (e) {
-//     console.log(e)
-//   }
-// })

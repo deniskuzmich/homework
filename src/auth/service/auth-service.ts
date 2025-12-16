@@ -10,7 +10,6 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
-import {mapRegisterUser} from "../../users/mapper/map-register-user";
 
 export const authService = {
   async getInfo(user: UserInfoType): Promise<UserInfoType> {
@@ -83,7 +82,7 @@ export const authService = {
     if(!isPassCorrect) {
       return {
         status: ResultStatus.Unauthorized,
-        extensions: [{field: 'auth', message: 'Bad request to login'}],
+        extensions: [{field: 'auth', message: 'Bad request to password'}],
         data: null
       }
     }
