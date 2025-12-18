@@ -17,6 +17,8 @@ export async function authUserHandler(req: Request, res: Response) {
     const token =  jwtService.createJWT(authUser.data!.id);
     const refreshToken = jwtService.createRefreshToken(authUser.data!.id);
 
+    await authService.updateRefreshToken(authUser.data!.id, refreshToken)
+
     res.cookie('refreshToken', refreshToken, { httpOnly: true , secure: true });
 
     return res.status(HttpStatuses.Success).send({accessToken: token});

@@ -25,6 +25,7 @@ function authUserHandler(req, res) {
             }
             const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
             const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id);
+            yield auth_service_1.authService.updateRefreshToken(authUser.data.id, refreshToken);
             res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
         }
