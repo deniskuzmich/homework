@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 
 export const jwtService = {
   createJWT(userId: string) {
-    return jwt.sign(userId, SETTINGS.JWT_SECRET, {expiresIn: "10s"});
+    return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: "10s"});
   },
   getUserInfoByToken(token: string) {
     try {
@@ -17,7 +17,7 @@ export const jwtService = {
     }
   },
   createRefreshToken(userId: string) {
-    return jwt.sign(userId, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
+    return jwt.sign({userId}, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
   },
   verifyRefreshToken(token: string): {userId: string} | null {
     try {
