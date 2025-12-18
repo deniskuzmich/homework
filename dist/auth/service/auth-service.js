@@ -170,6 +170,19 @@ exports.authService = {
             };
         });
     },
+    isRefreshTokenValid(userId, token) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield users_repository_1.usersRepository.getUserById(userId);
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.Unauthorized,
+                    extensions: [],
+                    data: false,
+                };
+            }
+            return user.refreshToken === token;
+        });
+    },
     unsetRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
             yield users_repository_1.usersRepository.unsetRefreshToken(refreshToken);

@@ -23,6 +23,10 @@ function logoutHandler(req, res) {
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
+        const isValidToken = yield auth_service_1.authService.isRefreshTokenValid(payload.userId, refreshToken);
+        if (!isValidToken) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
         yield auth_service_1.authService.unsetRefreshToken(refreshToken);
         res.clearCookie(refreshToken);
         return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);

@@ -23,6 +23,10 @@ function authRefreshTokenHandler(req, res) {
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
+        const isValidToken = yield auth_service_1.authService.isRefreshTokenValid(payload.userId, refreshToken);
+        if (!isValidToken) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
         yield auth_service_1.authService.unsetRefreshToken(refreshToken);
         const newAccessToken = jwt_service_1.jwtService.createJWT(payload.userId);
         const newRefreshToken = jwt_service_1.jwtService.createRefreshToken(payload.userId);

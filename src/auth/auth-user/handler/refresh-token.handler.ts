@@ -15,6 +15,15 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
+  const isValidToken = await authService.isRefreshTokenValid(
+    payload.userId,
+    refreshToken
+  );
+
+  if (!isValidToken) {
+    return res.sendStatus(HttpStatuses.Unauthorized);
+  }
+
   await authService.unsetRefreshToken(refreshToken);
 
   const newAccessToken = jwtService.createJWT(payload.userId)

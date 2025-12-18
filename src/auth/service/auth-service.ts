@@ -79,7 +79,7 @@ export const authService = {
       }
     }
     const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
-    if(!isPassCorrect) {
+    if (!isPassCorrect) {
       return {
         status: ResultStatus.Unauthorized,
         extensions: [{field: 'auth', message: 'Bad request to password'}],
@@ -87,7 +87,7 @@ export const authService = {
       }
     }
 
-    const result =  mapToUserViewModel(user)
+    const result = mapToUserViewModel(user)
     return {
       status: ResultStatus.Success,
       extensions: [],
@@ -104,7 +104,7 @@ export const authService = {
         data: false,
       }
     }
-    if(user.emailConfirmation.isConfirmed) {
+    if (user.emailConfirmation.isConfirmed) {
       return {
         status: ResultStatus.BadRequest,
         extensions: [{field: 'code', message: 'The code is already applied'}],
@@ -166,6 +166,17 @@ export const authService = {
       data: true,
     }
   },
+
+  async isRefreshTokenValid(userId: string, token: string) {
+    const user = await usersRepository.getUserById(userId)
+    if (!user) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [],
+        data: false,
+      }
+    } return user.refreshToken === token
+  },
   async unsetRefreshToken(refreshToken: string) {
     await usersRepository.unsetRefreshToken(refreshToken)
     return {
@@ -175,7 +186,7 @@ export const authService = {
     }
   },
   async updateRefreshToken(userId: string, refreshToken: string) {
-    await usersRepository.updateRefreshToken(userId,refreshToken)
+    await usersRepository.updateRefreshToken(userId, refreshToken)
     return {
       status: ResultStatus.NoContent,
       extensions: [],

@@ -3,6 +3,7 @@ export type UserDbType = {
   email: string;
   createdAt: Date;
   passwordHash: string;
+  refreshToken?: string;
   emailConfirmation: {
     confirmationCode: string,
     expirationDate: Date,
