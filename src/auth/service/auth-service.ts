@@ -165,5 +165,21 @@ export const authService = {
       extensions: [],
       data: true,
     }
-  }
+  },
+  async unsetRefreshToken(refreshToken: string) {
+    await usersRepository.unsetRefreshToken(refreshToken)
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: true,
+    }
+  },
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    await usersRepository.updateRefreshToken(userId,refreshToken)
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: true,
+    }
+  },
 }

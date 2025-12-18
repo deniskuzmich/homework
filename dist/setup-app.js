@@ -13,8 +13,10 @@ const users_router_1 = require("./routers/users.router");
 const auth_router_1 = require("./routers/auth.router");
 const comments_router_1 = require("./routers/comments.router");
 const http_statuses_1 = require("./common/types/http-statuses");
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const setupApp = (app) => {
     app.use(express_1.default.json());
+    app.use((0, cookie_parser_1.default)());
     app.get("/", (req, res) => {
         res.status(http_statuses_1.HttpStatuses.Success).send("Blogs and Posts");
     });

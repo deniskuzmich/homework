@@ -1,22 +1,31 @@
 import {SETTINGS} from "../../core/settings/settings";
 import jwt from 'jsonwebtoken';
-import {UserOutput} from "../../users/types/main-types/user-output.type";
 
 export const jwtService = {
-  createJWT(user: UserOutput) {
-    const token = jwt.sign({login: user.login, userId: user.id}, SETTINGS.JWT_SECRET, {expiresIn: "10000h"});
-    return token
+  createJWT(userId: string) {
+    return jwt.sign(userId, SETTINGS.JWT_SECRET, {expiresIn: "10s"});
   },
-
   getUserInfoByToken(token: string) {
     try {
       const payload = jwt.verify(token, SETTINGS.JWT_SECRET);
 
-      if(typeof payload === "string") return null;
+      if (typeof payload === "string") return null;
 
       return payload
     } catch (e) {
       return null;
     }
   },
+  createRefreshToken(userId: string) {
+    return jwt.sign(userId, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
+  },
+  verifyRefreshToken(token: string): {userId: string} | null {
+    try {
+      return jwt.verify(token, SETTINGS.JWT_REFRESH_SECRET) as {
+        userId: string
+      };
+    } catch (e: unknown) {
+      return null;
+    }
+  }
 }

@@ -7,9 +7,8 @@ exports.jwtService = void 0;
 const settings_1 = require("../../core/settings/settings");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 exports.jwtService = {
-    createJWT(user) {
-        const token = jsonwebtoken_1.default.sign({ login: user.login, userId: user.id }, settings_1.SETTINGS.JWT_SECRET, { expiresIn: "10000h" });
-        return token;
+    createJWT(userId) {
+        return jsonwebtoken_1.default.sign(userId, settings_1.SETTINGS.JWT_SECRET, { expiresIn: "10s" });
     },
     getUserInfoByToken(token) {
         try {
@@ -22,4 +21,15 @@ exports.jwtService = {
             return null;
         }
     },
+    createRefreshToken(userId) {
+        return jsonwebtoken_1.default.sign(userId, settings_1.SETTINGS.JWT_REFRESH_SECRET, { expiresIn: "20s" });
+    },
+    verifyRefreshToken(token) {
+        try {
+            return jsonwebtoken_1.default.verify(token, settings_1.SETTINGS.JWT_REFRESH_SECRET);
+        }
+        catch (e) {
+            return null;
+        }
+    }
 };

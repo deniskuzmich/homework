@@ -3,5 +3,6 @@ export const SETTINGS = {
   MONGO_URL:
     process.env.MONGO_URL || 'mongodb+srv://root:root@cluster0.rfbjknn.mongodb.net/?appName=Cluster0',
   DB_NAME: process.env.DB_NAME || 'Blogs-and-Posts',
-  JWT_SECRET: process.env.JWT_SECRET || '123'
+  JWT_SECRET: process.env.JWT_SECRET || '123',
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || '123456',
 };

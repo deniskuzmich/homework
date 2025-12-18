@@ -55,5 +55,17 @@ export const usersRepository = {
         })
       }
     })
+  },
+  async updateRefreshToken(userId: string, refreshToken: string) {
+    await usersCollection.updateOne(
+      {_id: new ObjectId(userId)},
+      {$set: {refreshToken}}
+    )
+  },
+  async unsetRefreshToken(refreshToken: string) {
+    await usersCollection.updateOne(
+      {refreshToken},
+      {$set: {refreshToken: null}}
+    )
   }
 }

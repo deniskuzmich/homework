@@ -21,9 +21,11 @@ function authUserHandler(req, res) {
         try {
             const authUser = yield auth_service_1.authService.checkCredentials(loginOrEmail, password);
             if (authUser.status !== result_status_1.ResultStatus.Success) {
-                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
+                res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }
-            const token = jwt_service_1.jwtService.createJWT(authUser.data);
+            const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
+            const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id);
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
         }
         catch (e) {

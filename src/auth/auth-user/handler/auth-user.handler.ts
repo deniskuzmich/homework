@@ -12,9 +12,13 @@ export async function authUserHandler(req: Request, res: Response) {
     const authUser = await authService.checkCredentials(loginOrEmail, password);
 
     if (authUser.status !== ResultStatus.Success) {
-      return res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
+      res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
     }
-    const token =  jwtService.createJWT(authUser.data!);
+    const token =  jwtService.createJWT(authUser.data!.id);
+    const refreshToken = jwtService.createRefreshToken(authUser.data!.id);
+
+    res.cookie('refreshToken', refreshToken, { httpOnly: true , secure: true });
+
     return res.status(HttpStatuses.Success).send({accessToken: token});
   } catch (e) {
     console.log(e)

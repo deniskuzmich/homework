@@ -169,5 +169,25 @@ exports.authService = {
                 data: true,
             };
         });
-    }
+    },
+    unsetRefreshToken(refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield users_repository_1.usersRepository.unsetRefreshToken(refreshToken);
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: true,
+            };
+        });
+    },
+    updateRefreshToken(userId, refreshToken) {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield users_repository_1.usersRepository.updateRefreshToken(userId, refreshToken);
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: true,
+            };
+        });
+    },
 };

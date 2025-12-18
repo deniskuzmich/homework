@@ -7,10 +7,13 @@ import {usersRouter} from "./routers/users.router";
 import {authRouter} from "./routers/auth.router";
 import {commentsRouter} from "./routers/comments.router";
 import {HttpStatuses} from "./common/types/http-statuses";
+import cookieParser from "cookie-parser";
 
 
 export const setupApp = (app: Express) => {
   app.use(express.json());
+  app.use(cookieParser());
+
   app.get("/", (req, res) => {
     res.status(HttpStatuses.Success).send("Blogs and Posts");
   });
