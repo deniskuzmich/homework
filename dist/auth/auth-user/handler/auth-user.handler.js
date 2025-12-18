@@ -21,7 +21,7 @@ function authUserHandler(req, res) {
         try {
             const authUser = yield auth_service_1.authService.checkCredentials(loginOrEmail, password);
             if (authUser.status !== result_status_1.ResultStatus.Success) {
-                res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
+                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }
             const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
             const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id);

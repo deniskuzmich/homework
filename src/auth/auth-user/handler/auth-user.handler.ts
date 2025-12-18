@@ -12,7 +12,7 @@ export async function authUserHandler(req: Request, res: Response) {
     const authUser = await authService.checkCredentials(loginOrEmail, password);
 
     if (authUser.status !== ResultStatus.Success) {
-      res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
+      return res.status(mapResultCodeToHttpExtension(authUser.status)).send(authUser.extensions)
     }
     const token =  jwtService.createJWT(authUser.data!.id);
     const refreshToken = jwtService.createRefreshToken(authUser.data!.id);
