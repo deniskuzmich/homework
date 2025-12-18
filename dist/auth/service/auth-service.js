@@ -24,6 +24,7 @@ exports.authService = {
             return {
                 userId: user.userId.toString(),
                 login: user.login,
+                email: user.email
             };
         });
     },

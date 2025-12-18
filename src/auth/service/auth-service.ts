@@ -16,6 +16,7 @@ export const authService = {
     return {
       userId: user.userId.toString(),
       login: user.login,
+      email: user.email
     }
   },
   async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
