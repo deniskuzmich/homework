@@ -1,11 +1,11 @@
-import {ObjectId, WithId} from "mongodb";
-import {UserDbType} from "../types/main-types/user-db-type";
+import {ObjectId} from "mongodb";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {UserOutput} from "../types/main-types/user-output.type";
 import {UsersInput} from "../types/main-types/user-Input.type";
-import {usersCollection} from "../../db/mongo.db";
+import {sessionsCollection, usersCollection} from "../../db/mongo.db";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {userForFrontMapper} from "../mapper/map-user-for-front";
+import {mapSessionToViewModel} from "../../devices/mapper/map-session-to-view-model";
 
 export const usersQueryRepository = {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
@@ -52,5 +52,12 @@ export const usersQueryRepository = {
     if(!user) return null;
     return mapToUserViewModel(user);
   },
+  async findSession(userId: string, deviceId: string, iat: number) {
+    return await sessionsCollection.findOne({userId: userId, deviceId: deviceId, iat: iat});
+  },
+  async findAllSessions(userId: string) {
+   const sessions = await sessionsCollection.find({userId}).toArray()
+    return sessions.map(mapSessionToViewModel)
+  }
 }
 

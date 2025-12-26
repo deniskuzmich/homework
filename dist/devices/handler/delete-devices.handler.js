@@ -8,23 +8,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const setup_app_1 = require("./setup-app");
-const express_1 = __importDefault(require("express"));
-const settings_1 = require("./core/settings/settings");
-const mongo_db_1 = require("./db/mongo.db");
-const bootstrap = () => __awaiter(void 0, void 0, void 0, function* () {
-    const app = (0, express_1.default)();
-    (0, setup_app_1.setupApp)(app);
-    // app.set('trust proxy', true);
-    const PORT = settings_1.SETTINGS.PORT;
-    yield (0, mongo_db_1.runDB)(settings_1.SETTINGS.MONGO_URL);
-    app.listen(PORT, () => {
-        console.log(`Server listening on port ${PORT}`);
+exports.deleteAllDevicesHandler = deleteAllDevicesHandler;
+function deleteAllDevicesHandler(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
     });
-    return app;
-});
-bootstrap();
+}

@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
+exports.sessionsCollection = exports.commentsCollection = exports.usersCollection = exports.postsCollection = exports.blogsCollection = exports.client = void 0;
 exports.runDB = runDB;
 exports.stopDb = stopDb;
 const mongodb_1 = require("mongodb");
@@ -18,6 +18,7 @@ const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
 const USERS_COLLECTION_NAME = 'users';
 const COMMENTS_COLLECTION_NAME = 'comments';
+const SESSIONS_COLLECTION_NAME = 'sessions';
 function runDB(url) {
     return __awaiter(this, void 0, void 0, function* () {
         exports.client = new mongodb_1.MongoClient(url);
@@ -26,6 +27,7 @@ function runDB(url) {
         exports.postsCollection = db.collection(POSTS_COLLECTION_NAME);
         exports.usersCollection = db.collection(USERS_COLLECTION_NAME);
         exports.commentsCollection = db.collection(COMMENTS_COLLECTION_NAME);
+        exports.sessionsCollection = db.collection(SESSIONS_COLLECTION_NAME);
         try {
             yield exports.client.connect();
             yield db.command({ ping: 1 });

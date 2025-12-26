@@ -16,13 +16,16 @@ export const jwtService = {
       return null;
     }
   },
-  createRefreshToken(userId: string) {
-    return jwt.sign({userId}, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
+  createRefreshToken(userId: string, deviceId: string) {
+    return jwt.sign({userId, deviceId}, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
   },
-  verifyRefreshToken(token: string): {userId: string} | null {
+  verifyRefreshToken(token: string): {userId: string, deviceId: string, iat: number, eat: number} | null {
     try {
       return jwt.verify(token, SETTINGS.JWT_REFRESH_SECRET) as {
-        userId: string
+        userId: string,
+        deviceId: string,
+        iat: number,
+        eat: number,
       };
     } catch (e: unknown) {
       return null;

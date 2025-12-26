@@ -11,6 +11,7 @@ describe('Auth', () => {
   let token: string
   let testUserLogin: string
   let testUserId: string
+  let testUserEmail: string
 
   beforeEach(async () => {
     app = express()
@@ -43,11 +44,9 @@ describe('Auth', () => {
 
     testUserLogin = createdUser.body.login;
     testUserId = createdUser.body.id;
+    testUserEmail = createdUser.body.email;
   }, 60000)
 
-  // beforeEach(async () => {
-  //
-  // })
   afterAll(async () => {
     await stopDb()
   })
@@ -72,6 +71,7 @@ describe('Auth', () => {
         expect(res.body).toEqual({
           userId: testUserId,
           login: testUserLogin,
+          email: testUserEmail
         })
       })
   });

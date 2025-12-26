@@ -76,14 +76,19 @@ exports.usersRepository = {
             });
         });
     },
-    updateRefreshToken(userId, refreshToken) {
+    updateRefreshToken(userId, updatedSession) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.usersCollection.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $set: { refreshToken } });
+            yield mongo_db_1.sessionsCollection.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $set: { updatedSession } });
         });
     },
     unsetRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
             yield mongo_db_1.usersCollection.updateOne({ refreshToken }, { $set: { refreshToken: null } });
         });
-    }
+    },
+    createSession(session) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield mongo_db_1.sessionsCollection.insertOne(session);
+        });
+    },
 };

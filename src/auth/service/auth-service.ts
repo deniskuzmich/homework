@@ -10,6 +10,9 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
+import {jwtService} from "../../common/services/jwt.service";
+import {SessionType} from "../../devices/types/session.type";
+
 
 export const authService = {
   async getInfo(user: UserInfoType): Promise<UserInfoType> {
@@ -176,7 +179,39 @@ export const authService = {
   async unsetRefreshToken(refreshToken: string) {
     return await usersRepository.unsetRefreshToken(refreshToken)
   },
-  async updateRefreshToken(userId: string, refreshToken: string) {
-   return await usersRepository.updateRefreshToken(userId, refreshToken)
+  async updateSession(userId: string, ip:string | undefined, deviceName: string, refreshToken: string) {
+    const payload = jwtService.verifyRefreshToken(refreshToken);
+    if(!payload) {
+      return null
+    }
+
+    const updatedSession = {
+      userId,
+      deviceId: payload.deviceId,
+      deviceName,
+      refreshToken,
+      ip,
+      iat: payload.iat,
+      eat: payload.eat,
+    }
+    return await usersRepository.updateRefreshToken(userId, updatedSession)
+  },
+  async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
+    const payload = jwtService.verifyRefreshToken(refreshToken);
+    if(!payload) {
+      return null
+    }
+    const {deviceId, iat, eat} = payload;
+
+    const session: SessionType = {
+      userId,
+      deviceId,
+      deviceName,
+      refreshToken,
+      ip,
+      iat,
+      eat
+    }
+    return await usersRepository.createSession(session)
   },
 }

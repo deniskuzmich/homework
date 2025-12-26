@@ -15,18 +15,23 @@ const jwt_service_1 = require("../../../common/services/jwt.service");
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
 const auth_service_1 = require("../../service/auth-service");
+const node_crypto_1 = require("node:crypto");
 function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         const { loginOrEmail, password } = req.body;
+        const deviceId = (0, node_crypto_1.randomUUID)();
+        const ip = req.ip;
+        const deviceName = (_a = req.headers['user-agent']) !== null && _a !== void 0 ? _a : 'Some device';
         try {
             const authUser = yield auth_service_1.authService.checkCredentials(loginOrEmail, password);
             if (authUser.status !== result_status_1.ResultStatus.Success) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
             }
             const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
-            const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id);
-            yield auth_service_1.authService.updateRefreshToken(authUser.data.id, refreshToken);
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+            const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id, deviceId);
+            yield auth_service_1.authService.createSession(authUser.data.id, refreshToken, ip, deviceName);
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: false });
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
         }
         catch (e) {

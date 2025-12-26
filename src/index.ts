@@ -7,6 +7,8 @@ const bootstrap = async () => {
   const app = express();
   setupApp(app);
 
+  // app.set('trust proxy', true);
+
   const PORT = SETTINGS.PORT;
 
   await runDB(SETTINGS.MONGO_URL)
