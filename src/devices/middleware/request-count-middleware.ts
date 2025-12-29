@@ -8,6 +8,9 @@ export const requestCountMiddleware = async (
   next: NextFunction,
 ) => {
 
+  if(req.originalUrl === '/auth/login') {
+   return next()
+  }
   const dateTenSecondAgo = new Date(Date.now() - 10000);
 
   const requestCount = await requestLogCollection.countDocuments({

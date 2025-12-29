@@ -6,7 +6,7 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 
 export async function deleteOneDeviceHandler(req: Request, res: Response) {
-  const userId = req.params.userId;
+  const userId = req.params.id
   const refreshToken = req.cookies.refreshToken;
 
   const payload = jwtService.verifyRefreshToken(refreshToken)

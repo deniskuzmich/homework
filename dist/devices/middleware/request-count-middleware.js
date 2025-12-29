@@ -13,6 +13,9 @@ exports.requestCountMiddleware = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const http_statuses_1 = require("../../common/types/http-statuses");
 const requestCountMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    if (req.originalUrl === '/auth/login') {
+        return next();
+    }
     const dateTenSecondAgo = new Date(Date.now() - 10000);
     const requestCount = yield mongo_db_1.requestLogCollection.countDocuments({
         IP: req.ip,

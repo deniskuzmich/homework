@@ -17,7 +17,7 @@ const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 function deleteOneDeviceHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.params.userId;
+        const userId = req.params.id;
         const refreshToken = req.cookies.refreshToken;
         const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
         if (!payload) {
