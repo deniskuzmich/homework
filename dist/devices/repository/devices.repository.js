@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.devicesRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
-const mongodb_1 = require("mongodb");
 exports.devicesRepository = {
     createSession(session) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -30,7 +29,7 @@ exports.devicesRepository = {
     },
     updateSession(deviceId, updatedSession) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.sessionsCollection.updateOne({ _id: new mongodb_1.ObjectId(deviceId) }, { $set: { updatedSession } });
+            yield mongo_db_1.sessionsCollection.updateOne({ deviceId }, { $set: { updatedSession } });
         });
     },
     deleteOneSession(deviceId) {
