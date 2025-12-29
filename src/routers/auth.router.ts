@@ -13,10 +13,10 @@ import {requestLoggerMiddleware} from "../devices/middleware/request-log-middlew
 import {requestCountMiddleware} from "../devices/middleware/request-count-middleware";
 
 export const authRouter = Router()
-  .post('/login', requestLoggerMiddleware, requestCountMiddleware, authUserHandler)
+  .post('/login', requestCountMiddleware, requestLoggerMiddleware, authUserHandler)
   .post('/refresh-token', authRefreshTokenHandler)
   .post('/logout', logoutHandler)
-  .post('/registration', requestLoggerMiddleware, requestCountMiddleware, authInputValidation, inputValidationResultMiddleware, userRegistrationHandler)
-  .post('/registration-confirmation', requestLoggerMiddleware, requestCountMiddleware, inputValidationResultMiddleware, registrationConfirmHandler)
-  .post('/registration-email-resending', requestLoggerMiddleware, requestCountMiddleware, inputValidationResultMiddleware, emailResendingHandler)
+  .post('/registration', requestCountMiddleware, requestLoggerMiddleware, authInputValidation, inputValidationResultMiddleware, userRegistrationHandler)
+  .post('/registration-confirmation', requestCountMiddleware, requestLoggerMiddleware, inputValidationResultMiddleware, registrationConfirmHandler)
+  .post('/registration-email-resending', requestCountMiddleware, requestLoggerMiddleware, inputValidationResultMiddleware, emailResendingHandler)
   .get('/me', authMiddleware, aboutMeHandler)
