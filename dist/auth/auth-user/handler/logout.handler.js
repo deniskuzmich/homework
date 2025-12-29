@@ -13,6 +13,7 @@ exports.logoutHandler = logoutHandler;
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
 const auth_service_1 = require("../../service/auth-service");
+const device_service_1 = require("../../../devices/service/device.service");
 function logoutHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const refreshToken = req.cookies.refreshToken;
@@ -23,13 +24,13 @@ function logoutHandler(req, res) {
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        // const isValidToken = await authService.isRefreshTokenValid(
-        //   payload.userId,
-        //   refreshToken
-        // );
-        // if (isValidToken.status !== ResultStatus.Success) {
-        //   return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
-        // }
+        const session = yield device_service_1.deviceService.getSession(payload.deviceId);
+        if (!session) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        if (session.iat !== payload.iat) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
         yield auth_service_1.authService.unsetRefreshToken(refreshToken);
         res.clearCookie(refreshToken);
         return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);

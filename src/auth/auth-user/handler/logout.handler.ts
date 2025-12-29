@@ -4,6 +4,7 @@ import {jwtService} from "../../../common/services/jwt.service";
 import {authService} from "../../service/auth-service";
 import {ResultStatus} from "../../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
+import {deviceService} from "../../../devices/service/device.service";
 
 export async function logoutHandler(req: Request, res: Response) {
   const refreshToken = req.cookies.refreshToken;
@@ -17,14 +18,14 @@ export async function logoutHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  // const isValidToken = await authService.isRefreshTokenValid(
-  //   payload.userId,
-  //   refreshToken
-  // );
-  // if (isValidToken.status !== ResultStatus.Success) {
-  //   return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
-  // }
+  const session = await deviceService.getSession(payload.deviceId);
+  if (!session) {
+    return res.sendStatus(HttpStatuses.Unauthorized);
+  }
 
+  if (session.iat !== payload.iat) {
+    return res.sendStatus(HttpStatuses.Unauthorized);
+  }
   await authService.unsetRefreshToken(refreshToken);
 
   res.clearCookie(refreshToken);
