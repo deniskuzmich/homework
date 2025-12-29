@@ -13,9 +13,6 @@ exports.authRefreshTokenHandler = authRefreshTokenHandler;
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
 const device_service_1 = require("../../../devices/service/device.service");
-const auth_service_1 = require("../../service/auth-service");
-const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
-const result_status_1 = require("../../../common/types/result.status");
 function authRefreshTokenHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -29,10 +26,10 @@ function authRefreshTokenHandler(req, res) {
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        const isValidToken = yield auth_service_1.authService.isRefreshTokenValid(payload.userId, refreshToken);
-        if (isValidToken.status !== result_status_1.ResultStatus.Success) {
-            return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(isValidToken.status));
-        }
+        // const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
+        // if (isValidToken.status !== ResultStatus.Success) {
+        //   return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
+        // }
         const session = yield device_service_1.deviceService.getSession(payload.deviceId);
         if (!session) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);

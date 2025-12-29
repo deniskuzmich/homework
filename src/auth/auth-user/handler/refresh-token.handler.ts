@@ -21,10 +21,10 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
-  if (isValidToken.status !== ResultStatus.Success) {
-    return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
-  }
+  // const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
+  // if (isValidToken.status !== ResultStatus.Success) {
+  //   return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
+  // }
 
   const session = await deviceService.getSession(payload.deviceId);
   if (!session) {
