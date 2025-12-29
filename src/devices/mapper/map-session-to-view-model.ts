@@ -4,7 +4,7 @@ export function mapSessionToViewModel(session: SessionType) {
   return {
       ip: session.ip,
       title: session.deviceName,
-      lastActiveDate: session.iat,
+      lastActiveDate: new Date(session.iat * 1000).toDateString(),
       deviceId: session.deviceId,
   }
 }
