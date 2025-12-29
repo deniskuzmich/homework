@@ -17,12 +17,13 @@ const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 function deleteOneDeviceHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const userId = req.params.userId;
         const refreshToken = req.cookies.refreshToken;
         const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        const result = yield device_service_1.deviceService.deleteOneSession(payload.userId, payload.deviceId, payload.iat);
+        const result = yield device_service_1.deviceService.deleteOneSession(userId, payload.deviceId, payload.iat);
         if (result.status !== result_status_1.ResultStatus.NoContent) {
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
         }
