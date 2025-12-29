@@ -1,18 +1,7 @@
-import { ErrorType } from "../types/error-types/ErrorType";
-import { ErrorTypeOutput } from "../types/error-types/ErrorTypeOutput";
-import {
-  FieldValidationError,
-  ValidationError,
-  validationResult,
-} from "express-validator";
-import { NextFunction, Request, Response } from "express";
-import {HttpStatuses} from "../../common/types/http-statuses";
-
-export const createErrorMessages = (
-  errors: ErrorType[],
-): ErrorTypeOutput => {
-  return { errorsMessages: errors };
-};
+import {ErrorType} from "../../core/types/error-types/ErrorType";
+import {FieldValidationError, ValidationError, validationResult,} from "express-validator";
+import {NextFunction, Request, Response} from "express";
+import {HttpStatuses} from "../types/http-statuses";
 
 const formatErrors = (error: ValidationError): ErrorType => {
   const expressError = error as unknown as FieldValidationError;

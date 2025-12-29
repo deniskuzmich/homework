@@ -4,7 +4,7 @@ import {getCommentByIdHandler} from "../comments/handler/get-comment.handler";
 import {updateCommentsHandler} from "../comments/handler/update-comments.handler";
 import {commentInputValidation} from "../comments/validation/comments-validation";
 import {deleteCommentHandler} from "../comments/handler/delete-comment.handler";
-import {inputValidationResultMiddleware} from "../core/middleware-validation/input.validation-result.middleware";
+import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
 
 
 export const commentsRouter = Router()

@@ -4,12 +4,15 @@ import {Blog} from "../blogs/types/main-types/blog-db.type";
 import {Post} from "../posts/types/main-types/posts-db.type";
 import {CommentDbType} from "../comments/types/main-types/comment-db.type";
 import {UserDbType} from "../users/types/main-types/user-db-type";
+import {SessionType} from "../devices/types/session.type";
+import {RequestLogType} from "../devices/types/request-count.type";
 
 const BLOGS_COLLECTION_NAME = 'blogs';
 const POSTS_COLLECTION_NAME = 'posts';
 const USERS_COLLECTION_NAME = 'users';
 const COMMENTS_COLLECTION_NAME = 'comments';
 const SESSIONS_COLLECTION_NAME = 'sessions';
+const REQUEST_LOG_COLLECTION_NAME = 'requestCount';
 
 export let client: MongoClient;
 
@@ -17,7 +20,8 @@ export let blogsCollection: Collection<Blog>;
 export let postsCollection: Collection<Post>;
 export let usersCollection: Collection<UserDbType>;
 export let commentsCollection: Collection<CommentDbType>;
-export let sessionsCollection: Collection
+export let sessionsCollection: Collection<SessionType>
+export let requestLogCollection: Collection<RequestLogType>
 
 
 export async function runDB(url: string): Promise<void> {
@@ -30,7 +34,8 @@ export async function runDB(url: string): Promise<void> {
   usersCollection = db.collection<UserDbType>(USERS_COLLECTION_NAME);
   commentsCollection = db.collection<CommentDbType>(COMMENTS_COLLECTION_NAME);
   sessionsCollection = db.collection(SESSIONS_COLLECTION_NAME);
-
+  requestLogCollection = db.collection(REQUEST_LOG_COLLECTION_NAME)
+  
   try {
     await client.connect();
     await db.command({ ping: 1 });

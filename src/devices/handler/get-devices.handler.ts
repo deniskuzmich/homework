@@ -1,7 +1,7 @@
 import {Request, Response} from "express";
 import {jwtService} from "../../common/services/jwt.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {usersQueryRepository} from "../../users/repository/users-query.repository";
+import {devicesQueryRepository} from "../repository/devices-query.repository";
 
 export async function getDevicesHandler(req: Request, res: Response) {
   const refreshToken = req.cookies.refreshToken;
@@ -12,7 +12,7 @@ export async function getDevicesHandler(req: Request, res: Response) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
 
-    const sessionsData = await usersQueryRepository.findAllSessions(payload.userId)
+    const sessionsData = await devicesQueryRepository.findAllSessions(payload.userId)
     if (!sessionsData) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }

@@ -10,7 +10,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteAllDevicesHandler = deleteAllDevicesHandler;
+const jwt_service_1 = require("../../common/services/jwt.service");
+const http_statuses_1 = require("../../common/types/http-statuses");
 function deleteAllDevicesHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const refreshToken = req.cookies.refreshToken;
+        const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
+        if (!payload) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
     });
 }

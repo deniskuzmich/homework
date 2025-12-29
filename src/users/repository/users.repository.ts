@@ -69,7 +69,4 @@ export const usersRepository = {
       {$set: {refreshToken: null}}
     )
   },
-  async createSession(session: SessionType) {
-    return  await sessionsCollection.insertOne(session);
-  },
 }

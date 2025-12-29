@@ -9,18 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testingRouter = void 0;
-const express_1 = require("express");
+exports.requestLoggerMiddleware = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
-const http_statuses_1 = require("../../common/types/http-statuses");
-exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield Promise.all([
-        mongo_db_1.blogsCollection.deleteMany(),
-        mongo_db_1.postsCollection.deleteMany(),
-        mongo_db_1.usersCollection.deleteMany(),
-        mongo_db_1.commentsCollection.deleteMany(),
-        mongo_db_1.sessionsCollection.deleteMany(),
-    ]);
-    res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
-}));
+const requestLoggerMiddleware = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    yield mongo_db_1.requestLogCollection.insertOne({
+        IP: req.ip,
+        URL: req.originalUrl,
+        date: new Date()
+    });
+    next();
+});
+exports.requestLoggerMiddleware = requestLoggerMiddleware;

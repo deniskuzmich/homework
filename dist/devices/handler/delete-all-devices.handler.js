@@ -9,26 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDevicesHandler = getDevicesHandler;
+exports.deleteAllDevicesHandler = deleteAllDevicesHandler;
 const jwt_service_1 = require("../../common/services/jwt.service");
 const http_statuses_1 = require("../../common/types/http-statuses");
-const devices_query_repository_1 = require("../repository/devices-query.repository");
-function getDevicesHandler(req, res) {
+const device_service_1 = require("../service/device.service");
+const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
+const result_status_1 = require("../../common/types/result.status");
+function deleteAllDevicesHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const refreshToken = req.cookies.refreshToken;
-        try {
-            const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-            if (!payload) {
-                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-            }
-            const sessionsData = yield devices_query_repository_1.devicesQueryRepository.findAllSessions(payload.userId);
-            if (!sessionsData) {
-                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-            }
-            res.status(http_statuses_1.HttpStatuses.Success).send(sessionsData);
+        const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
+        if (!payload) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        catch (e) {
-            console.log('Something wrong', e);
+        const result = yield device_service_1.deviceService.deleteAllSessions(payload.deviceId);
+        if (result.status !== result_status_1.ResultStatus.NoContent) {
+            return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
         }
+        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
     });
 }

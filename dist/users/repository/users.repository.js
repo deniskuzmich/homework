@@ -86,9 +86,4 @@ exports.usersRepository = {
             yield mongo_db_1.usersCollection.updateOne({ refreshToken }, { $set: { refreshToken: null } });
         });
     },
-    createSession(session) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.sessionsCollection.insertOne(session);
-        });
-    },
 };

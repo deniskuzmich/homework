@@ -2,10 +2,10 @@ import {Request, Response} from "express";
 import {jwtService} from "../../common/services/jwt.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {deviceService} from "../service/device.service";
-import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {ResultStatus} from "../../common/types/result.status";
 
-export async function deleteOneDeviceHandler(req: Request, res: Response) {
+export async function deleteAllDevicesHandler(req: Request, res: Response) {
   const refreshToken = req.cookies.refreshToken;
 
   const payload = jwtService.verifyRefreshToken(refreshToken)
@@ -13,8 +13,7 @@ export async function deleteOneDeviceHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  const result = await deviceService.deleteOneSession(payload.userId, payload.deviceId, payload.iat)
-
+  const result = await deviceService.deleteAllSessions(payload.deviceId)
   if (result.status !== ResultStatus.NoContent) {
     return res.sendStatus(mapResultCodeToHttpExtension(result.status))
   }

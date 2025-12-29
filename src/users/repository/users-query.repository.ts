@@ -6,6 +6,7 @@ import {sessionsCollection, usersCollection} from "../../db/mongo.db";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {userForFrontMapper} from "../mapper/map-user-for-front";
 import {mapSessionToViewModel} from "../../devices/mapper/map-session-to-view-model";
+import {SessionType} from "../../devices/types/session.type";
 
 export const usersQueryRepository = {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
@@ -52,12 +53,5 @@ export const usersQueryRepository = {
     if(!user) return null;
     return mapToUserViewModel(user);
   },
-  async findSession(userId: string, deviceId: string, iat: number) {
-    return await sessionsCollection.findOne({userId: userId, deviceId: deviceId, iat: iat});
-  },
-  async findAllSessions(userId: string) {
-   const sessions = await sessionsCollection.find({userId}).toArray()
-    return sessions.map(mapSessionToViewModel)
-  }
 }
 

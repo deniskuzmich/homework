@@ -2,7 +2,8 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
 import {authService} from "../../service/auth-service";
-import {usersQueryRepository} from "../../../users/repository/users-query.repository";
+import {deviceService} from "../../../devices/service/device.service";
+import {devicesRepository} from "../../../devices/repository/devices.repository";
 
 
 export async function authRefreshTokenHandler(req: Request, res: Response) {
@@ -26,7 +27,7 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
 
-  const session = await usersQueryRepository.findSession(userId, deviceId, iat);
+  const session = await deviceService.getSession(userId, deviceId, iat);
   if (!session) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
@@ -40,7 +41,7 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
   const newAccessToken = jwtService.createJWT(payload.userId)
   const newRefreshToken = jwtService.createRefreshToken(payload.userId, payload.deviceId);
 
-  await authService.updateSession(payload.userId, ip, deviceName, newRefreshToken);
+  await deviceService.updateSession(payload.userId, ip, deviceName, newRefreshToken);
 
   res.cookie("refreshToken", newRefreshToken, {httpOnly: true, secure: true});
   res.status(HttpStatuses.Success).send({accessToken: newAccessToken});

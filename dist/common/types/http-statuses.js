@@ -11,4 +11,5 @@ var HttpStatuses;
     HttpStatuses[HttpStatuses["NotFound"] = 404] = "NotFound";
     HttpStatuses[HttpStatuses["ServerError"] = 500] = "ServerError";
     HttpStatuses[HttpStatuses["Forbidden"] = 403] = "Forbidden";
+    HttpStatuses[HttpStatuses["TooManyRequests"] = 429] = "TooManyRequests";
 })(HttpStatuses || (exports.HttpStatuses = HttpStatuses = {}));

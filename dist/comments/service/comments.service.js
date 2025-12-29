@@ -114,7 +114,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const deletedComment = yield comments_repository_1.commentsRepository.deleteComment(commentId);
+            yield comments_repository_1.commentsRepository.deleteComment(commentId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],

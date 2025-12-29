@@ -18,7 +18,6 @@ const node_crypto_1 = require("node:crypto");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
 const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
-const jwt_service_1 = require("../../common/services/jwt.service");
 exports.authService = {
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -183,43 +182,6 @@ exports.authService = {
     unsetRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield users_repository_1.usersRepository.unsetRefreshToken(refreshToken);
-        });
-    },
-    updateSession(userId, ip, deviceName, refreshToken) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-            if (!payload) {
-                return null;
-            }
-            const updatedSession = {
-                userId,
-                deviceId: payload.deviceId,
-                deviceName,
-                refreshToken,
-                ip,
-                iat: payload.iat,
-                eat: payload.eat,
-            };
-            return yield users_repository_1.usersRepository.updateRefreshToken(userId, updatedSession);
-        });
-    },
-    createSession(userId, refreshToken, ip, deviceName) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-            if (!payload) {
-                return null;
-            }
-            const { deviceId, iat, eat } = payload;
-            const session = {
-                userId,
-                deviceId,
-                deviceName,
-                refreshToken,
-                ip,
-                iat,
-                eat
-            };
-            return yield users_repository_1.usersRepository.createSession(session);
         });
     },
 };

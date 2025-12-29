@@ -10,10 +10,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deviceService = void 0;
-const jwt_service_1 = require("../common/services/jwt.service");
-const users_repository_1 = require("../users/repository/users.repository");
-const devices_repository_1 = require("./repository/devices.repository");
-const result_status_1 = require("../common/types/result.status");
+const jwt_service_1 = require("../../common/services/jwt.service");
+const users_repository_1 = require("../../users/repository/users.repository");
+const devices_repository_1 = require("../repository/devices.repository");
+const result_status_1 = require("../../common/types/result.status");
 exports.deviceService = {
     getSession(userId, deviceId, iat) {
         return __awaiter(this, void 0, void 0, function* () {

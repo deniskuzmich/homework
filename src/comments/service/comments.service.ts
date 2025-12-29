@@ -109,7 +109,7 @@ export const commentsService = {
       }
     }
 
-    const deletedComment = await commentsRepository.deleteComment(commentId);
+    await commentsRepository.deleteComment(commentId);
     return {
       status: ResultStatus.NoContent,
       extensions: [],

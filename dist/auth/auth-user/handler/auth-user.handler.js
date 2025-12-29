@@ -16,6 +16,7 @@ const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
 const auth_service_1 = require("../../service/auth-service");
 const node_crypto_1 = require("node:crypto");
+const device_service_1 = require("../../../devices/service/device.service");
 function authUserHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -30,8 +31,8 @@ function authUserHandler(req, res) {
             }
             const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
             const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id, deviceId);
-            yield auth_service_1.authService.createSession(authUser.data.id, refreshToken, ip, deviceName);
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: false });
+            yield device_service_1.deviceService.createSession(authUser.data.id, refreshToken, ip, deviceName);
+            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
             return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
         }
         catch (e) {

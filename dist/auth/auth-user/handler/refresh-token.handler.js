@@ -13,7 +13,7 @@ exports.authRefreshTokenHandler = authRefreshTokenHandler;
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
 const auth_service_1 = require("../../service/auth-service");
-const users_query_repository_1 = require("../../../users/repository/users-query.repository");
+const device_service_1 = require("../../../devices/service/device.service");
 function authRefreshTokenHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -32,7 +32,7 @@ function authRefreshTokenHandler(req, res) {
         if (!isValidToken) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        const session = yield users_query_repository_1.usersQueryRepository.findSession(userId, deviceId, iat);
+        const session = yield device_service_1.deviceService.getSession(userId, deviceId, iat);
         if (!session) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
@@ -42,7 +42,7 @@ function authRefreshTokenHandler(req, res) {
         yield auth_service_1.authService.unsetRefreshToken(refreshToken);
         const newAccessToken = jwt_service_1.jwtService.createJWT(payload.userId);
         const newRefreshToken = jwt_service_1.jwtService.createRefreshToken(payload.userId, payload.deviceId);
-        yield auth_service_1.authService.updateSession(payload.userId, ip, deviceName, newRefreshToken);
+        yield device_service_1.deviceService.updateSession(payload.userId, ip, deviceName, newRefreshToken);
         res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true });
         res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: newAccessToken });
     });

@@ -5,16 +5,18 @@ import {aboutMeHandler} from "../auth/auth-user/handler/auth-me-handler";
 import {userRegistrationHandler} from "../auth/auth-user/handler/user-registration.handler";
 import {registrationConfirmHandler} from "../auth/auth-user/handler/registration-confirm";
 import {emailResendingHandler} from "../auth/auth-user/handler/email-resending";
-import {inputValidationResultMiddleware} from "../core/middleware-validation/input.validation-result.middleware";
+import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
 import {authInputValidation} from "../auth/middleware/auth-validation";
 import {authRefreshTokenHandler} from "../auth/auth-user/handler/refresh-token.handler";
 import {logoutHandler} from "../auth/auth-user/handler/logout.handler";
+import {requestLoggerMiddleware} from "../devices/middleware/request-log-middleware";
+import {requestCountMiddleware} from "../devices/middleware/request-count-middleware";
 
 export const authRouter = Router()
-  .post('/login', authUserHandler)
+  .post('/login', requestLoggerMiddleware, requestCountMiddleware, authUserHandler)
   .post('/refresh-token', authRefreshTokenHandler)
   .post('/logout', logoutHandler)
-  .post('/registration', authInputValidation, inputValidationResultMiddleware, userRegistrationHandler)
-  .post('/registration-confirmation', inputValidationResultMiddleware, registrationConfirmHandler)
-  .post('/registration-email-resending', inputValidationResultMiddleware, emailResendingHandler)
+  .post('/registration', requestLoggerMiddleware, requestCountMiddleware, authInputValidation, inputValidationResultMiddleware, userRegistrationHandler)
+  .post('/registration-confirmation', requestLoggerMiddleware, requestCountMiddleware, inputValidationResultMiddleware, registrationConfirmHandler)
+  .post('/registration-email-resending', requestLoggerMiddleware, requestCountMiddleware, inputValidationResultMiddleware, emailResendingHandler)
   .get('/me', authMiddleware, aboutMeHandler)

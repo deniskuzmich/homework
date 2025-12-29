@@ -9,18 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.testingRouter = void 0;
-const express_1 = require("express");
+exports.devicesQueryRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
-const http_statuses_1 = require("../../common/types/http-statuses");
-exports.testingRouter = (0, express_1.Router)();
-exports.testingRouter.delete("/all-data", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    yield Promise.all([
-        mongo_db_1.blogsCollection.deleteMany(),
-        mongo_db_1.postsCollection.deleteMany(),
-        mongo_db_1.usersCollection.deleteMany(),
-        mongo_db_1.commentsCollection.deleteMany(),
-        mongo_db_1.sessionsCollection.deleteMany(),
-    ]);
-    res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
-}));
+const map_session_to_view_model_1 = require("../mapper/map-session-to-view-model");
+exports.devicesQueryRepository = {
+    findAllSessions(userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const sessions = yield mongo_db_1.sessionsCollection.find({ userId }).toArray();
+            return sessions.map(map_session_to_view_model_1.mapSessionToViewModel);
+        });
+    },
+};
