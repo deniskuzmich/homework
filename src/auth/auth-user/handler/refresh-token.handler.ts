@@ -3,7 +3,6 @@ import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
 import {authService} from "../../service/auth-service";
 import {deviceService} from "../../../devices/service/device.service";
-import {devicesRepository} from "../../../devices/repository/devices.repository";
 
 
 export async function authRefreshTokenHandler(req: Request, res: Response) {
@@ -20,28 +19,19 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  const {userId, deviceId, iat} = payload;
-
-  const isValidToken = await authService.isRefreshTokenValid(userId, refreshToken);
-  if (!isValidToken) {
-    return res.sendStatus(HttpStatuses.Unauthorized);
-  }
-
-  const session = await deviceService.getSession(deviceId);
+  const session = await deviceService.getSession(payload.deviceId);
   if (!session) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
 
-  if (session.iat !== iat) {
+  if (session.iat !== payload.iat) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
-
-  await authService.unsetRefreshToken(refreshToken);
 
   const newAccessToken = jwtService.createJWT(payload.userId)
   const newRefreshToken = jwtService.createRefreshToken(payload.userId, payload.deviceId);
 
-  await deviceService.updateSession(payload.userId, ip, deviceName, newRefreshToken);
+  await deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
 
   res.cookie("refreshToken", newRefreshToken, {httpOnly: true, secure: true});
   res.status(HttpStatuses.Success).send({accessToken: newAccessToken});

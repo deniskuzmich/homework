@@ -1,8 +1,7 @@
-import {sessionsCollection, usersCollection} from "../../db/mongo.db";
+import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../types/main-types/user-db-type";
 import {add} from "date-fns/add";
-import {SessionType} from "../../devices/types/session.type";
 
 
 export const usersRepository = {
@@ -56,12 +55,6 @@ export const usersRepository = {
         })
       }
     })
-  },
-  async updateRefreshToken(userId: string, updatedSession: SessionType) {
-    await sessionsCollection.updateOne(
-      {_id: new ObjectId(userId)},
-      {$set: {updatedSession}}
-    )
   },
   async unsetRefreshToken(refreshToken: string) {
     await usersCollection.updateOne(

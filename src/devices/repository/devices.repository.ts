@@ -1,5 +1,7 @@
 import {sessionsCollection} from "../../db/mongo.db";
 import {SessionType} from "../types/session.type";
+import {ObjectId} from "mongodb";
+import {UpdateSessionType} from "../types/update-session.type";
 
 
 export const devicesRepository = {
@@ -11,6 +13,12 @@ export const devicesRepository = {
   },
   async findSession(deviceId: string) {
     return await sessionsCollection.findOne({deviceId: deviceId});
+  },
+  async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
+    await sessionsCollection.updateOne(
+      {_id: new ObjectId(deviceId)},
+      {$set: {updatedSession}}
+    )
   },
   async deleteOneSession(deviceId: string) {
     const deletedSession = await sessionsCollection.deleteOne({deviceId: deviceId});

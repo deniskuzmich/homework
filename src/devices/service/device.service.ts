@@ -1,6 +1,5 @@
 import {jwtService} from "../../common/services/jwt.service";
 import {SessionType} from "../types/session.type";
-import {usersRepository} from "../../users/repository/users.repository";
 import {devicesRepository} from "../repository/devices.repository";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
@@ -28,14 +27,13 @@ export const deviceService = {
     }
     return await devicesRepository.createSession(session)
   },
-  async updateSession(userId: string, ip:string | undefined, deviceName: string, refreshToken: string) {
+  async updateSession(deviceId: string, ip:string | undefined, deviceName: string, refreshToken: string) {
     const payload = jwtService.verifyRefreshToken(refreshToken);
     if(!payload) {
       return null
     }
 
     const updatedSession = {
-      userId,
       deviceId: payload.deviceId,
       deviceName,
       refreshToken,
@@ -43,7 +41,7 @@ export const deviceService = {
       iat: payload.iat,
       eat: payload.eat,
     }
-    return await usersRepository.updateRefreshToken(userId, updatedSession)
+    return await devicesRepository.updateSession(deviceId, updatedSession)
   },
   async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {
     const session = await devicesRepository.findSession(deviceId)

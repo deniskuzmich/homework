@@ -76,11 +76,6 @@ exports.usersRepository = {
             });
         });
     },
-    updateRefreshToken(userId, updatedSession) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.sessionsCollection.updateOne({ _id: new mongodb_1.ObjectId(userId) }, { $set: { updatedSession } });
-        });
-    },
     unsetRefreshToken(refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
             yield mongo_db_1.usersCollection.updateOne({ refreshToken }, { $set: { refreshToken: null } });

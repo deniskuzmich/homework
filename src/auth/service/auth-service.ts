@@ -10,8 +10,6 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
-import {jwtService} from "../../common/services/jwt.service";
-import {SessionType} from "../../devices/types/session.type";
 
 
 export const authService = {
