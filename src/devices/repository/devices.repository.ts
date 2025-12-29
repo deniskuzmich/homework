@@ -17,7 +17,7 @@ export const devicesRepository = {
   async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
     await sessionsCollection.updateOne(
       {deviceId},
-      {$set: {updatedSession}}
+      {$set: updatedSession}
     )
   },
   async deleteOneSession(deviceId: string) {

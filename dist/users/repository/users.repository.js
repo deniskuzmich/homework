@@ -76,9 +76,4 @@ exports.usersRepository = {
             });
         });
     },
-    unsetRefreshToken(refreshToken) {
-        return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.usersCollection.updateOne({ refreshToken }, { $set: { refreshToken: null } });
-        });
-    },
 };

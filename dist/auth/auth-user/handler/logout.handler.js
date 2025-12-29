@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.logoutHandler = logoutHandler;
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
-const auth_service_1 = require("../../service/auth-service");
 const device_service_1 = require("../../../devices/service/device.service");
 function logoutHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -31,8 +30,8 @@ function logoutHandler(req, res) {
         if (session.iat !== payload.iat) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        yield auth_service_1.authService.unsetRefreshToken(refreshToken);
-        res.clearCookie(refreshToken);
+        yield device_service_1.deviceService.deleteOneSession(payload.userId, payload.deviceId);
+        res.clearCookie('refreshToken');
         return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
     });
 }

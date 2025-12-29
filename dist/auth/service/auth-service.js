@@ -171,26 +171,4 @@ exports.authService = {
             };
         });
     },
-    isRefreshTokenValid(userId, token) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserById(userId);
-            if (!user) {
-                return {
-                    status: result_status_1.ResultStatus.Unauthorized,
-                    extensions: [],
-                    data: null,
-                };
-            }
-            return {
-                status: result_status_1.ResultStatus.Success,
-                extensions: [],
-                data: user.refreshToken === token,
-            };
-        });
-    },
-    unsetRefreshToken(refreshToken) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield users_repository_1.usersRepository.unsetRefreshToken(refreshToken);
-        });
-    },
 };

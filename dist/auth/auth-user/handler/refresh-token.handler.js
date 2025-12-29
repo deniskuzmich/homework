@@ -26,10 +26,6 @@ function authRefreshTokenHandler(req, res) {
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        // const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
-        // if (isValidToken.status !== ResultStatus.Success) {
-        //   return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
-        // }
         const session = yield device_service_1.deviceService.getSession(payload.deviceId);
         if (!session) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);

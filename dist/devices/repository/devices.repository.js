@@ -29,7 +29,7 @@ exports.devicesRepository = {
     },
     updateSession(deviceId, updatedSession) {
         return __awaiter(this, void 0, void 0, function* () {
-            yield mongo_db_1.sessionsCollection.updateOne({ deviceId }, { $set: { updatedSession } });
+            yield mongo_db_1.sessionsCollection.updateOne({ deviceId }, { $set: updatedSession });
         });
     },
     deleteOneSession(deviceId) {

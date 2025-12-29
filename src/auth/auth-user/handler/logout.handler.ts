@@ -2,8 +2,6 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
 import {authService} from "../../service/auth-service";
-import {ResultStatus} from "../../../common/types/result.status";
-import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
 import {deviceService} from "../../../devices/service/device.service";
 
 export async function logoutHandler(req: Request, res: Response) {
@@ -26,8 +24,8 @@ export async function logoutHandler(req: Request, res: Response) {
   if (session.iat !== payload.iat) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
-  await authService.unsetRefreshToken(refreshToken);
+  await deviceService.deleteOneSession(payload.userId, payload.deviceId);
 
-  res.clearCookie(refreshToken);
+  res.clearCookie('refreshToken');
   return res.sendStatus(HttpStatuses.NoContent)
 }

@@ -168,23 +168,4 @@ export const authService = {
       data: true,
     }
   },
-
-  async isRefreshTokenValid(userId: string, token: string): Promise<ResultType>{
-    const user = await usersRepository.getUserById(userId);
-    if (!user) {
-      return {
-        status: ResultStatus.Unauthorized,
-        extensions: [],
-        data: null,
-      }
-    }
-    return {
-      status: ResultStatus.Success,
-      extensions: [],
-      data: user.refreshToken === token,
-    };
-  },
-  async unsetRefreshToken(refreshToken: string) {
-    return await usersRepository.unsetRefreshToken(refreshToken)
-  },
 }

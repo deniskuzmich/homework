@@ -56,10 +56,4 @@ export const usersRepository = {
       }
     })
   },
-  async unsetRefreshToken(refreshToken: string) {
-    await usersCollection.updateOne(
-      {refreshToken},
-      {$set: {refreshToken: null}}
-    )
-  },
 }
