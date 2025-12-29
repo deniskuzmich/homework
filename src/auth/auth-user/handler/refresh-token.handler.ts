@@ -3,6 +3,8 @@ import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
 import {deviceService} from "../../../devices/service/device.service";
 import {authService} from "../../service/auth-service";
+import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
+import {ResultStatus} from "../../../common/types/result.status";
 
 
 export async function authRefreshTokenHandler(req: Request, res: Response) {
@@ -19,10 +21,10 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  // const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
-  // if (!isValidToken) {
-  //   return res.sendStatus(HttpStatuses.Unauthorized);
-  // }
+  const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
+  if (isValidToken.status !== ResultStatus.Success) {
+    return res.sendStatus(mapResultCodeToHttpExtension(isValidToken.status));
+  }
 
   const session = await deviceService.getSession(payload.deviceId);
   if (!session) {
