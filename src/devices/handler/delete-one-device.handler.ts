@@ -6,7 +6,7 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 
 export async function deleteOneDeviceHandler(req: Request, res: Response) {
-  const userId = req.params.id
+  const deviceId = req.params.deviceId;
   const refreshToken = req.cookies.refreshToken;
 
   const payload = jwtService.verifyRefreshToken(refreshToken)
@@ -14,7 +14,7 @@ export async function deleteOneDeviceHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized)
   }
 
-  const result = await deviceService.deleteOneSession(userId, payload.deviceId, payload.iat)
+  const result = await deviceService.deleteOneSession(payload.userId, deviceId)
 
   if (result.status !== ResultStatus.NoContent) {
     return res.sendStatus(mapResultCodeToHttpExtension(result.status))

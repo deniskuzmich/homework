@@ -22,9 +22,9 @@ exports.devicesRepository = {
             return yield mongo_db_1.sessionsCollection.find().toArray();
         });
     },
-    findSession(userId, deviceId, iat) {
+    findSession(deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.sessionsCollection.findOne({ userId: userId, deviceId: deviceId, iat: iat });
+            return yield mongo_db_1.sessionsCollection.findOne({ deviceId: deviceId });
         });
     },
     deleteOneSession(deviceId) {

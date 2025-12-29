@@ -27,7 +27,7 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }
 
-  const session = await deviceService.getSession(userId, deviceId, iat);
+  const session = await deviceService.getSession(deviceId);
   if (!session) {
     return res.sendStatus(HttpStatuses.Unauthorized);
   }

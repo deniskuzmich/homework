@@ -15,9 +15,9 @@ const users_repository_1 = require("../../users/repository/users.repository");
 const devices_repository_1 = require("../repository/devices.repository");
 const result_status_1 = require("../../common/types/result.status");
 exports.deviceService = {
-    getSession(userId, deviceId, iat) {
+    getSession(deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield devices_repository_1.devicesRepository.findSession(userId, deviceId, iat);
+            return yield devices_repository_1.devicesRepository.findSession(deviceId);
         });
     },
     createSession(userId, refreshToken, ip, deviceName) {
@@ -57,9 +57,9 @@ exports.deviceService = {
             return yield users_repository_1.usersRepository.updateRefreshToken(userId, updatedSession);
         });
     },
-    deleteOneSession(userId, deviceId, iat) {
+    deleteOneSession(userId, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const session = yield devices_repository_1.devicesRepository.findSession(userId, deviceId, iat);
+            const session = yield devices_repository_1.devicesRepository.findSession(deviceId);
             if (!session) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,

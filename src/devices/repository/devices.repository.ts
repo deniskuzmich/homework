@@ -9,8 +9,8 @@ export const devicesRepository = {
   async findAllSessions() {
     return await sessionsCollection.find().toArray()
   },
-  async findSession(userId: string, deviceId: string, iat: number) {
-    return await sessionsCollection.findOne({userId: userId, deviceId: deviceId, iat: iat});
+  async findSession(deviceId: string) {
+    return await sessionsCollection.findOne({deviceId: deviceId});
   },
   async deleteOneSession(deviceId: string) {
     const deletedSession = await sessionsCollection.deleteOne({deviceId: deviceId});

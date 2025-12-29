@@ -32,7 +32,7 @@ function authRefreshTokenHandler(req, res) {
         if (!isValidToken) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        const session = yield device_service_1.deviceService.getSession(userId, deviceId, iat);
+        const session = yield device_service_1.deviceService.getSession(deviceId);
         if (!session) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }

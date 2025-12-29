@@ -7,8 +7,8 @@ import {ResultType} from "../../common/types/result.type";
 
 
 export const deviceService = {
-  async getSession(userId: string, deviceId: string, iat: number) {
-    return await devicesRepository.findSession(userId, deviceId, iat)
+  async getSession(deviceId: string) {
+    return await devicesRepository.findSession(deviceId)
   },
   async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
     const payload = jwtService.verifyRefreshToken(refreshToken);
@@ -45,8 +45,8 @@ export const deviceService = {
     }
     return await usersRepository.updateRefreshToken(userId, updatedSession)
   },
-  async deleteOneSession(userId: string, deviceId: string, iat: number): Promise<ResultType> {
-    const session = await devicesRepository.findSession(userId, deviceId, iat)
+  async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {
+    const session = await devicesRepository.findSession(deviceId)
     if(!session) {
       return {
         status: ResultStatus.NotFound,
