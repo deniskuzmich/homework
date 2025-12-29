@@ -69,7 +69,7 @@ export const deviceService = {
       data: null
     }
   },
-  async deleteAllSessions(deviceId: string): Promise<ResultType> {
+  async deleteAllSessions(userId: string, deviceId: string): Promise<ResultType> {
     const sessions = await devicesRepository.findAllSessions()
     if(deviceId === undefined) {
       return {
@@ -78,9 +78,8 @@ export const deviceService = {
         data: null
       }
     }
-    const deletedSessions = sessions.filter((session) => session.deviceId !== deviceId)
 
-    await devicesRepository.deleteAllSession(deletedSessions)
+    await devicesRepository.deleteAllSession(userId, deviceId)
     return {
       status: ResultStatus.NoContent,
       extensions: [],

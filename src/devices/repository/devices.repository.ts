@@ -1,12 +1,11 @@
 import {sessionsCollection} from "../../db/mongo.db";
 import {SessionType} from "../types/session.type";
-import {ObjectId} from "mongodb";
 import {UpdateSessionType} from "../types/update-session.type";
 
 
 export const devicesRepository = {
   async createSession(session: SessionType) {
-    return  await sessionsCollection.insertOne(session);
+    return await sessionsCollection.insertOne(session);
   },
   async findAllSessions() {
     return await sessionsCollection.find().toArray()
@@ -27,8 +26,11 @@ export const devicesRepository = {
     }
     return true
   },
-  async deleteAllSession(sessions: SessionType[]) {
-    const deletedSessions = await sessionsCollection.deleteMany(sessions);
+  async deleteAllSession(userId: string, deviceId: string) {
+    const deletedSessions = await sessionsCollection.deleteMany({
+      userId: userId,
+      deviceId: {$ne: deviceId},
+    });
     if (deletedSessions.deletedCount < 1) {
       return null
     }

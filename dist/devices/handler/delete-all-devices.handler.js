@@ -15,14 +15,22 @@ const http_statuses_1 = require("../../common/types/http-statuses");
 const device_service_1 = require("../service/device.service");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const result_status_1 = require("../../common/types/result.status");
+const devices_repository_1 = require("../repository/devices.repository");
 function deleteAllDevicesHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const refreshToken = req.cookies.refreshToken;
+        if (!refreshToken) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
         const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
         if (!payload) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
-        const result = yield device_service_1.deviceService.deleteAllSessions(payload.deviceId);
+        const sessions = yield devices_repository_1.devicesRepository.findSession(payload.deviceId);
+        if (!sessions || sessions.iat !== payload.iat) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        const result = yield device_service_1.deviceService.deleteAllSessions(payload.userId, payload.deviceId);
         if (result.status !== result_status_1.ResultStatus.NoContent) {
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
         }

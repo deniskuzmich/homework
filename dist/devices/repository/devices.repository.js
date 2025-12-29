@@ -41,9 +41,12 @@ exports.devicesRepository = {
             return true;
         });
     },
-    deleteAllSession(sessions) {
+    deleteAllSession(userId, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedSessions = yield mongo_db_1.sessionsCollection.deleteMany(sessions);
+            const deletedSessions = yield mongo_db_1.sessionsCollection.deleteMany({
+                userId: userId,
+                deviceId: { $ne: deviceId },
+            });
             if (deletedSessions.deletedCount < 1) {
                 return null;
             }

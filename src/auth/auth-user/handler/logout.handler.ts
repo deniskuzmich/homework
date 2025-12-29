@@ -1,7 +1,6 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
-import {authService} from "../../service/auth-service";
 import {deviceService} from "../../../devices/service/device.service";
 
 export async function logoutHandler(req: Request, res: Response) {

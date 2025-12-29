@@ -82,7 +82,7 @@ exports.deviceService = {
             };
         });
     },
-    deleteAllSessions(deviceId) {
+    deleteAllSessions(userId, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
             const sessions = yield devices_repository_1.devicesRepository.findAllSessions();
             if (deviceId === undefined) {
@@ -92,8 +92,7 @@ exports.deviceService = {
                     data: null
                 };
             }
-            const deletedSessions = sessions.filter((session) => session.deviceId !== deviceId);
-            yield devices_repository_1.devicesRepository.deleteAllSession(deletedSessions);
+            yield devices_repository_1.devicesRepository.deleteAllSession(userId, deviceId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
