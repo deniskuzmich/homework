@@ -13,6 +13,7 @@ exports.authRefreshTokenHandler = authRefreshTokenHandler;
 const http_statuses_1 = require("../../../common/types/http-statuses");
 const jwt_service_1 = require("../../../common/services/jwt.service");
 const device_service_1 = require("../../../devices/service/device.service");
+const auth_service_1 = require("../../service/auth-service");
 function authRefreshTokenHandler(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -24,6 +25,10 @@ function authRefreshTokenHandler(req, res) {
         }
         const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
         if (!payload) {
+            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+        }
+        const isValidToken = yield auth_service_1.authService.isRefreshTokenValid(payload.userId, refreshToken);
+        if (!isValidToken) {
             return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
         }
         const session = yield device_service_1.deviceService.getSession(payload.deviceId);

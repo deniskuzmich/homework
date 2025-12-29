@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {jwtService} from "../../../common/services/jwt.service";
 import {deviceService} from "../../../devices/service/device.service";
+import {authService} from "../../service/auth-service";
 
 
 export async function authRefreshTokenHandler(req: Request, res: Response) {
@@ -16,6 +17,11 @@ export async function authRefreshTokenHandler(req: Request, res: Response) {
   const payload = jwtService.verifyRefreshToken(refreshToken);
   if (!payload) {
     return res.sendStatus(HttpStatuses.Unauthorized)
+  }
+
+  const isValidToken = await authService.isRefreshTokenValid(payload.userId, refreshToken);
+  if (!isValidToken) {
+    return res.sendStatus(HttpStatuses.Unauthorized);
   }
 
   const session = await deviceService.getSession(payload.deviceId);

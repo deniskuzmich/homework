@@ -169,10 +169,20 @@ export const authService = {
     }
   },
 
-  async isRefreshTokenValid(userId: string, token: string) {
+  async isRefreshTokenValid(userId: string, token: string): Promise<ResultType>{
     const user = await usersRepository.getUserById(userId);
-    if (!user) return false;
-    return user.refreshToken === token;
+    if (!user) {
+      return {
+        status: ResultStatus.Unauthorized,
+        extensions: [],
+        data: null,
+      }
+    }
+    return {
+      status: ResultStatus.Success,
+      extensions: [],
+      data: user.refreshToken === token,
+    };
   },
   async unsetRefreshToken(refreshToken: string) {
     return await usersRepository.unsetRefreshToken(refreshToken)
