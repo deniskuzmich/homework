@@ -62,12 +62,14 @@ exports.authService = {
                 }
             };
             yield users_repository_1.usersRepository.createUser(newUser);
-            try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
-            }
-            catch (e) {
-                console.log('Send email error', e);
-            }
+            // try {
+            //   await nodemailerService.sendEmail(
+            //     newUser.email,
+            //     emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
+            //   )
+            // } catch (e) {
+            //   console.log('Send email error', e)
+            // }
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
