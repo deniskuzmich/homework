@@ -20,8 +20,8 @@ exports.nodemailerService = {
             let transport = nodemailer_1.default.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: 'kuzmichdenis21@gmail.com',
-                    pass: 'utzglaowipftlbsr',
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD,
                 }
             });
             let info = yield transport.sendMail({
