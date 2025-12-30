@@ -56,14 +56,14 @@ export const authService = {
     }
     await usersRepository.createUser(newUser)
 
-    // try {
-    //   await nodemailerService.sendEmail(
-    //     newUser.email,
-    //     emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
-    //   )
-    // } catch (e) {
-    //   console.log('Send email error', e)
-    // }
+    try {
+      await nodemailerService.sendEmail(
+        newUser.email,
+        emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
+      )
+    } catch (e) {
+      console.log('Send email error', e)
+    }
     return {
       status: ResultStatus.NoContent,
       extensions: [],
