@@ -12,11 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.devicesRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 exports.devicesRepository = {
-    createSession(session) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield mongo_db_1.sessionsCollection.insertOne(session);
-        });
-    },
     findAllSessions() {
         return __awaiter(this, void 0, void 0, function* () {
             return yield mongo_db_1.sessionsCollection.find().toArray();
@@ -25,6 +20,11 @@ exports.devicesRepository = {
     findSession(deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
             return yield mongo_db_1.sessionsCollection.findOne({ deviceId: deviceId });
+        });
+    },
+    createSession(session) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield mongo_db_1.sessionsCollection.insertOne(session);
         });
     },
     updateSession(deviceId, updatedSession) {

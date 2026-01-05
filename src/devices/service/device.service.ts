@@ -70,7 +70,6 @@ export const deviceService = {
     }
   },
   async deleteAllSessions(userId: string, deviceId: string): Promise<ResultType> {
-    const sessions = await devicesRepository.findAllSessions()
     if(deviceId === undefined) {
       return {
         status: ResultStatus.Unauthorized,

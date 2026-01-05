@@ -4,14 +4,14 @@ import {UpdateSessionType} from "../types/update-session.type";
 
 
 export const devicesRepository = {
-  async createSession(session: SessionType) {
-    return await sessionsCollection.insertOne(session);
-  },
   async findAllSessions() {
     return await sessionsCollection.find().toArray()
   },
   async findSession(deviceId: string) {
     return await sessionsCollection.findOne({deviceId: deviceId});
+  },
+  async createSession(session: SessionType) {
+    return await sessionsCollection.insertOne(session);
   },
   async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
     await sessionsCollection.updateOne(

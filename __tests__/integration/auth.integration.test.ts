@@ -1,28 +1,27 @@
-import { MongoMemoryServer } from 'mongodb-memory-server';
-import { runDB, stopDb, usersCollection } from '../../src/db/mongo.db';
-import { authService } from '../../src/auth/service/auth-service';
-import { testSeeder } from '../../src/utils-for-tests/utils-for-auth-tests';
-import { ResultStatus } from '../../src/common/types/result.status';
-import { nodemailerService } from '../../src/adapters/nodemailer-service';
+import {MongoMemoryServer} from 'mongodb-memory-server';
+import {runDB, stopDb} from '../../src/db/mongo.db';
+import {authService} from '../../src/auth/service/auth-service';
+import {testSeeder} from '../../src/utils-for-tests/utils-for-auth-tests';
+import {ResultStatus} from '../../src/common/types/result.status';
+import {nodemailerService} from '../../src/adapters/nodemailer-service';
 
 describe('AUTH Integration Tests', () => {
   let mongoServer: MongoMemoryServer;
 
   beforeAll(async () => {
-    // создаём временный MongoDB сервер
     mongoServer = await MongoMemoryServer.create();
     const uri = mongoServer.getUri();
 
-    // подключаемся через runDB
     await runDB(uri);
 
-    // мок отправки писем
-    jest.spyOn(nodemailerService, 'sendEmail').mockResolvedValue({} as any);
+    jest
+      .spyOn(nodemailerService, 'sendEmail')
+      .mockResolvedValue({} as any);
   });
 
   afterAll(async () => {
-    await stopDb(); // закрываем Mongo клиент
-    await mongoServer.stop(); // останавливаем временный сервер
+    await stopDb();
+    await mongoServer.stop();
   });
 
   describe('registration user', () => {
@@ -58,7 +57,7 @@ describe('AUTH Integration Tests', () => {
       const { login, password, email } = testSeeder.createUser();
       await testSeeder.insertUser({login, password, email});
 
-      const result = await confirmEmail('testcode');
+      const result = await confirmEmail(code);
       expect(result.status).toBe(ResultStatus.BadRequest);
     });
 
@@ -68,7 +67,7 @@ describe('AUTH Integration Tests', () => {
       const { login, password, email } = testSeeder.createUser();
       await testSeeder.insertUser({login, password, email});
 
-      const result = await confirmEmail('testcode');
+      const result = await confirmEmail(code);
       expect(result.status).toBe(ResultStatus.BadRequest);
     });
 

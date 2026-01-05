@@ -1,14 +1,8 @@
-import { setupApp } from "./setup-app";
-import express from "express";
 import {SETTINGS} from "./core/settings/settings";
 import {runDB} from "./db/mongo.db";
+import {app} from "./init-app";
 
 const bootstrap = async () => {
-  const app = express();
-  setupApp(app);
-
-  // app.set('trust proxy', true);
-
   const PORT = SETTINGS.PORT;
 
   await runDB(SETTINGS.MONGO_URL)

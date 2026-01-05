@@ -84,7 +84,6 @@ exports.deviceService = {
     },
     deleteAllSessions(userId, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const sessions = yield devices_repository_1.devicesRepository.findAllSessions();
             if (deviceId === undefined) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
