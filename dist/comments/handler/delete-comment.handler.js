@@ -9,18 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCommentHandler = deleteCommentHandler;
-const comments_service_1 = require("../service/comments.service");
+exports.DeleteCommentHandler = void 0;
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-function deleteCommentHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const commentId = req.params.commentId;
-        const userId = req.user.userId;
-        const deletedComment = yield comments_service_1.commentsService.deleteComment(commentId, userId);
-        if (deletedComment.status !== result_status_1.ResultStatus.NoContent) {
+const composition_root_1 = require("../../core/composition/composition-root");
+class DeleteCommentHandler {
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const commentId = req.params.commentId;
+            const userId = req.user.userId;
+            const deletedComment = yield composition_root_1.commentsService.deleteComment(commentId, userId);
+            if (deletedComment.status !== result_status_1.ResultStatus.NoContent) {
+                return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
+            }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
-        }
-        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
-    });
+        });
+    }
 }
+exports.DeleteCommentHandler = DeleteCommentHandler;

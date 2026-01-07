@@ -9,14 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.devicesQueryRepository = void 0;
+exports.DevicesQueryRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const map_session_to_view_model_1 = require("../mapper/map-session-to-view-model");
-exports.devicesQueryRepository = {
+class DevicesQueryRepository {
     findAllSessions(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             const sessions = yield mongo_db_1.sessionsCollection.find({ userId }).toArray();
             return sessions.map(map_session_to_view_model_1.mapSessionToViewModel);
         });
-    },
-};
+    }
+}
+exports.DevicesQueryRepository = DevicesQueryRepository;

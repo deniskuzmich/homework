@@ -9,35 +9,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authUserHandler = authUserHandler;
+exports.AuthUserHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const jwt_service_1 = require("../../../common/services/jwt.service");
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
-const auth_service_1 = require("../../service/auth-service");
 const node_crypto_1 = require("node:crypto");
-const device_service_1 = require("../../../devices/service/device.service");
-function authUserHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        var _a;
-        const { loginOrEmail, password } = req.body;
-        const deviceId = (0, node_crypto_1.randomUUID)();
-        const ip = req.ip;
-        const deviceName = (_a = req.headers['user-agent']) !== null && _a !== void 0 ? _a : 'Some device';
-        try {
-            const authUser = yield auth_service_1.authService.checkCredentials(loginOrEmail, password);
-            if (authUser.status !== result_status_1.ResultStatus.Success) {
-                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
+const composition_root_1 = require("../../../core/composition/composition-root");
+class AuthUserHandler {
+    login(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a;
+            const { loginOrEmail, password } = req.body;
+            const deviceId = (0, node_crypto_1.randomUUID)();
+            const ip = req.ip;
+            const deviceName = (_a = req.headers['user-agent']) !== null && _a !== void 0 ? _a : 'Some device';
+            try {
+                const authUser = yield composition_root_1.authService.checkCredentials(loginOrEmail, password);
+                if (authUser.status !== result_status_1.ResultStatus.Success) {
+                    return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(authUser.status)).send(authUser.extensions);
+                }
+                const token = composition_root_1.jwtService.createJWT(authUser.data.id);
+                const refreshToken = composition_root_1.jwtService.createRefreshToken(authUser.data.id, deviceId);
+                yield composition_root_1.deviceService.createSession(authUser.data.id, refreshToken, ip, deviceName);
+                res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
+                return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
             }
-            const token = jwt_service_1.jwtService.createJWT(authUser.data.id);
-            const refreshToken = jwt_service_1.jwtService.createRefreshToken(authUser.data.id, deviceId);
-            yield device_service_1.deviceService.createSession(authUser.data.id, refreshToken, ip, deviceName);
-            res.cookie('refreshToken', refreshToken, { httpOnly: true, secure: true });
-            return res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: token });
-        }
-        catch (e) {
-            console.log(e);
-            return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
-        }
-    });
+            catch (e) {
+                console.log(e);
+                return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
+            }
+        });
+    }
 }
+exports.AuthUserHandler = AuthUserHandler;

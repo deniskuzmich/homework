@@ -9,16 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsService = void 0;
-const comments_query_repository_1 = require("../repository/comments-query.repository");
+exports.CommentsService = void 0;
 const result_status_1 = require("../../common/types/result.status");
-const comments_repository_1 = require("../repository/comments.repository");
-const posts_repository_1 = require("../../posts/repository/posts-repository");
-exports.commentsService = {
+const composition_root_1 = require("../../core/composition/composition-root");
+class CommentsService {
     updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
-            const comment = yield comments_query_repository_1.commentsQueryRepository.getCommentById(id);
+            const comment = yield composition_root_1.commentsQueryRepository.getCommentById(id);
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -35,7 +33,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            const updatedComment = yield comments_repository_1.commentsRepository.updateComment(id, newContent);
+            const updatedComment = yield composition_root_1.commentsRepository.updateComment(id, newContent);
             if (!updatedComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -50,10 +48,10 @@ exports.commentsService = {
                 data: null
             };
         });
-    },
+    }
     createCommentForPost(user, content, postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isPostExists = yield posts_repository_1.postsRepository.getPostById(postId);
+            const isPostExists = yield composition_root_1.postsRepository.getPostById(postId);
             if (!isPostExists) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -79,7 +77,7 @@ exports.commentsService = {
                 },
                 createdAt: new Date().toISOString(),
             };
-            const createdComment = yield comments_repository_1.commentsRepository.createCommentForPost(newCommentForPost);
+            const createdComment = yield composition_root_1.commentsRepository.createCommentForPost(newCommentForPost);
             if (!createdComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -94,10 +92,10 @@ exports.commentsService = {
                 data: createdComment
             };
         });
-    },
+    }
     deleteComment(commentId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield comments_repository_1.commentsRepository.getCommentById(commentId);
+            const comment = yield composition_root_1.commentsRepository.getCommentById(commentId);
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -114,7 +112,7 @@ exports.commentsService = {
                     data: null
                 };
             }
-            yield comments_repository_1.commentsRepository.deleteComment(commentId);
+            yield composition_root_1.commentsRepository.deleteComment(commentId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
@@ -122,4 +120,5 @@ exports.commentsService = {
             };
         });
     }
-};
+}
+exports.CommentsService = CommentsService;

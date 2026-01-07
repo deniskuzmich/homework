@@ -1,17 +1,17 @@
-import {jwtService} from "../../common/services/jwt.service";
 import {SessionType} from "../types/session.type";
-import {devicesRepository} from "../repository/devices.repository";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
+import {devicesRepository, jwtService} from "../../core/composition/composition-root";
 
 
-export const deviceService = {
-  async getSession(deviceId: string) {
+export class DeviceService {
+   async getSession(deviceId: string) {
     return await devicesRepository.findSession(deviceId)
-  },
-  async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
+  }
+
+   async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
     const payload = jwtService.verifyRefreshToken(refreshToken);
-    if(!payload) {
+    if (!payload) {
       return null
     }
     const {deviceId, iat, eat} = payload;
@@ -26,10 +26,11 @@ export const deviceService = {
       eat
     }
     return await devicesRepository.createSession(session)
-  },
-  async updateSession(deviceId: string, ip:string | undefined, deviceName: string, refreshToken: string) {
+  }
+
+   async updateSession(deviceId: string, ip: string | undefined, deviceName: string, refreshToken: string) {
     const payload = jwtService.verifyRefreshToken(refreshToken);
-    if(!payload) {
+    if (!payload) {
       return null
     }
 
@@ -42,10 +43,11 @@ export const deviceService = {
       eat: payload.eat,
     }
     return await devicesRepository.updateSession(deviceId, updatedSession)
-  },
-  async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {
+  }
+
+   async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {
     const session = await devicesRepository.findSession(deviceId)
-    if(!session) {
+    if (!session) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: 'Session is not found',
@@ -68,9 +70,10 @@ export const deviceService = {
       extensions: [],
       data: null
     }
-  },
-  async deleteAllSessions(userId: string, deviceId: string): Promise<ResultType> {
-    if(deviceId === undefined) {
+  }
+
+   async deleteAllSessions(userId: string, deviceId: string): Promise<ResultType> {
+    if (deviceId === undefined) {
       return {
         status: ResultStatus.Unauthorized,
         extensions: [],
@@ -84,5 +87,5 @@ export const deviceService = {
       extensions: [],
       data: null
     }
-  },
+  }
 }

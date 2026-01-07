@@ -9,26 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDevicesHandler = getDevicesHandler;
-const jwt_service_1 = require("../../common/services/jwt.service");
+exports.GetDevicesHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const devices_query_repository_1 = require("../repository/devices-query.repository");
-function getDevicesHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const refreshToken = req.cookies.refreshToken;
-        try {
-            const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-            if (!payload) {
-                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+const composition_root_1 = require("../../core/composition/composition-root");
+class GetDevicesHandler {
+    getDevices(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshToken = req.cookies.refreshToken;
+            try {
+                const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+                if (!payload) {
+                    return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+                }
+                const sessionsData = yield composition_root_1.devicesQueryRepository.findAllSessions(payload.userId);
+                if (!sessionsData) {
+                    return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+                }
+                res.status(http_statuses_1.HttpStatuses.Success).send(sessionsData);
             }
-            const sessionsData = yield devices_query_repository_1.devicesQueryRepository.findAllSessions(payload.userId);
-            if (!sessionsData) {
-                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            catch (e) {
+                console.log('Something wrong', e);
             }
-            res.status(http_statuses_1.HttpStatuses.Success).send(sessionsData);
-        }
-        catch (e) {
-            console.log('Something wrong', e);
-        }
-    });
+        });
+    }
 }
+exports.GetDevicesHandler = GetDevicesHandler;

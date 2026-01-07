@@ -9,17 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserHandler = createUserHandler;
-const users_service_1 = require("../service/users.service");
+exports.CreateUserHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const users_query_repository_1 = require("../repository/users-query.repository");
-function createUserHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const result = yield users_service_1.usersService.createUser(req.body);
-        if ("errorsMessages" in result) {
-            return res.status(http_statuses_1.HttpStatuses.BadRequest).send(result);
-        }
-        const userViewModel = yield users_query_repository_1.usersQueryRepository.getUserById(result._id.toString());
-        return res.status(http_statuses_1.HttpStatuses.Created).send(userViewModel);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class CreateUserHandler {
+    createUser(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield composition_root_1.usersService.createUser(req.body);
+            if ("errorsMessages" in result) {
+                return res.status(http_statuses_1.HttpStatuses.BadRequest).send(result);
+            }
+            const userViewModel = yield composition_root_1.usersQueryRepository.getUserById(result._id.toString());
+            return res.status(http_statuses_1.HttpStatuses.Created).send(userViewModel);
+        });
+    }
 }
+exports.CreateUserHandler = CreateUserHandler;

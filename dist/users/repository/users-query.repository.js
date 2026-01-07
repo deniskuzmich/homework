@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usersQueryRepository = void 0;
+exports.UsersQueryRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
 const map_to_user_view_model_1 = require("../mapper/map-to-user-view-model");
 const map_user_for_front_1 = require("../mapper/map-user-for-front");
-exports.usersQueryRepository = {
+class UsersQueryRepository {
     getAllUsers(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
@@ -49,7 +49,7 @@ exports.usersQueryRepository = {
             const userForFront = itemsFromDb.map(map_to_user_view_model_1.mapToUserViewModel);
             return (0, map_user_for_front_1.userForFrontMapper)(userForFront, paramsForFront);
         });
-    },
+    }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!mongodb_1.ObjectId.isValid(id))
@@ -59,5 +59,6 @@ exports.usersQueryRepository = {
                 return null;
             return (0, map_to_user_view_model_1.mapToUserViewModel)(user);
         });
-    },
-};
+    }
+}
+exports.UsersQueryRepository = UsersQueryRepository;

@@ -1,11 +1,14 @@
 import { Request, Response } from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {blogsQueryRepository} from "../repository/blogs-query-repository";
 import {parseQueryInput} from "../mapper/query-input.mapper";
+import {blogsQueryRepository} from "../../core/composition/composition-root";
 
-export async function getBlogsListHandler(req: Request, res: Response) {
-    const queryInput = parseQueryInput(req.query)
-    const blogsListOutput = await blogsQueryRepository.findBlogs(queryInput)
+export class GetBlogsListHandler {
+   async getBlogs(req: Request, res: Response) {
+       const queryInput = parseQueryInput(req.query)
+       const blogsListOutput = await blogsQueryRepository.findBlogs(queryInput)
 
-    res.status(HttpStatuses.Success).send(blogsListOutput);
+       res.status(HttpStatuses.Success).send(blogsListOutput);
+   }
 }
+

@@ -3,18 +3,16 @@ import {ObjectId, WithId} from "mongodb";
 import {CommentForPostInput} from "../types/main-types/comment-for-post-input.type";
 import {CommentDbType} from "../types/main-types/comment-db.type";
 
-
-
-export const commentsRepository = {
+export class CommentsRepository {
   async getCommentById(postId: string): Promise<WithId<CommentDbType> | null> {
     return commentsCollection.findOne({_id: new ObjectId(postId)})
-  },
+  }
 
   async getCommentByPostId(id: string): Promise<WithId<CommentDbType> | null> {
     const commentForPost = await commentsCollection.findOne({postId: new ObjectId(id)})
     if(!commentForPost) return null
     return commentForPost
-  },
+  }
 
   async updateComment(id: string, newContent: string) {
     const updatedComment = await commentsCollection.updateOne(
@@ -26,7 +24,7 @@ export const commentsRepository = {
       });
     if (updatedComment.matchedCount < 1) return false
     return  true
-  },
+  }
 
   async deleteComment(id: string)  {
     const deletedComment = await commentsCollection.deleteOne({_id: new ObjectId(id)});
@@ -34,7 +32,7 @@ export const commentsRepository = {
       return null
     }
     return true
-  },
+  }
 
   async createCommentForPost(comment: CommentDbType): Promise<WithId<CommentDbType> | null> {
       const insertResult = await commentsCollection.insertOne(comment)
@@ -47,3 +45,4 @@ export const commentsRepository = {
       return newComment
   }
 }
+

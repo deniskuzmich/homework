@@ -9,24 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.blogsService = void 0;
-const blogs_repository_1 = require("../repository/blogs-repository");
-const posts_repository_1 = require("../../posts/repository/posts-repository");
-exports.blogsService = {
+exports.BlogsService = void 0;
+const composition_root_1 = require("../../core/composition/composition-root");
+class BlogsService {
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return blogs_repository_1.blogsRepository.getBlogById(id);
+            return composition_root_1.blogsRepository.getBlogById(id);
         });
-    },
+    }
     getPostByBlogId(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield blogs_repository_1.blogsRepository.getBlogById(id);
+            const blog = yield composition_root_1.blogsRepository.getBlogById(id);
             if (!blog) {
                 return null;
             }
-            return yield posts_repository_1.postsRepository.getPostByBlogId(blog._id.toString());
+            return yield composition_root_1.postsRepository.getPostByBlogId(blog._id.toString());
         });
-    },
+    }
     createPostForBlog(blog, inputInfo) {
         return __awaiter(this, void 0, void 0, function* () {
             const newPostByBlogId = {
@@ -37,15 +36,15 @@ exports.blogsService = {
                 blogName: blog.name,
                 createdAt: new Date().toISOString(),
             };
-            return posts_repository_1.postsRepository.createPost(newPostByBlogId);
+            return composition_root_1.postsRepository.createPost(newPostByBlogId);
         });
-    },
+    }
     updateBlog(id, newData) {
         return __awaiter(this, void 0, void 0, function* () {
-            const updatedBlog = yield blogs_repository_1.blogsRepository.updateBlog(id, newData);
+            const updatedBlog = yield composition_root_1.blogsRepository.updateBlog(id, newData);
             return;
         });
-    },
+    }
     createBlog(newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const newBlog = {
@@ -55,12 +54,14 @@ exports.blogsService = {
                 createdAt: new Date().toISOString(),
                 isMembership: false
             };
-            return yield blogs_repository_1.blogsRepository.createBlog(newBlog);
+            return yield composition_root_1.blogsRepository.createBlog(newBlog);
         });
-    },
+    }
     deleteBlog(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedBlog = yield blogs_repository_1.blogsRepository.deleteBlog(id);
+            const deletedBlog = yield composition_root_1.blogsRepository.deleteBlog(id);
         });
-    },
-};
+    }
+}
+exports.BlogsService = BlogsService;
+;

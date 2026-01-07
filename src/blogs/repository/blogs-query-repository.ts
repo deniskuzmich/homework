@@ -6,7 +6,7 @@ import {BlogOutput} from "../types/main-types/blog-output.type";
 import {mapToBlogViewModel} from "../mapper/map-to-blog-view-model";
 import {finalBlogMapper} from "../mapper/final-blog-map";
 
-export const blogsQueryRepository = {
+export class BlogsQueryRepository {
   async findBlogs(queryDto: BlogInput): Promise<OutputTypeWithPagination<BlogOutput>> {
 
     const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
@@ -37,8 +37,7 @@ export const blogsQueryRepository = {
 
     const blogForFront = items.map(mapToBlogViewModel)
     return finalBlogMapper(blogForFront, paramsForFront);
-
-  },
+  }
 
   async getBlogById(id: string): Promise<BlogOutput | null> {
     const blog = await blogsCollection.findOne({_id: new ObjectId(id)});
@@ -48,3 +47,4 @@ export const blogsQueryRepository = {
     return mapToBlogViewModel(blog)
   }
 }
+

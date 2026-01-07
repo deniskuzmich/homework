@@ -9,29 +9,31 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.logoutHandler = logoutHandler;
+exports.LogoutHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const jwt_service_1 = require("../../../common/services/jwt.service");
-const device_service_1 = require("../../../devices/service/device.service");
-function logoutHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-        if (!payload) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const session = yield device_service_1.deviceService.getSession(payload.deviceId);
-        if (!session) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        if (session.iat !== payload.iat) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        yield device_service_1.deviceService.deleteOneSession(payload.userId, payload.deviceId);
-        res.clearCookie('refreshToken');
-        return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
-    });
+const composition_root_1 = require("../../../core/composition/composition-root");
+class LogoutHandler {
+    logout(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshToken = req.cookies.refreshToken;
+            if (!refreshToken) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            if (!payload) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const session = yield composition_root_1.deviceService.getSession(payload.deviceId);
+            if (!session) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            if (session.iat !== payload.iat) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            yield composition_root_1.deviceService.deleteOneSession(payload.userId, payload.deviceId);
+            res.clearCookie('refreshToken');
+            return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
+        });
+    }
 }
+exports.LogoutHandler = LogoutHandler;

@@ -2,13 +2,11 @@ import {ObjectId} from "mongodb";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {UserOutput} from "../types/main-types/user-output.type";
 import {UsersInput} from "../types/main-types/user-Input.type";
-import {sessionsCollection, usersCollection} from "../../db/mongo.db";
+import {usersCollection} from "../../db/mongo.db";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {userForFrontMapper} from "../mapper/map-user-for-front";
-import {mapSessionToViewModel} from "../../devices/mapper/map-session-to-view-model";
-import {SessionType} from "../../devices/types/session.type";
 
-export const usersQueryRepository = {
+export class UsersQueryRepository {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
     const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;
 
@@ -45,13 +43,14 @@ export const usersQueryRepository = {
 
     const userForFront = itemsFromDb.map(mapToUserViewModel)
     return userForFrontMapper(userForFront, paramsForFront);
-  },
+  }
 
   async getUserById(id: string): Promise<UserOutput | null> {
     if(!ObjectId.isValid(id)) return null;
     const user = await usersCollection.findOne({_id: new ObjectId(id)});
     if(!user) return null;
     return mapToUserViewModel(user);
-  },
+  }
 }
+
 

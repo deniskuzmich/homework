@@ -1,20 +1,21 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {postsQueryRepository} from "../repository/posts-query-repository";
 import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
-import {blogsService} from "../../blogs/service/blogs.service";
+import {blogsService, postsQueryRepository} from "../../core/composition/composition-root";
 
-export async function getPostByBlogIdHanlder(req: Request, res:Response) {
-  const query = valuesPaginationMaper(req.query);
+export class GetPostByBlogIdHandler {
+  async getPost(req: Request, res: Response) {
+    const query = valuesPaginationMaper(req.query);
 
-  const blog = await blogsService.getBlogById(req.params.id);
-  if(!blog) {
-    return res.sendStatus(HttpStatuses.NotFound)
+    const blog = await blogsService.getBlogById(req.params.id);
+    if (!blog) {
+      return res.sendStatus(HttpStatuses.NotFound)
+    }
+
+    const post = await postsQueryRepository.getPostByBlogId(blog._id.toString(), query)
+    if (!post) {
+      return res.sendStatus(HttpStatuses.NotFound)
+    }
+    res.status(HttpStatuses.Success).send(post)
   }
-
-  const post = await postsQueryRepository.getPostByBlogId(blog._id.toString(), query)
-  if(!post) {
-    return res.sendStatus(HttpStatuses.NotFound)
-  }
-  res.status(HttpStatuses.Success).send(post)
 }

@@ -9,14 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = getAllUsers;
+exports.GetAllUsers = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const parse_query_input_1 = require("../mapper/parse-query-input");
-const users_query_repository_1 = require("../repository/users-query.repository");
-function getAllUsers(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const queryInput = (0, parse_query_input_1.parseQueryInputForUsers)(req.query);
-        const usersList = yield users_query_repository_1.usersQueryRepository.getAllUsers(queryInput);
-        res.status(http_statuses_1.HttpStatuses.Success).send(usersList);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class GetAllUsers {
+    getAll(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryInput = (0, parse_query_input_1.parseQueryInputForUsers)(req.query);
+            const usersList = yield composition_root_1.usersQueryRepository.getAllUsers(queryInput);
+            res.status(http_statuses_1.HttpStatuses.Success).send(usersList);
+        });
+    }
 }
+exports.GetAllUsers = GetAllUsers;

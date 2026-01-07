@@ -1,24 +1,25 @@
 import { Router } from "express";
-import { getPostsListHanlder } from "../posts/handlers/get-posts-list.hanlder";
-import { getPostHandler } from "../posts/handlers/get-post.hanlder";
-import { updatePostHanlder } from "../posts/handlers/update-post.hanlder";
-import { postPostsHandler } from "../posts/handlers/create-posts.hanlder";
-import { deletePostHanlder } from "../posts/handlers/delete-post.hanlder";
 import { idValidation } from "../common/middleware-validation/id.validation-middleware";
 import { inputValidationResultMiddleware } from "../common/middleware-validation/input.validation-result.middleware";
 import { postInputValidation } from "../posts/middleware-validation/posts.input.validation-middleware";
 import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {authMiddleware} from "../auth/middleware/auth.middleware";
-import {createCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
 import {contentValidation} from "../comments/validation/comments-validation";
-import {getCommentForPostHandler} from "../comments/handler/get-comment-for-post.handler";
+
+import {
+  createCommentForPostHandler,
+  createPostsHandler, deletePostHandler, getCommentForPostHandler,
+  getPostHandler,
+  getPostListHandler,
+  updatePostHandler
+} from "../core/composition/composition-root";
 
 export const postRouter = Router();
 postRouter
-  .get("",paginationValidation, getPostsListHanlder)
+  .get("",paginationValidation, getPostListHandler.getPostList)
 
-  .get("/:id", idValidation, inputValidationResultMiddleware, getPostHandler)
+  .get("/:id", idValidation, inputValidationResultMiddleware, getPostHandler.getPost)
 
   .put(
     "/:id",
@@ -26,7 +27,7 @@ postRouter
     idValidation,
     postInputValidation,
     inputValidationResultMiddleware,
-    updatePostHanlder,
+    updatePostHandler.updatePost,
   )
 
   .post(
@@ -34,7 +35,7 @@ postRouter
     superAdminGuardMiddleware,
     postInputValidation,
     inputValidationResultMiddleware,
-    postPostsHandler,
+    createPostsHandler.createPost,
   )
 
   .delete(
@@ -42,11 +43,11 @@ postRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deletePostHanlder,
+    deletePostHandler.deletePost,
   )
 
-  .get('/:id/comments', idValidation, paginationValidation,inputValidationResultMiddleware, getCommentForPostHandler)
-  .post('/:id/comments', authMiddleware, contentValidation, inputValidationResultMiddleware, createCommentForPostHandler)
+  .get('/:id/comments', idValidation, paginationValidation,inputValidationResultMiddleware, getCommentForPostHandler.getComment)
+  .post('/:id/comments', authMiddleware, contentValidation, inputValidationResultMiddleware, createCommentForPostHandler.createComment)
 
 
 

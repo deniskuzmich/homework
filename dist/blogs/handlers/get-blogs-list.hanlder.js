@@ -9,14 +9,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBlogsListHandler = getBlogsListHandler;
+exports.GetBlogsListHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const blogs_query_repository_1 = require("../repository/blogs-query-repository");
 const query_input_mapper_1 = require("../mapper/query-input.mapper");
-function getBlogsListHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const queryInput = (0, query_input_mapper_1.parseQueryInput)(req.query);
-        const blogsListOutput = yield blogs_query_repository_1.blogsQueryRepository.findBlogs(queryInput);
-        res.status(http_statuses_1.HttpStatuses.Success).send(blogsListOutput);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class GetBlogsListHandler {
+    getBlogs(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const queryInput = (0, query_input_mapper_1.parseQueryInput)(req.query);
+            const blogsListOutput = yield composition_root_1.blogsQueryRepository.findBlogs(queryInput);
+            res.status(http_statuses_1.HttpStatuses.Success).send(blogsListOutput);
+        });
+    }
 }
+exports.GetBlogsListHandler = GetBlogsListHandler;

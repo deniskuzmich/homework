@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsRepository = void 0;
+exports.CommentsRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
-exports.commentsRepository = {
+class CommentsRepository {
     getCommentById(postId) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
         });
-    },
+    }
     getCommentByPostId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const commentForPost = yield mongo_db_1.commentsCollection.findOne({ postId: new mongodb_1.ObjectId(id) });
@@ -25,7 +25,7 @@ exports.commentsRepository = {
                 return null;
             return commentForPost;
         });
-    },
+    }
     updateComment(id, newContent) {
         return __awaiter(this, void 0, void 0, function* () {
             const updatedComment = yield mongo_db_1.commentsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
@@ -37,7 +37,7 @@ exports.commentsRepository = {
                 return false;
             return true;
         });
-    },
+    }
     deleteComment(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const deletedComment = yield mongo_db_1.commentsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
@@ -46,7 +46,7 @@ exports.commentsRepository = {
             }
             return true;
         });
-    },
+    }
     createCommentForPost(comment) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.commentsCollection.insertOne(comment);
@@ -58,4 +58,5 @@ exports.commentsRepository = {
             return newComment;
         });
     }
-};
+}
+exports.CommentsRepository = CommentsRepository;

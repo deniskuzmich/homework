@@ -9,16 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.authService = void 0;
-const bcrypt_service_1 = require("../../common/services/bcrypt.service");
+exports.AuthService = void 0;
 const add_1 = require("date-fns/add");
-const users_repository_1 = require("../../users/repository/users.repository");
+const usersRepository_1 = require("../../users/repository/usersRepository");
 const result_status_1 = require("../../common/types/result.status");
 const node_crypto_1 = require("node:crypto");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
 const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
-exports.authService = {
+const composition_root_1 = require("../../core/composition/composition-root");
+class AuthService {
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return {
@@ -27,10 +27,10 @@ exports.authService = {
                 email: user.email
             };
         });
-    },
+    }
     registerUser(login, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isLoginExists = yield users_repository_1.usersRepository.getLoginUser(login);
+            const isLoginExists = yield usersRepository_1.UsersRepository.getLoginUser(login);
             if (isLoginExists) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -38,7 +38,7 @@ exports.authService = {
                     data: null
                 };
             }
-            const isEmailExists = yield users_repository_1.usersRepository.getEmailUser(email);
+            const isEmailExists = yield usersRepository_1.UsersRepository.getEmailUser(email);
             if (isEmailExists) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -46,7 +46,7 @@ exports.authService = {
                     data: null
                 };
             }
-            const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(password);
+            const passwordHash = yield composition_root_1.bcryptService.generateHash(password);
             const newUser = {
                 login,
                 email,
@@ -61,7 +61,7 @@ exports.authService = {
                     isConfirmed: false,
                 }
             };
-            yield users_repository_1.usersRepository.createUser(newUser);
+            yield usersRepository_1.UsersRepository.createUser(newUser);
             try {
                 yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
             }
@@ -74,10 +74,10 @@ exports.authService = {
                 data: null,
             };
         });
-    },
+    }
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(loginOrEmail);
+            const user = yield usersRepository_1.UsersRepository.getUserByLoginOrEmail(loginOrEmail);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
@@ -85,7 +85,7 @@ exports.authService = {
                     data: null
                 };
             }
-            const isPassCorrect = yield bcrypt_service_1.bcryptService.checkPassword(password, user.passwordHash);
+            const isPassCorrect = yield composition_root_1.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
@@ -100,10 +100,10 @@ exports.authService = {
                 data: result
             };
         });
-    },
+    }
     confirmEmail(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserByConfirmationCode(code);
+            const user = yield usersRepository_1.UsersRepository.getUserByConfirmationCode(code);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -132,17 +132,17 @@ exports.authService = {
                     data: false,
                 };
             }
-            let result = yield users_repository_1.usersRepository.updateConfirmation(user._id);
+            let result = yield usersRepository_1.UsersRepository.updateConfirmation(user._id);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
                 data: result,
             };
         });
-    },
+    }
     resendEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield users_repository_1.usersRepository.getUserByLoginOrEmail(email);
+            const user = yield usersRepository_1.UsersRepository.getUserByLoginOrEmail(email);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -157,7 +157,7 @@ exports.authService = {
                     data: false,
                 };
             const newCode = (0, node_crypto_1.randomUUID)();
-            yield users_repository_1.usersRepository.updateConfirmationCode(user._id, newCode);
+            yield usersRepository_1.UsersRepository.updateConfirmationCode(user._id, newCode);
             try {
                 yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
             }
@@ -170,5 +170,6 @@ exports.authService = {
                 data: true,
             };
         });
-    },
-};
+    }
+}
+exports.AuthService = AuthService;

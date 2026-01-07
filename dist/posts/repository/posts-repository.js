@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.postsRepository = void 0;
+exports.PostsRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
-exports.postsRepository = {
+class PostsRepository {
     getPostById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.postsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
         });
-    },
+    }
     getPostByBlogId(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const post = yield mongo_db_1.postsCollection.findOne({ blogId: new mongodb_1.ObjectId(id) });
@@ -25,7 +25,7 @@ exports.postsRepository = {
                 return null;
             return post;
         });
-    },
+    }
     updatePost(id, newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const updatedPost = yield mongo_db_1.postsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
@@ -41,13 +41,13 @@ exports.postsRepository = {
             }
             return;
         });
-    },
+    }
     createPost(newPost) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.postsCollection.insertOne(newPost);
             return Object.assign(Object.assign({}, newPost), { _id: insertResult.insertedId });
         });
-    },
+    }
     deletePost(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const deletedPost = yield mongo_db_1.postsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
@@ -55,5 +55,7 @@ exports.postsRepository = {
                 throw new Error("Post not exist");
             }
         });
-    },
-};
+    }
+}
+exports.PostsRepository = PostsRepository;
+;

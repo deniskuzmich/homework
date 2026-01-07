@@ -11,7 +11,7 @@ import {finalPostMapper} from "../mapper/final-post-map";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 
 
-export const postsQueryRepository = {
+export class PostsQueryRepository {
   async findPosts(query: InputPaginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {
 
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
@@ -36,13 +36,13 @@ export const postsQueryRepository = {
 
     const postsForFront = posts.map(mapToPostViewModel)
     return finalPostMapper(postsForFront, paramsForFront);
-  },
+  }
 
   async getPostById(id: string): Promise<PostOutput | null> {
     const post = await postsCollection.findOne({_id: new ObjectId(id)});
     if (!post) return null
     return  mapToPostViewModel(post)
-  },
+  }
 
   async getPostByBlogId(id: string, query: InputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
 
@@ -69,3 +69,4 @@ export const postsQueryRepository = {
     return finalPostMapper(postsForFront, paramsForFront);
   }
 };
+

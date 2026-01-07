@@ -1,18 +1,17 @@
 import {Post} from "../types/main-types/posts-db.type";
 import {ObjectId, WithId} from "mongodb";
 import {PostInputDto} from "../types/main-types/post.input-dto";
-import {postsRepository} from "../repository/posts-repository";
-import {blogsRepository} from "../../blogs/repository/blogs-repository";
+import {blogsRepository, postsRepository} from "../../core/composition/composition-root";
 
-export const postsService = {
+export class PostsService {
   async getPostById(id: string): Promise<WithId<Post> | null> {
     return postsRepository.getPostById(id);
-  },
+  }
 
   async updatePost(id: string, newData: PostInputDto): Promise<void> {
     const updatedPost = await postsRepository.updatePost(id, newData);
     return
-  },
+  }
   async createPost(newData: PostInputDto): Promise<WithId<Post> | null> {
 
     const blog = await blogsRepository.getBlogById(newData.blogId);
@@ -28,9 +27,10 @@ export const postsService = {
     };
     const createdPost = await postsRepository.createPost(newPost);
     return createdPost
-  },
+  }
 
   async deletePost(id: string) {
     const deletedPost = await postsRepository.deletePost(id);
-  },
+  }
 };
+

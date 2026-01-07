@@ -1,11 +1,12 @@
 import {SETTINGS} from "../../core/settings/settings";
 import jwt from 'jsonwebtoken';
 
-export const jwtService = {
-  createJWT(userId: string) {
+export class JwtService {
+   createJWT(userId: string) {
     return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: "10s"});
-  },
-  getUserInfoByToken(token: string) {
+  }
+
+   getUserInfoByToken(token: string) {
     try {
       const payload = jwt.verify(token, SETTINGS.JWT_SECRET);
 
@@ -15,11 +16,13 @@ export const jwtService = {
     } catch (e) {
       return null;
     }
-  },
-  createRefreshToken(userId: string, deviceId: string) {
+  }
+
+   createRefreshToken(userId: string, deviceId: string) {
     return jwt.sign({userId, deviceId}, SETTINGS.JWT_REFRESH_SECRET, {expiresIn: "20s"});
-  },
-  verifyRefreshToken(token: string): {userId: string, deviceId: string, iat: number, eat: number} | null {
+  }
+
+   verifyRefreshToken(token: string): { userId: string, deviceId: string, iat: number, eat: number } | null {
     try {
       return jwt.verify(token, SETTINGS.JWT_REFRESH_SECRET) as {
         userId: string,
@@ -32,3 +35,4 @@ export const jwtService = {
     }
   }
 }
+

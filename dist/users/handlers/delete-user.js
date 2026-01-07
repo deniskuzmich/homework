@@ -9,16 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserHandler = deleteUserHandler;
-const users_service_1 = require("../service/users.service");
+exports.DeleteUserHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-function deleteUserHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield users_service_1.usersService.getUserById(req.params.id);
-        if (!user) {
-            res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        yield users_service_1.usersService.deleteUser(req.params.id);
-        return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class DeleteUserHandler {
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield composition_root_1.usersService.getUserById(req.params.id);
+            if (!user) {
+                res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+            }
+            yield composition_root_1.usersService.deleteUser(req.params.id);
+            return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
+        });
+    }
 }
+exports.DeleteUserHandler = DeleteUserHandler;

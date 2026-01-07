@@ -9,28 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createCommentForPostHandler = createCommentForPostHandler;
+exports.CreateCommentForPostHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-const comments_service_1 = require("../service/comments.service");
-const comments_query_repository_1 = require("../repository/comments-query.repository");
-function createCommentForPostHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = req.user;
-        const content = req.body.content;
-        const postId = req.params.id;
-        if (!content || !user) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
-        }
-        if (!postId) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        const createdComment = yield comments_service_1.commentsService.createCommentForPost(user, content, postId);
-        if (createdComment.status !== result_status_1.ResultStatus.Created) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
-        }
-        const commentForPost = yield comments_query_repository_1.commentsQueryRepository.getCommentById(createdComment.data._id.toString());
-        return res.status(http_statuses_1.HttpStatuses.Created).send(commentForPost);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class CreateCommentForPostHandler {
+    createComment(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = req.user;
+            const content = req.body.content;
+            const postId = req.params.id;
+            if (!content || !user) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.BadRequest);
+            }
+            if (!postId) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+            }
+            const createdComment = yield composition_root_1.commentsService.createCommentForPost(user, content, postId);
+            if (createdComment.status !== result_status_1.ResultStatus.Created) {
+                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
+            }
+            const commentForPost = yield composition_root_1.commentsQueryRepository.getCommentById(createdComment.data._id.toString());
+            return res.status(http_statuses_1.HttpStatuses.Created).send(commentForPost);
+        });
+    }
 }
+exports.CreateCommentForPostHandler = CreateCommentForPostHandler;

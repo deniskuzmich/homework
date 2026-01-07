@@ -9,12 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.commentsQueryRepository = void 0;
+exports.CommentsQueryRepository = void 0;
 const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
 const map_to_comment_view_model_1 = require("../mapper/map-to-comment-view-model");
 const final_comment_mapper_1 = require("../mapper/final-comment-mapper");
-exports.commentsQueryRepository = {
+class CommentsQueryRepository {
     getCommentById(postId) {
         return __awaiter(this, void 0, void 0, function* () {
             const comment = yield mongo_db_1.commentsCollection.findOne({ _id: new mongodb_1.ObjectId(postId) });
@@ -22,7 +22,7 @@ exports.commentsQueryRepository = {
                 return null;
             return (0, map_to_comment_view_model_1.mapToCommentViewModel)(comment);
         });
-    },
+    }
     getCommentByPostIdWithPagination(id, query) {
         return __awaiter(this, void 0, void 0, function* () {
             const skip = (query.pageSize * query.pageNumber) - query.pageSize;
@@ -44,4 +44,5 @@ exports.commentsQueryRepository = {
             return (0, final_comment_mapper_1.finalCommentMapper)(commentsForFront, paramsForFront);
         });
     }
-};
+}
+exports.CommentsQueryRepository = CommentsQueryRepository;

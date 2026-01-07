@@ -9,31 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteAllDevicesHandler = deleteAllDevicesHandler;
-const jwt_service_1 = require("../../common/services/jwt.service");
+exports.DeleteAllDevicesHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const device_service_1 = require("../service/device.service");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const result_status_1 = require("../../common/types/result.status");
-const devices_repository_1 = require("../repository/devices.repository");
-function deleteAllDevicesHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const refreshToken = req.cookies.refreshToken;
-        if (!refreshToken) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const payload = jwt_service_1.jwtService.verifyRefreshToken(refreshToken);
-        if (!payload) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const sessions = yield devices_repository_1.devicesRepository.findSession(payload.deviceId);
-        if (!sessions || sessions.iat !== payload.iat) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const result = yield device_service_1.deviceService.deleteAllSessions(payload.userId, payload.deviceId);
-        if (result.status !== result_status_1.ResultStatus.NoContent) {
+const composition_root_1 = require("../../core/composition/composition-root");
+class DeleteAllDevicesHandler {
+    delete(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const refreshToken = req.cookies.refreshToken;
+            if (!refreshToken) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            if (!payload) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const sessions = yield composition_root_1.devicesRepository.findSession(payload.deviceId);
+            if (!sessions || sessions.iat !== payload.iat) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const result = yield composition_root_1.deviceService.deleteAllSessions(payload.userId, payload.deviceId);
+            if (result.status !== result_status_1.ResultStatus.NoContent) {
+                return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
+            }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
-        }
-        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
-    });
+        });
+    }
 }
+exports.DeleteAllDevicesHandler = DeleteAllDevicesHandler;

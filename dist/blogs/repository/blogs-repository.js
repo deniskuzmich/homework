@@ -9,15 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.blogsRepository = void 0;
+exports.BlogsRepository = void 0;
 const mongodb_1 = require("mongodb");
 const mongo_db_1 = require("../../db/mongo.db");
-exports.blogsRepository = {
+class BlogsRepository {
     getBlogById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.blogsCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
         });
-    },
+    }
     updateBlog(id, newData) {
         return __awaiter(this, void 0, void 0, function* () {
             const updatedBlog = yield mongo_db_1.blogsCollection.updateOne({ _id: new mongodb_1.ObjectId(id) }, {
@@ -32,13 +32,13 @@ exports.blogsRepository = {
             }
             return;
         });
-    },
+    }
     createBlog(newBlog) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.blogsCollection.insertOne(newBlog);
             return Object.assign(Object.assign({}, newBlog), { _id: insertResult.insertedId });
         });
-    },
+    }
     deleteBlog(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const deletedBlog = yield mongo_db_1.blogsCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
@@ -46,5 +46,7 @@ exports.blogsRepository = {
                 throw new Error("Blog not exist");
             }
         });
-    },
-};
+    }
+}
+exports.BlogsRepository = BlogsRepository;
+;

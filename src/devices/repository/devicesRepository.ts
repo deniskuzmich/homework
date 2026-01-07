@@ -3,30 +3,31 @@ import {SessionType} from "../types/session.type";
 import {UpdateSessionType} from "../types/update-session.type";
 
 
-export const devicesRepository = {
-  async findAllSessions() {
-    return await sessionsCollection.find().toArray()
-  },
-  async findSession(deviceId: string) {
+export class DevicesRepository {
+   async findSession(deviceId: string) {
     return await sessionsCollection.findOne({deviceId: deviceId});
-  },
-  async createSession(session: SessionType) {
+  }
+
+   async createSession(session: SessionType) {
     return await sessionsCollection.insertOne(session);
-  },
-  async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
+  }
+
+   async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
     await sessionsCollection.updateOne(
       {deviceId},
       {$set: updatedSession}
     )
-  },
-  async deleteOneSession(deviceId: string) {
+  }
+
+   async deleteOneSession(deviceId: string) {
     const deletedSession = await sessionsCollection.deleteOne({deviceId: deviceId});
     if (deletedSession.deletedCount < 1) {
       return null
     }
     return true
-  },
-  async deleteAllSession(userId: string, deviceId: string) {
+  }
+
+   async deleteAllSession(userId: string, deviceId: string) {
     const deletedSessions = await sessionsCollection.deleteMany({
       userId: userId,
       deviceId: {$ne: deviceId},
@@ -35,5 +36,5 @@ export const devicesRepository = {
       return null
     }
     return true
-  },
+  }
 }

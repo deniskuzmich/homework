@@ -1,7 +1,6 @@
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
-import {bcryptService} from "../../common/services/bcrypt.service";
 import {add} from "date-fns/add";
-import {usersRepository} from "../../users/repository/users.repository";
+import {UsersRepository} from "../../users/repository/usersRepository";
 import {ResultStatus} from "../../common/types/result.status";
 import {randomUUID} from "node:crypto";
 import {UserDbType} from "../../users/types/main-types/user-db-type";
@@ -10,18 +9,20 @@ import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
+import {bcryptService} from "../../core/composition/composition-root";
 
 
-export const authService = {
-  async getInfo(user: UserInfoType): Promise<UserInfoType> {
+export class AuthService {
+   async getInfo(user: UserInfoType): Promise<UserInfoType> {
     return {
       userId: user.userId.toString(),
       login: user.login,
       email: user.email
     }
-  },
-  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
-    const isLoginExists = await usersRepository.getLoginUser(login)
+  }
+
+   async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
+    const isLoginExists = await UsersRepository.getLoginUser(login)
     if (isLoginExists) {
       return {
         status: ResultStatus.BadRequest,
@@ -29,7 +30,7 @@ export const authService = {
         data: null
       }
     }
-    const isEmailExists = await usersRepository.getEmailUser(email)
+    const isEmailExists = await UsersRepository.getEmailUser(email)
     if (isEmailExists) {
       return {
         status: ResultStatus.BadRequest,
@@ -54,7 +55,7 @@ export const authService = {
         isConfirmed: false,
       }
     }
-    await usersRepository.createUser(newUser)
+    await UsersRepository.createUser(newUser)
 
     try {
       await nodemailerService.sendEmail(
@@ -69,10 +70,10 @@ export const authService = {
       extensions: [],
       data: null,
     }
-  },
+  }
 
-  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
-    const user = await usersRepository.getUserByLoginOrEmail(loginOrEmail);
+   async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+    const user = await UsersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
       return {
         status: ResultStatus.Unauthorized,
@@ -95,10 +96,10 @@ export const authService = {
       extensions: [],
       data: result
     }
-  },
+  }
 
-  async confirmEmail(code: string): Promise<ResultType<boolean>> {
-    const user = await usersRepository.getUserByConfirmationCode(code)
+   async confirmEmail(code: string): Promise<ResultType<boolean>> {
+    const user = await UsersRepository.getUserByConfirmationCode(code)
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -128,15 +129,16 @@ export const authService = {
       }
     }
 
-    let result = await usersRepository.updateConfirmation(user._id)
+    let result = await UsersRepository.updateConfirmation(user._id)
     return {
       status: ResultStatus.NoContent,
       extensions: [],
       data: result,
     }
-  },
-  async resendEmail(email: string) {
-    const user = await usersRepository.getUserByLoginOrEmail(email)
+  }
+
+   async resendEmail(email: string) {
+    const user = await UsersRepository.getUserByLoginOrEmail(email)
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -153,7 +155,7 @@ export const authService = {
 
     const newCode = randomUUID()
 
-    await usersRepository.updateConfirmationCode(user._id, newCode)
+    await UsersRepository.updateConfirmationCode(user._id, newCode)
     try {
       await nodemailerService.sendEmail(
         user.email,
@@ -167,5 +169,6 @@ export const authService = {
       extensions: [],
       data: true,
     }
-  },
+  }
 }
+

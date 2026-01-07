@@ -1,24 +1,25 @@
 import {Request, Response} from "express";
-import {jwtService} from "../../common/services/jwt.service";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {devicesQueryRepository} from "../repository/devices-query.repository";
+import {devicesQueryRepository, jwtService} from "../../core/composition/composition-root";
 
-export async function getDevicesHandler(req: Request, res: Response) {
-  const refreshToken = req.cookies.refreshToken;
+export class GetDevicesHandler {
+  async getDevices(req: Request, res: Response) {
+    const refreshToken = req.cookies.refreshToken;
 
-  try {
-    const payload = jwtService.verifyRefreshToken(refreshToken)
-    if (!payload) {
-      return res.sendStatus(HttpStatuses.Unauthorized)
+    try {
+      const payload = jwtService.verifyRefreshToken(refreshToken)
+      if (!payload) {
+        return res.sendStatus(HttpStatuses.Unauthorized)
+      }
+
+      const sessionsData = await devicesQueryRepository.findAllSessions(payload.userId)
+      if (!sessionsData) {
+        return res.sendStatus(HttpStatuses.Unauthorized)
+      }
+
+      res.status(HttpStatuses.Success).send(sessionsData)
+    } catch (e: unknown) {
+      console.log('Something wrong', e)
     }
-
-    const sessionsData = await devicesQueryRepository.findAllSessions(payload.userId)
-    if (!sessionsData) {
-      return res.sendStatus(HttpStatuses.Unauthorized)
-    }
-
-    res.status(HttpStatuses.Success).send(sessionsData)
-  } catch (e: unknown) {
-    console.log('Something wrong', e)
   }
 }

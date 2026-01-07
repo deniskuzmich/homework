@@ -1,14 +1,12 @@
-import {commentsQueryRepository} from "../repository/comments-query.repository";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
-import {commentsRepository} from "../repository/comments.repository";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
-import {postsRepository} from "../../posts/repository/posts-repository";
 import {WithId} from "mongodb";
 import {CommentDbType} from "../types/main-types/comment-db.type";
+import {commentsQueryRepository, commentsRepository, postsRepository} from "../../core/composition/composition-root";
 
 
-export const commentsService = {
+export class CommentsService {
   async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
     const comment = await commentsQueryRepository.getCommentById(id);
     if (!comment) {
@@ -42,7 +40,7 @@ export const commentsService = {
       extensions: [],
       data: null
     }
-  },
+  }
 
   async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
     const isPostExists = await postsRepository.getPostById(postId);
@@ -88,7 +86,7 @@ export const commentsService = {
       extensions: [],
       data: createdComment
     }
-  },
+  }
 
   async deleteComment(commentId: string, userId: string): Promise<ResultType> {
     const comment = await commentsRepository.getCommentById(commentId);
@@ -117,3 +115,4 @@ export const commentsService = {
     }
   }
 }
+

@@ -7,12 +7,12 @@ import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaio
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 
 
-export const commentsQueryRepository = {
+export class CommentsQueryRepository {
   async getCommentById(postId: string): Promise<CommentOutput | null> {
     const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})
     if (!comment) return null;
     return mapToCommentViewModel(comment)
-  },
+  }
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
@@ -37,3 +37,4 @@ export const commentsQueryRepository = {
     return finalCommentMapper(commentsForFront, paramsForFront);
   }
 }
+

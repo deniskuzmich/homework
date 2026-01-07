@@ -9,14 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.usersService = void 0;
-const users_repository_1 = require("../repository/users.repository");
-const bcrypt_service_1 = require("../../common/services/bcrypt.service");
+exports.UsersService = void 0;
+const usersRepository_1 = require("../repository/usersRepository");
 const map_register_user_1 = require("../mapper/map-register-user");
-exports.usersService = {
+const composition_root_1 = require("../../core/composition/composition-root");
+class UsersService {
     createUser(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isLoginExists = yield users_repository_1.usersRepository.getLoginUser(queryDto.login);
+            const isLoginExists = yield usersRepository_1.UsersRepository.getLoginUser(queryDto.login);
             if (isLoginExists) {
                 return {
                     errorsMessages: [
@@ -24,7 +24,7 @@ exports.usersService = {
                     ]
                 };
             }
-            const isEmailExists = yield users_repository_1.usersRepository.getEmailUser(queryDto.email);
+            const isEmailExists = yield usersRepository_1.UsersRepository.getEmailUser(queryDto.email);
             if (isEmailExists) {
                 return {
                     errorsMessages: [
@@ -32,7 +32,7 @@ exports.usersService = {
                     ]
                 };
             }
-            const passwordHash = yield bcrypt_service_1.bcryptService.generateHash(queryDto.password);
+            const passwordHash = yield composition_root_1.bcryptService.generateHash(queryDto.password);
             const newUser = {
                 login: queryDto.login,
                 email: queryDto.email,
@@ -40,19 +40,20 @@ exports.usersService = {
                 createdAt: new Date()
             };
             const mappedUser = (0, map_register_user_1.mapRegisterUser)(newUser);
-            return yield users_repository_1.usersRepository.createUser(mappedUser);
+            return yield usersRepository_1.UsersRepository.createUser(mappedUser);
         });
-    },
+    }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!id)
                 return null;
-            return users_repository_1.usersRepository.getUserById(id);
+            return usersRepository_1.UsersRepository.getUserById(id);
         });
-    },
+    }
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedUser = yield users_repository_1.usersRepository.deleteUser(id);
+            const deletedUser = yield usersRepository_1.UsersRepository.deleteUser(id);
         });
-    },
-};
+    }
+}
+exports.UsersService = UsersService;

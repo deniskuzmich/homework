@@ -9,19 +9,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createPostForBlogHandler = createPostForBlogHandler;
-const blogs_service_1 = require("../../blogs/service/blogs.service");
+exports.CreatePostForBlogHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const posts_query_repository_1 = require("../repository/posts-query-repository");
-function createPostForBlogHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const blogId = req.params.id;
-        const blog = yield blogs_service_1.blogsService.getBlogById(blogId);
-        if (!blog) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        const createdPost = yield blogs_service_1.blogsService.createPostForBlog(blog, req.body);
-        const postForBlog = yield posts_query_repository_1.postsQueryRepository.getPostById(createdPost._id.toString());
-        return res.status(http_statuses_1.HttpStatuses.Created).send(postForBlog);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class CreatePostForBlogHandler {
+    createPost(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const blogId = req.params.id;
+            const blog = yield composition_root_1.blogsService.getBlogById(blogId);
+            if (!blog) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+            }
+            const createdPost = yield composition_root_1.blogsService.createPostForBlog(blog, req.body);
+            const postForBlog = yield composition_root_1.postsQueryRepository.getPostById(createdPost._id.toString());
+            return res.status(http_statuses_1.HttpStatuses.Created).send(postForBlog);
+        });
+    }
 }
+exports.CreatePostForBlogHandler = CreatePostForBlogHandler;

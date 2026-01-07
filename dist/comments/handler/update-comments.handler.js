@@ -9,19 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateCommentsHandler = updateCommentsHandler;
-const comments_service_1 = require("../service/comments.service");
+exports.UpdateCommentsHandler = void 0;
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-function updateCommentsHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const commentId = req.params.commentId;
-        const content = req.body.content;
-        const userId = req.user.userId;
-        const updatedComment = yield comments_service_1.commentsService.updateComment(commentId, content, userId);
-        if (updatedComment.status !== result_status_1.ResultStatus.NoContent) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status)).send(updatedComment.extensions);
-        }
-        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status));
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class UpdateCommentsHandler {
+    update(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const commentId = req.params.commentId;
+            const content = req.body.content;
+            const userId = req.user.userId;
+            const updatedComment = yield composition_root_1.commentsService.updateComment(commentId, content, userId);
+            if (updatedComment.status !== result_status_1.ResultStatus.NoContent) {
+                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status)).send(updatedComment.extensions);
+            }
+            return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(updatedComment.status));
+        });
+    }
 }
+exports.UpdateCommentsHandler = UpdateCommentsHandler;

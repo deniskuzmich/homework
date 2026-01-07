@@ -9,15 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBlogHandler = getBlogHandler;
+exports.GetBlogHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const blogs_query_repository_1 = require("../repository/blogs-query-repository");
-function getBlogHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const blog = yield blogs_query_repository_1.blogsQueryRepository.getBlogById(req.params.id);
-        if (!blog) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-        }
-        res.status(http_statuses_1.HttpStatuses.Success).send(blog);
-    });
+const composition_root_1 = require("../../core/composition/composition-root");
+class GetBlogHandler {
+    getBlog(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const blog = yield composition_root_1.blogsQueryRepository.getBlogById(req.params.id);
+            if (!blog) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
+            }
+            res.status(http_statuses_1.HttpStatuses.Success).send(blog);
+        });
+    }
 }
+exports.GetBlogHandler = GetBlogHandler;

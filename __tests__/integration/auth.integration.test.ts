@@ -1,9 +1,9 @@
 import {MongoMemoryServer} from 'mongodb-memory-server';
 import {runDB, stopDb} from '../../src/db/mongo.db';
-import {authService} from '../../src/auth/service/auth-service';
 import {testSeeder} from '../../src/utils-for-tests/utils-for-auth-tests';
 import {ResultStatus} from '../../src/common/types/result.status';
 import {nodemailerService} from '../../src/adapters/nodemailer-service';
+import {authService} from "../../src/core/composition/composition-root";
 
 describe('AUTH Integration Tests', () => {
   let mongoServer: MongoMemoryServer;

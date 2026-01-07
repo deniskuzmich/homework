@@ -9,16 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registrationConfirmHandler = registrationConfirmHandler;
-const auth_service_1 = require("../../service/auth-service");
+exports.RegistrationConfirmHandler = void 0;
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
-function registrationConfirmHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const result = yield auth_service_1.authService.confirmEmail(req.body.code);
-        if (result.status !== result_status_1.ResultStatus.NoContent) {
-            return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
-        }
-        return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
-    });
+const composition_root_1 = require("../../../core/composition/composition-root");
+class RegistrationConfirmHandler {
+    confirmation(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield composition_root_1.authService.confirmEmail(req.body.code);
+            if (result.status !== result_status_1.ResultStatus.NoContent) {
+                return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
+            }
+            return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
+        });
+    }
 }
+exports.RegistrationConfirmHandler = RegistrationConfirmHandler;

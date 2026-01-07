@@ -1,25 +1,26 @@
-import { Router } from "express";
-import { getBlogsListHandler } from "../blogs/handlers/get-blogs-list.hanlder";
-import { updateBlogHandler } from "../blogs/handlers/update-blog.hanlder";
-import { createBlogHanlder } from "../blogs/handlers/create-blog.hanlder";
-import { deleteBlogHandler } from "../blogs/handlers/delete-blog.hanlder";
-import { getBlogHandler } from "../blogs/handlers/get-blog.handler";
-import { idValidation } from "../common/middleware-validation/id.validation-middleware";
-import { inputValidationResultMiddleware } from "../common/middleware-validation/input.validation-result.middleware";
-import { blogsInputValidation } from "../blogs/middleware-validation/blogs.input.validation-middleware";
-import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
+import {Router} from "express";
+import {idValidation} from "../common/middleware-validation/id.validation-middleware";
+import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
+import {blogsInputValidation} from "../blogs/middleware-validation/blogs.input.validation-middleware";
+import {superAdminGuardMiddleware} from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {postInputDtoValidation} from "../posts/middleware-validation/post-inputDto-validation";
-import {createPostForBlogHandler} from "../posts/handlers/create-post-for-blog.handler";
-import {getPostByBlogIdHanlder} from "../posts/handlers/get-post-by-blog";
+
+
+import {
+  createBlogHandler, createPostForBlogHandler, deleteBlogHandler,
+  getBlogHandler,
+  getBlogsListHandler, getPostByBlogIdHandler,
+  updateBlogHandler
+} from "../core/composition/composition-root";
 
 
 export const blogRouter = Router();
 
 blogRouter
-  .get("",paginationValidation, getBlogsListHandler)
+  .get("",paginationValidation, getBlogsListHandler.getBlogs)
 
-  .get("/:id", idValidation, inputValidationResultMiddleware, getBlogHandler)
+  .get("/:id", idValidation, inputValidationResultMiddleware, getBlogHandler.getBlog)
 
   .put(
     "/:id",
@@ -27,7 +28,7 @@ blogRouter
     idValidation,
     blogsInputValidation,
     inputValidationResultMiddleware,
-    updateBlogHandler,
+    updateBlogHandler.update,
   )
 
   .post(
@@ -35,7 +36,7 @@ blogRouter
     superAdminGuardMiddleware,
     blogsInputValidation,
     inputValidationResultMiddleware,
-    createBlogHanlder,
+    createBlogHandler.create,
   )
 
   .delete(
@@ -43,11 +44,11 @@ blogRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deleteBlogHandler,
+    deleteBlogHandler.delete,
   )
 
-  .get("/:id/posts",idValidation,inputValidationResultMiddleware,paginationValidation, getPostByBlogIdHanlder)
-  .post("/:id/posts", superAdminGuardMiddleware,postInputDtoValidation,inputValidationResultMiddleware,createPostForBlogHandler)
+  .get("/:id/posts",idValidation,inputValidationResultMiddleware,paginationValidation, getPostByBlogIdHandler.getPost)
+  .post("/:id/posts", superAdminGuardMiddleware,postInputDtoValidation,inputValidationResultMiddleware, createPostForBlogHandler.createPost)
 
 
 

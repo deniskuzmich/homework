@@ -9,15 +9,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.aboutMeHandler = aboutMeHandler;
+exports.AboutMeHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const auth_service_1 = require("../../service/auth-service");
-function aboutMeHandler(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        if (!req.user) {
-            return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
-        }
-        const userInfo = yield auth_service_1.authService.getInfo(req.user);
-        return res.status(http_statuses_1.HttpStatuses.Success).send(userInfo);
-    });
+const composition_root_1 = require("../../../core/composition/composition-root");
+class AboutMeHandler {
+    me(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (!req.user) {
+                return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
+            }
+            const userInfo = yield composition_root_1.authService.getInfo(req.user);
+            return res.status(http_statuses_1.HttpStatuses.Success).send(userInfo);
+        });
+    }
 }
+exports.AboutMeHandler = AboutMeHandler;
