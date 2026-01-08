@@ -1,19 +1,29 @@
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {add} from "date-fns/add";
-import {UsersRepository} from "../../users/repository/usersRepository";
 import {ResultStatus} from "../../common/types/result.status";
 import {randomUUID} from "node:crypto";
 import {UserDbType} from "../../users/types/main-types/user-db-type";
 import {ResultType} from "../../common/types/result.type";
-import {nodemailerService} from "../../adapters/nodemailer-service";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
 import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
-import {bcryptService} from "../../core/composition/composition-root";
+import {BcryptService} from "../../common/services/bcrypt.service";
+import {NodemailerService} from "../../adapters/nodemailer-service";
+import {UsersRepository} from "../../users/repository/usersRepository";
 
 
 export class AuthService {
-   async getInfo(user: UserInfoType): Promise<UserInfoType> {
+  bcryptService: BcryptService;
+  nodemailerService: NodemailerService;
+  usersRepository: UsersRepository;
+
+  constructor(bcryptService: BcryptService, nodemailerService: NodemailerService, usersRepository: UsersRepository) {
+    this.bcryptService = bcryptService;
+    this.nodemailerService = nodemailerService;
+    this.usersRepository = usersRepository;
+  }
+
+  async getInfo(user: UserInfoType): Promise<UserInfoType> {
     return {
       userId: user.userId.toString(),
       login: user.login,
@@ -21,8 +31,8 @@ export class AuthService {
     }
   }
 
-   async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
-    const isLoginExists = await UsersRepository.getLoginUser(login)
+  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
+    const isLoginExists = await this.usersRepository.getLoginUser(login)
     if (isLoginExists) {
       return {
         status: ResultStatus.BadRequest,
@@ -30,7 +40,7 @@ export class AuthService {
         data: null
       }
     }
-    const isEmailExists = await UsersRepository.getEmailUser(email)
+    const isEmailExists = await this.usersRepository.getEmailUser(email)
     if (isEmailExists) {
       return {
         status: ResultStatus.BadRequest,
@@ -39,7 +49,7 @@ export class AuthService {
       }
     }
 
-    const passwordHash = await bcryptService.generateHash(password)
+    const passwordHash = await this.bcryptService.generateHash(password)
 
     const newUser: UserDbType = {
       login,
@@ -55,10 +65,10 @@ export class AuthService {
         isConfirmed: false,
       }
     }
-    await UsersRepository.createUser(newUser)
+    await this.usersRepository.createUser(newUser)
 
     try {
-      await nodemailerService.sendEmail(
+      await this.nodemailerService.sendEmail(
         newUser.email,
         emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode)
       )
@@ -72,8 +82,8 @@ export class AuthService {
     }
   }
 
-   async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
-    const user = await UsersRepository.getUserByLoginOrEmail(loginOrEmail);
+  async checkCredentials(loginOrEmail: string, password: string): Promise<ResultType<UserOutput | null>> {
+    const user = await this.usersRepository.getUserByLoginOrEmail(loginOrEmail);
     if (!user) {
       return {
         status: ResultStatus.Unauthorized,
@@ -81,7 +91,7 @@ export class AuthService {
         data: null
       }
     }
-    const isPassCorrect = await bcryptService.checkPassword(password, user.passwordHash);
+    const isPassCorrect = await this.bcryptService.checkPassword(password, user.passwordHash);
     if (!isPassCorrect) {
       return {
         status: ResultStatus.Unauthorized,
@@ -98,8 +108,8 @@ export class AuthService {
     }
   }
 
-   async confirmEmail(code: string): Promise<ResultType<boolean>> {
-    const user = await UsersRepository.getUserByConfirmationCode(code)
+  async confirmEmail(code: string): Promise<ResultType<boolean>> {
+    const user = await this.usersRepository.getUserByConfirmationCode(code)
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -129,7 +139,7 @@ export class AuthService {
       }
     }
 
-    let result = await UsersRepository.updateConfirmation(user._id)
+    let result = await this.usersRepository.updateConfirmation(user._id)
     return {
       status: ResultStatus.NoContent,
       extensions: [],
@@ -137,8 +147,8 @@ export class AuthService {
     }
   }
 
-   async resendEmail(email: string) {
-    const user = await UsersRepository.getUserByLoginOrEmail(email)
+  async resendEmail(email: string) {
+    const user = await this.usersRepository.getUserByLoginOrEmail(email)
     if (!user) {
       return {
         status: ResultStatus.BadRequest,
@@ -155,9 +165,9 @@ export class AuthService {
 
     const newCode = randomUUID()
 
-    await UsersRepository.updateConfirmationCode(user._id, newCode)
+    await this.usersRepository.updateConfirmationCode(user._id, newCode)
     try {
-      await nodemailerService.sendEmail(
+      await this.nodemailerService.sendEmail(
         user.email,
         emailExamples.registrationEmail(newCode)
       )
@@ -168,6 +178,29 @@ export class AuthService {
       status: ResultStatus.NoContent,
       extensions: [],
       data: true,
+    }
+  }
+
+  async passwordRecovery(email: string) {
+    const user = await this.usersRepository.getUserByLoginOrEmail(email)
+    if (!user) {
+      return {
+        status: ResultStatus.NoContent,
+        extensions: [],
+        data: true,
+      }
+    }
+
+    const newCode = randomUUID()
+
+    await this.usersRepository.updateCodeForPasswordRecovery(user._id, newCode)
+    try {
+      await this.nodemailerService.sendPassword(
+        user.email,
+        emailExamples.passwordRecovery(newCode)
+      )
+    } catch (e) {
+      console.log('Send email error', e)
     }
   }
 }

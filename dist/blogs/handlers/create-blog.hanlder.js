@@ -11,17 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateBlogHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class CreateBlogHandler {
-    create(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const createdBlog = yield composition_root_1.blogsService.createBlog(req.body);
+    constructor(blogsService, blogsQueryRepository) {
+        this.create = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const createdBlog = yield this.blogsService.createBlog(req.body);
             if (!createdBlog) {
                 res.status(http_statuses_1.HttpStatuses.BadRequest);
             }
-            const blogViewModel = yield composition_root_1.blogsQueryRepository.getBlogById(createdBlog._id.toString());
+            const blogViewModel = yield this.blogsQueryRepository.getBlogById(createdBlog._id.toString());
             res.status(http_statuses_1.HttpStatuses.Created).send(blogViewModel);
         });
+        this.blogsService = blogsService;
+        this.blogsQueryRepository = blogsQueryRepository;
     }
 }
 exports.CreateBlogHandler = CreateBlogHandler;

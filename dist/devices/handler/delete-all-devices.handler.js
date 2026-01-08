@@ -13,28 +13,30 @@ exports.DeleteAllDevicesHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
 const result_status_1 = require("../../common/types/result.status");
-const composition_root_1 = require("../../core/composition/composition-root");
 class DeleteAllDevicesHandler {
-    delete(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(jwtService, devicesRepository, deviceService) {
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const refreshToken = req.cookies.refreshToken;
             if (!refreshToken) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            const payload = this.jwtService.verifyRefreshToken(refreshToken);
             if (!payload) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const sessions = yield composition_root_1.devicesRepository.findSession(payload.deviceId);
+            const sessions = yield this.devicesRepository.findSession(payload.deviceId);
             if (!sessions || sessions.iat !== payload.iat) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const result = yield composition_root_1.deviceService.deleteAllSessions(payload.userId, payload.deviceId);
+            const result = yield this.deviceService.deleteAllSessions(payload.userId, payload.deviceId);
             if (result.status !== result_status_1.ResultStatus.NoContent) {
                 return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
             }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
         });
+        this.jwtService = jwtService;
+        this.devicesRepository = devicesRepository;
+        this.deviceService = deviceService;
     }
 }
 exports.DeleteAllDevicesHandler = DeleteAllDevicesHandler;

@@ -11,17 +11,17 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteBlogHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class DeleteBlogHandler {
-    delete(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const blog = yield composition_root_1.blogsService.getBlogById(req.params.id);
+    constructor(blogsService) {
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const blog = yield this.blogsService.getBlogById(req.params.id);
             if (!blog) {
                 res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
-            yield composition_root_1.blogsService.deleteBlog(req.params.id);
+            yield this.blogsService.deleteBlog(req.params.id);
             return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
         });
+        this.blogsService = blogsService;
     }
 }
 exports.DeleteBlogHandler = DeleteBlogHandler;

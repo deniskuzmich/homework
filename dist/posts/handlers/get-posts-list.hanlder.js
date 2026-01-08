@@ -12,14 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPostListHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const values_pagination_mapper_1 = require("../../common/mapper/values-pagination.mapper");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetPostListHandler {
-    getPostList(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(postsQueryRepository) {
+        this.getPostList = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const queryInput = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-            const foundPosts = yield composition_root_1.postsQueryRepository.findPosts(queryInput);
+            const foundPosts = yield this.postsQueryRepository.findPosts(queryInput);
             res.status(http_statuses_1.HttpStatuses.Success).send(foundPosts);
         });
+        this.postsQueryRepository = postsQueryRepository;
     }
 }
 exports.GetPostListHandler = GetPostListHandler;

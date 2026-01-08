@@ -11,12 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CommentsService = void 0;
 const result_status_1 = require("../../common/types/result.status");
-const composition_root_1 = require("../../core/composition/composition-root");
 class CommentsService {
+    constructor(commentsQueryRepository, commentsRepository, postsRepository) {
+        this.commentsQueryRepository = commentsQueryRepository;
+        this.commentsRepository = commentsRepository;
+        this.postsRepository = postsRepository;
+    }
     updateComment(id, newContent, userId) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b;
-            const comment = yield composition_root_1.commentsQueryRepository.getCommentById(id);
+            const comment = yield this.commentsQueryRepository.getCommentById(id);
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -33,7 +37,7 @@ class CommentsService {
                     data: null
                 };
             }
-            const updatedComment = yield composition_root_1.commentsRepository.updateComment(id, newContent);
+            const updatedComment = yield this.commentsRepository.updateComment(id, newContent);
             if (!updatedComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -51,7 +55,7 @@ class CommentsService {
     }
     createCommentForPost(user, content, postId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isPostExists = yield composition_root_1.postsRepository.getPostById(postId);
+            const isPostExists = yield this.postsRepository.getPostById(postId);
             if (!isPostExists) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -77,7 +81,7 @@ class CommentsService {
                 },
                 createdAt: new Date().toISOString(),
             };
-            const createdComment = yield composition_root_1.commentsRepository.createCommentForPost(newCommentForPost);
+            const createdComment = yield this.commentsRepository.createCommentForPost(newCommentForPost);
             if (!createdComment) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -95,7 +99,7 @@ class CommentsService {
     }
     deleteComment(commentId, userId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield composition_root_1.commentsRepository.getCommentById(commentId);
+            const comment = yield this.commentsRepository.getCommentById(commentId);
             if (!comment) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -112,7 +116,7 @@ class CommentsService {
                     data: null
                 };
             }
-            yield composition_root_1.commentsRepository.deleteComment(commentId);
+            yield this.commentsRepository.deleteComment(commentId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],

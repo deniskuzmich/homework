@@ -1,18 +1,28 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {devicesQueryRepository, jwtService} from "../../core/composition/composition-root";
+import {JwtService} from "../../common/services/jwtService";
+import {DevicesQueryRepository} from "../repository/devices-query.repository";
+
 
 export class GetDevicesHandler {
-  async getDevices(req: Request, res: Response) {
+  jwtService: JwtService;
+  devicesQueryRepository: DevicesQueryRepository;
+
+  constructor(jwtService: JwtService, devicesQueryRepository: DevicesQueryRepository) {
+    this.jwtService = jwtService;
+    this.devicesQueryRepository = devicesQueryRepository;
+  }
+
+  getDevices = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
     try {
-      const payload = jwtService.verifyRefreshToken(refreshToken)
+      const payload = this.jwtService.verifyRefreshToken(refreshToken)
       if (!payload) {
         return res.sendStatus(HttpStatuses.Unauthorized)
       }
 
-      const sessionsData = await devicesQueryRepository.findAllSessions(payload.userId)
+      const sessionsData = await this.devicesQueryRepository.findAllSessions(payload.userId)
       if (!sessionsData) {
         return res.sendStatus(HttpStatuses.Unauthorized)
       }

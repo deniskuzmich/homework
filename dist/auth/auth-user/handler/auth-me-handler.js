@@ -11,16 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AboutMeHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const composition_root_1 = require("../../../core/composition/composition-root");
 class AboutMeHandler {
-    me(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(authService) {
+        this.me = (req, res) => __awaiter(this, void 0, void 0, function* () {
             if (!req.user) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const userInfo = yield composition_root_1.authService.getInfo(req.user);
+            const userInfo = yield this.authService.getInfo(req.user);
             return res.status(http_statuses_1.HttpStatuses.Success).send(userInfo);
         });
+        this.authService = authService;
     }
 }
 exports.AboutMeHandler = AboutMeHandler;

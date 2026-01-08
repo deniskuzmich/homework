@@ -1,15 +1,20 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {blogsService} from "../../core/composition/composition-root";
+import {BlogsService} from "../service/blogs.service";
 
 export class DeleteBlogHandler {
-  async delete(req: Request, res: Response) {
-    const blog = await blogsService.getBlogById(req.params.id);
+  blogsService: BlogsService;
+
+  constructor(blogsService: BlogsService) {
+    this.blogsService = blogsService;
+  }
+   delete = async(req: Request, res: Response) => {
+    const blog = await this.blogsService.getBlogById(req.params.id);
     if (!blog) {
       res.sendStatus(HttpStatuses.NotFound);
     }
 
-    await blogsService.deleteBlog(req.params.id);
+    await this.blogsService.deleteBlog(req.params.id);
     return res.sendStatus(HttpStatuses.NoContent);
   }
 }

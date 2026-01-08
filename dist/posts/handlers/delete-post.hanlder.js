@@ -11,22 +11,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeletePostHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class DeletePostHandler {
-    deletePost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(postsService) {
+        this.deletePost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const post = yield composition_root_1.postsService.getPostById(req.params.id);
+                const post = yield this.postsService.getPostById(req.params.id);
                 if (!post) {
                     res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
                 }
-                yield composition_root_1.postsService.deletePost(req.params.id);
+                yield this.postsService.deletePost(req.params.id);
                 return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
             }
             catch (e) {
                 res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
             }
         });
+        this.postsService = postsService;
     }
 }
 exports.DeletePostHandler = DeletePostHandler;

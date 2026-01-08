@@ -12,19 +12,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRegistrationHandler = void 0;
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
-const composition_root_1 = require("../../../core/composition/composition-root");
 class UserRegistrationHandler {
-    registration(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(authService) {
+        this.registration = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const login = req.body.login;
             const email = req.body.email;
             const password = req.body.password;
-            const user = yield composition_root_1.authService.registerUser(login, email, password);
+            const user = yield this.authService.registerUser(login, email, password);
             if (user.status !== result_status_1.ResultStatus.NoContent) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status)).send({ errorsMessages: user.extensions });
             }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(user.status));
         });
+        this.authService = authService;
     }
 }
 exports.UserRegistrationHandler = UserRegistrationHandler;

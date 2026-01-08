@@ -12,14 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetBlogsListHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const query_input_mapper_1 = require("../mapper/query-input.mapper");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetBlogsListHandler {
-    getBlogs(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(blogsQueryRepository) {
+        this.getBlogs = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const queryInput = (0, query_input_mapper_1.parseQueryInput)(req.query);
-            const blogsListOutput = yield composition_root_1.blogsQueryRepository.findBlogs(queryInput);
+            const blogsListOutput = yield this.blogsQueryRepository.findBlogs(queryInput);
             res.status(http_statuses_1.HttpStatuses.Success).send(blogsListOutput);
         });
+        this.blogsQueryRepository = blogsQueryRepository;
     }
 }
 exports.GetBlogsListHandler = GetBlogsListHandler;

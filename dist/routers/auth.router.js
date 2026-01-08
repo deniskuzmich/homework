@@ -15,4 +15,6 @@ exports.authRouter = (0, express_1.Router)()
     .post('/registration', request_count_middleware_1.requestCountMiddleware, request_log_middleware_1.requestLoggerMiddleware, auth_validation_1.authInputValidation, input_validation_result_middleware_1.inputValidationResultMiddleware, composition_root_1.userRegistrationHandler.registration)
     .post('/registration-confirmation', request_count_middleware_1.requestCountMiddleware, request_log_middleware_1.requestLoggerMiddleware, input_validation_result_middleware_1.inputValidationResultMiddleware, composition_root_1.registrationConfirmHandler.confirmation)
     .post('/registration-email-resending', request_count_middleware_1.requestCountMiddleware, request_log_middleware_1.requestLoggerMiddleware, input_validation_result_middleware_1.inputValidationResultMiddleware, composition_root_1.emailResendingHandler.resending)
+    // .post('/password-recovery', requestCountMiddleware, requestLoggerMiddleware, emailValidation, inputValidationResultMiddleware, passwordRecovery.recover)
+    // .post('/new-password',)
     .get('/me', auth_middleware_1.authMiddleware, composition_root_1.aboutMeHandler.me);

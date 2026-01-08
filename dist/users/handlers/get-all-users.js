@@ -12,14 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetAllUsers = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const parse_query_input_1 = require("../mapper/parse-query-input");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetAllUsers {
-    getAll(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(usersQueryRepository) {
+        this.getAll = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const queryInput = (0, parse_query_input_1.parseQueryInputForUsers)(req.query);
-            const usersList = yield composition_root_1.usersQueryRepository.getAllUsers(queryInput);
+            const usersList = yield this.usersQueryRepository.getAllUsers(queryInput);
             res.status(http_statuses_1.HttpStatuses.Success).send(usersList);
         });
+        this.usersQueryRepository = usersQueryRepository;
     }
 }
 exports.GetAllUsers = GetAllUsers;

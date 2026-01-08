@@ -12,18 +12,18 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeleteCommentHandler = void 0;
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-const composition_root_1 = require("../../core/composition/composition-root");
 class DeleteCommentHandler {
-    delete(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(commentsService) {
+        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const commentId = req.params.commentId;
             const userId = req.user.userId;
-            const deletedComment = yield composition_root_1.commentsService.deleteComment(commentId, userId);
+            const deletedComment = yield this.commentsService.deleteComment(commentId, userId);
             if (deletedComment.status !== result_status_1.ResultStatus.NoContent) {
                 return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
             }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(deletedComment.status));
         });
+        this.commentsService = commentsService;
     }
 }
 exports.DeleteCommentHandler = DeleteCommentHandler;

@@ -9,19 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DeleteUserHandler = void 0;
-const http_statuses_1 = require("../../common/types/http-statuses");
-class DeleteUserHandler {
-    constructor(usersService) {
-        this.delete = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const user = yield this.usersService.getUserById(req.params.id);
-            if (!user) {
-                res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
-            }
-            yield this.usersService.deleteUser(req.params.id);
-            return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
+exports.PasswordRecovery = void 0;
+class PasswordRecovery {
+    constructor(authService) {
+        this.recover = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const email = req.body.email;
+            const result = yield this.authService.passwordRecovery(req.body.email);
         });
-        this.usersService = usersService;
+        this.authService = authService;
     }
 }
-exports.DeleteUserHandler = DeleteUserHandler;
+exports.PasswordRecovery = PasswordRecovery;

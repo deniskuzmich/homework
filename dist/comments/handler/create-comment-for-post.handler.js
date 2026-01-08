@@ -13,10 +13,9 @@ exports.CreateCommentForPostHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const result_status_1 = require("../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../common/mapper/mapResultCodeToHttpExtention");
-const composition_root_1 = require("../../core/composition/composition-root");
 class CreateCommentForPostHandler {
-    createComment(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(commentsService, commentsQueryRepository) {
+        this.createComment = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const user = req.user;
             const content = req.body.content;
             const postId = req.params.id;
@@ -26,13 +25,15 @@ class CreateCommentForPostHandler {
             if (!postId) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
-            const createdComment = yield composition_root_1.commentsService.createCommentForPost(user, content, postId);
+            const createdComment = yield this.commentsService.createCommentForPost(user, content, postId);
             if (createdComment.status !== result_status_1.ResultStatus.Created) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(createdComment.status)).send(createdComment.extensions);
             }
-            const commentForPost = yield composition_root_1.commentsQueryRepository.getCommentById(createdComment.data._id.toString());
+            const commentForPost = yield this.commentsQueryRepository.getCommentById(createdComment.data._id.toString());
             return res.status(http_statuses_1.HttpStatuses.Created).send(commentForPost);
         });
+        this.commentsService = commentsService;
+        this.commentsQueryRepository = commentsQueryRepository;
     }
 }
 exports.CreateCommentForPostHandler = CreateCommentForPostHandler;

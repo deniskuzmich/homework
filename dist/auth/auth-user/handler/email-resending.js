@@ -12,16 +12,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmailResendingHandler = void 0;
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
 const result_status_1 = require("../../../common/types/result.status");
-const composition_root_1 = require("../../../core/composition/composition-root");
 class EmailResendingHandler {
-    resending(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield composition_root_1.authService.resendEmail(req.body.email);
+    constructor(authService) {
+        this.resending = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.authService.resendEmail(req.body.email);
             if (result.status !== result_status_1.ResultStatus.NoContent) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
             }
             return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
         });
+        this.authService = authService;
     }
 }
 exports.EmailResendingHandler = EmailResendingHandler;

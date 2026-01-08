@@ -14,42 +14,42 @@ const mongo_db_1 = require("../../db/mongo.db");
 const mongodb_1 = require("mongodb");
 const add_1 = require("date-fns/add");
 class UsersRepository {
-    static getUserById(id) {
+    getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!mongodb_1.ObjectId.isValid(id))
                 return null;
             return mongo_db_1.usersCollection.findOne({ _id: new mongodb_1.ObjectId(id) });
         });
     }
-    static getLoginUser(login) {
+    getLoginUser(login) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.usersCollection.findOne({ login: login });
         });
     }
-    static getEmailUser(email) {
+    getEmailUser(email) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.usersCollection.findOne({ email: email });
         });
     }
-    static getUserByConfirmationCode(code) {
+    getUserByConfirmationCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield mongo_db_1.usersCollection.findOne({ "emailConfirmation.confirmationCode": code });
             return user;
         });
     }
-    static getUserByLoginOrEmail(loginOrEmail) {
+    getUserByLoginOrEmail(loginOrEmail) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
             return user;
         });
     }
-    static createUser(newUser) {
+    createUser(newUser) {
         return __awaiter(this, void 0, void 0, function* () {
             const insertResult = yield mongo_db_1.usersCollection.insertOne(newUser);
             return Object.assign(Object.assign({}, newUser), { _id: insertResult.insertedId });
         });
     }
-    static deleteUser(id) {
+    deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const deletedUser = yield mongo_db_1.usersCollection.deleteOne({ _id: new mongodb_1.ObjectId(id) });
             if (deletedUser.deletedCount < 1) {
@@ -57,13 +57,26 @@ class UsersRepository {
             }
         });
     }
-    static updateConfirmation(_id) {
+    updateConfirmation(_id) {
         return __awaiter(this, void 0, void 0, function* () {
             let result = yield mongo_db_1.usersCollection.updateOne({ _id }, { $set: { 'emailConfirmation.isConfirmed': true } });
             return result.modifiedCount === 1;
         });
     }
-    static updateConfirmationCode(_id, newCode) {
+    updateConfirmationCode(_id, newCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.updateOne({ _id }, {
+                $set: {
+                    'emailConfirmation.confirmationCode': newCode,
+                    'emailConfirmation.expirationDate': (0, add_1.add)(new Date(), {
+                        hours: 3,
+                        minutes: 30,
+                    })
+                }
+            });
+        });
+    }
+    updateCodeForPasswordRecovery(_id, newCode) {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.usersCollection.updateOne({ _id }, {
                 $set: {

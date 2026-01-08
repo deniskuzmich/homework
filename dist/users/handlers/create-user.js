@@ -11,17 +11,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateUserHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class CreateUserHandler {
-    createUser(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const result = yield composition_root_1.usersService.createUser(req.body);
+    constructor(usersQueryRepository, usersService) {
+        this.createUser = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.usersService.createUser(req.body);
             if ("errorsMessages" in result) {
                 return res.status(http_statuses_1.HttpStatuses.BadRequest).send(result);
             }
-            const userViewModel = yield composition_root_1.usersQueryRepository.getUserById(result._id.toString());
+            const userViewModel = yield this.usersQueryRepository.getUserById(result._id.toString());
             return res.status(http_statuses_1.HttpStatuses.Created).send(userViewModel);
         });
+        this.usersQueryRepository = usersQueryRepository;
+        this.usersService = usersService;
     }
 }
 exports.CreateUserHandler = CreateUserHandler;

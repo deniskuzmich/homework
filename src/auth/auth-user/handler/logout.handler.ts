@@ -1,21 +1,31 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
-import {deviceService, jwtService} from "../../../core/composition/composition-root";
+import {JwtService} from "../../../common/services/jwtService";
+import {DeviceService} from "../../../devices/service/deviceService";
+
 
 export class LogoutHandler {
-  async logout(req: Request, res: Response) {
+  jwtService: JwtService;
+  deviceService: DeviceService;
+
+  constructor(jwtService: JwtService, deviceService: DeviceService) {
+    this.jwtService = jwtService;
+    this.deviceService = deviceService;
+  }
+
+  logout = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
 
-    const payload = jwtService.verifyRefreshToken(refreshToken);
+    const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
 
-    const session = await deviceService.getSession(payload.deviceId);
+    const session = await this.deviceService.getSession(payload.deviceId);
     if (!session) {
       return res.sendStatus(HttpStatuses.Unauthorized);
     }
@@ -23,7 +33,7 @@ export class LogoutHandler {
     if (session.iat !== payload.iat) {
       return res.sendStatus(HttpStatuses.Unauthorized);
     }
-    await deviceService.deleteOneSession(payload.userId, payload.deviceId);
+    await this.deviceService.deleteOneSession(payload.userId, payload.deviceId);
 
     res.clearCookie('refreshToken');
     return res.sendStatus(HttpStatuses.NoContent)

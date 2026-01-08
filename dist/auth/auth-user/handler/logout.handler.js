@@ -11,29 +11,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LogoutHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const composition_root_1 = require("../../../core/composition/composition-root");
 class LogoutHandler {
-    logout(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(jwtService, deviceService) {
+        this.logout = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const refreshToken = req.cookies.refreshToken;
             if (!refreshToken) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            const payload = this.jwtService.verifyRefreshToken(refreshToken);
             if (!payload) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const session = yield composition_root_1.deviceService.getSession(payload.deviceId);
+            const session = yield this.deviceService.getSession(payload.deviceId);
             if (!session) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
             if (session.iat !== payload.iat) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            yield composition_root_1.deviceService.deleteOneSession(payload.userId, payload.deviceId);
+            yield this.deviceService.deleteOneSession(payload.userId, payload.deviceId);
             res.clearCookie('refreshToken');
             return res.sendStatus(http_statuses_1.HttpStatuses.NoContent);
         });
+        this.jwtService = jwtService;
+        this.deviceService = deviceService;
     }
 }
 exports.LogoutHandler = LogoutHandler;

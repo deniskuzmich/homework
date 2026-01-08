@@ -1,11 +1,17 @@
 import {Request, Response} from "express";
 import {ResultStatus} from "../../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
-import {authService} from "../../../core/composition/composition-root";
+import {AuthService} from "../../service/auth-service";
 
 export class RegistrationConfirmHandler {
-  async confirmation(req: Request, res: Response) {
-    const result = await authService.confirmEmail(req.body.code);
+  authService: AuthService;
+
+  constructor(authService: AuthService) {
+    this.authService = authService;
+  }
+
+  confirmation = async (req: Request, res: Response) => {
+    const result = await this.authService.confirmEmail(req.body.code);
     if (result.status !== ResultStatus.NoContent) {
       return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions})
     }

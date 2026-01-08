@@ -12,21 +12,22 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPostByBlogIdHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const values_pagination_mapper_1 = require("../../common/mapper/values-pagination.mapper");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetPostByBlogIdHandler {
-    getPost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(blogsService, postsQueryRepository) {
+        this.getPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-            const blog = yield composition_root_1.blogsService.getBlogById(req.params.id);
+            const blog = yield this.blogsService.getBlogById(req.params.id);
             if (!blog) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
-            const post = yield composition_root_1.postsQueryRepository.getPostByBlogId(blog._id.toString(), query);
+            const post = yield this.postsQueryRepository.getPostByBlogId(blog._id.toString(), query);
             if (!post) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
             res.status(http_statuses_1.HttpStatuses.Success).send(post);
         });
+        this.blogsService = blogsService;
+        this.postsQueryRepository = postsQueryRepository;
     }
 }
 exports.GetPostByBlogIdHandler = GetPostByBlogIdHandler;

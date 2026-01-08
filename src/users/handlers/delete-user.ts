@@ -1,16 +1,22 @@
-import { Request, Response } from "express";
+import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
-import {usersService} from "../../core/composition/composition-root";
+import {UsersService} from "../service/users.service";
 
 
 export class DeleteUserHandler {
-  async delete (req: Request, res: Response) {
-    const user = await usersService.getUserById(req.params.id);
+  usersService: UsersService;
+
+  constructor(usersService: UsersService) {
+    this.usersService = usersService;
+  }
+
+  delete = async (req: Request, res: Response) => {
+    const user = await this.usersService.getUserById(req.params.id);
     if (!user) {
       res.sendStatus(HttpStatuses.NotFound);
     }
 
-    await usersService.deleteUser(req.params.id);
+    await this.usersService.deleteUser(req.params.id);
     return res.sendStatus(HttpStatuses.NoContent);
   }
 }

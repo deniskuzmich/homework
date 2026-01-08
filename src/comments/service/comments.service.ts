@@ -3,12 +3,23 @@ import {ResultType} from "../../common/types/result.type";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {WithId} from "mongodb";
 import {CommentDbType} from "../types/main-types/comment-db.type";
-import {commentsQueryRepository, commentsRepository, postsRepository} from "../../core/composition/composition-root";
+import {CommentsQueryRepository} from "../repository/comments-query.repository";
+import {PostsRepository} from "../../posts/repository/posts-repository";
+import {CommentsRepository} from "../repository/comments.repository";
 
 
 export class CommentsService {
+  commentsQueryRepository: CommentsQueryRepository;
+  commentsRepository: CommentsRepository;
+  postsRepository: PostsRepository;
+
+  constructor(commentsQueryRepository: CommentsQueryRepository, commentsRepository: CommentsRepository, postsRepository: PostsRepository) {
+    this.commentsQueryRepository = commentsQueryRepository;
+    this.commentsRepository = commentsRepository;
+    this.postsRepository = postsRepository;
+  }
   async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
-    const comment = await commentsQueryRepository.getCommentById(id);
+    const comment = await this.commentsQueryRepository.getCommentById(id);
     if (!comment) {
       return {
         status: ResultStatus.NotFound,
@@ -26,7 +37,7 @@ export class CommentsService {
         data: null
       }
     }
-    const updatedComment = await commentsRepository.updateComment(id, newContent);
+    const updatedComment = await this.commentsRepository.updateComment(id, newContent);
     if (!updatedComment) {
       return {
         status: ResultStatus.BadRequest,
@@ -43,7 +54,7 @@ export class CommentsService {
   }
 
   async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
-    const isPostExists = await postsRepository.getPostById(postId);
+    const isPostExists = await this.postsRepository.getPostById(postId);
     if (!isPostExists) {
       return {
         status: ResultStatus.NotFound,
@@ -71,7 +82,7 @@ export class CommentsService {
       },
       createdAt: new Date().toISOString(),
     }
-    const createdComment = await commentsRepository.createCommentForPost(newCommentForPost)
+    const createdComment = await this.commentsRepository.createCommentForPost(newCommentForPost)
 
     if (!createdComment) {
       return {
@@ -89,7 +100,7 @@ export class CommentsService {
   }
 
   async deleteComment(commentId: string, userId: string): Promise<ResultType> {
-    const comment = await commentsRepository.getCommentById(commentId);
+    const comment = await this.commentsRepository.getCommentById(commentId);
     if(!comment) {
       return {
         status: ResultStatus.NotFound,
@@ -107,7 +118,7 @@ export class CommentsService {
       }
     }
 
-    await commentsRepository.deleteComment(commentId);
+    await this.commentsRepository.deleteComment(commentId);
     return {
       status: ResultStatus.NoContent,
       extensions: [],

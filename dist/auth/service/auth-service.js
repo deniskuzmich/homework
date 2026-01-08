@@ -11,14 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const add_1 = require("date-fns/add");
-const usersRepository_1 = require("../../users/repository/usersRepository");
 const result_status_1 = require("../../common/types/result.status");
 const node_crypto_1 = require("node:crypto");
-const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const email_examples_1 = require("../../adapters/email-examples");
 const map_to_user_view_model_1 = require("../../users/mapper/map-to-user-view-model");
-const composition_root_1 = require("../../core/composition/composition-root");
 class AuthService {
+    constructor(bcryptService, nodemailerService, usersRepository) {
+        this.bcryptService = bcryptService;
+        this.nodemailerService = nodemailerService;
+        this.usersRepository = usersRepository;
+    }
     getInfo(user) {
         return __awaiter(this, void 0, void 0, function* () {
             return {
@@ -30,7 +32,7 @@ class AuthService {
     }
     registerUser(login, email, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isLoginExists = yield usersRepository_1.UsersRepository.getLoginUser(login);
+            const isLoginExists = yield this.usersRepository.getLoginUser(login);
             if (isLoginExists) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -38,7 +40,7 @@ class AuthService {
                     data: null
                 };
             }
-            const isEmailExists = yield usersRepository_1.UsersRepository.getEmailUser(email);
+            const isEmailExists = yield this.usersRepository.getEmailUser(email);
             if (isEmailExists) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -46,7 +48,7 @@ class AuthService {
                     data: null
                 };
             }
-            const passwordHash = yield composition_root_1.bcryptService.generateHash(password);
+            const passwordHash = yield this.bcryptService.generateHash(password);
             const newUser = {
                 login,
                 email,
@@ -61,9 +63,9 @@ class AuthService {
                     isConfirmed: false,
                 }
             };
-            yield usersRepository_1.UsersRepository.createUser(newUser);
+            yield this.usersRepository.createUser(newUser);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(newUser.email, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
+                yield this.nodemailerService.sendEmail(newUser.email, email_examples_1.emailExamples.registrationEmail(newUser.emailConfirmation.confirmationCode));
             }
             catch (e) {
                 console.log('Send email error', e);
@@ -77,7 +79,7 @@ class AuthService {
     }
     checkCredentials(loginOrEmail, password) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield usersRepository_1.UsersRepository.getUserByLoginOrEmail(loginOrEmail);
+            const user = yield this.usersRepository.getUserByLoginOrEmail(loginOrEmail);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
@@ -85,7 +87,7 @@ class AuthService {
                     data: null
                 };
             }
-            const isPassCorrect = yield composition_root_1.bcryptService.checkPassword(password, user.passwordHash);
+            const isPassCorrect = yield this.bcryptService.checkPassword(password, user.passwordHash);
             if (!isPassCorrect) {
                 return {
                     status: result_status_1.ResultStatus.Unauthorized,
@@ -103,7 +105,7 @@ class AuthService {
     }
     confirmEmail(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield usersRepository_1.UsersRepository.getUserByConfirmationCode(code);
+            const user = yield this.usersRepository.getUserByConfirmationCode(code);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -132,7 +134,7 @@ class AuthService {
                     data: false,
                 };
             }
-            let result = yield usersRepository_1.UsersRepository.updateConfirmation(user._id);
+            let result = yield this.usersRepository.updateConfirmation(user._id);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
@@ -142,7 +144,7 @@ class AuthService {
     }
     resendEmail(email) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield usersRepository_1.UsersRepository.getUserByLoginOrEmail(email);
+            const user = yield this.usersRepository.getUserByLoginOrEmail(email);
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
@@ -157,9 +159,9 @@ class AuthService {
                     data: false,
                 };
             const newCode = (0, node_crypto_1.randomUUID)();
-            yield usersRepository_1.UsersRepository.updateConfirmationCode(user._id, newCode);
+            yield this.usersRepository.updateConfirmationCode(user._id, newCode);
             try {
-                yield nodemailer_service_1.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
+                yield this.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.registrationEmail(newCode));
             }
             catch (e) {
                 console.log('Send email error', e);
@@ -169,6 +171,26 @@ class AuthService {
                 extensions: [],
                 data: true,
             };
+        });
+    }
+    passwordRecovery(email) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.usersRepository.getUserByLoginOrEmail(email);
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.NoContent,
+                    extensions: [],
+                    data: true,
+                };
+            }
+            const newCode = (0, node_crypto_1.randomUUID)();
+            yield this.usersRepository.updateCodeForPasswordRecovery(user._id, newCode);
+            try {
+                yield this.nodemailerService.sendPassword(user.email, email_examples_1.emailExamples.passwordRecovery(newCode));
+            }
+            catch (e) {
+                console.log('Send email error', e);
+            }
         });
     }
 }

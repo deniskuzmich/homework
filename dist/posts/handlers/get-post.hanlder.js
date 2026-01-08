@@ -11,12 +11,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetPostHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetPostHandler {
-    getPost(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(postsQueryRepository) {
+        this.getPost = (req, res) => __awaiter(this, void 0, void 0, function* () {
             try {
-                const post = yield composition_root_1.postsQueryRepository.getPostById(req.params.id);
+                const post = yield this.postsQueryRepository.getPostById(req.params.id);
                 if (!post) {
                     return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
                 }
@@ -26,6 +25,7 @@ class GetPostHandler {
                 return res.sendStatus(http_statuses_1.HttpStatuses.ServerError);
             }
         });
+        this.postsQueryRepository = postsQueryRepository;
     }
 }
 exports.GetPostHandler = GetPostHandler;

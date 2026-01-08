@@ -45,62 +45,71 @@ import {CreateUserHandler} from "../../users/handlers/create-user";
 import {UsersService} from "../../users/service/users.service";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {DeleteUserHandler} from "../../users/handlers/delete-user";
+import {PasswordRecovery} from "../../auth/auth-user/handler/password-recovery";
+import {NodemailerService} from "../../adapters/nodemailer-service";
+import {UsersRepository} from "../../users/repository/usersRepository";
+
 
 export const bcryptService = new BcryptService();
-
-export const getBlogsListHandler = new GetBlogsListHandler()
-export const getBlogHandler = new GetBlogHandler();
-export const createBlogHandler = new CreateBlogHandler();
-export const updateBlogHandler = new UpdateBlogHandler();
-export const deleteBlogHandler = new DeleteBlogHandler();
-export const blogsQueryRepository = new BlogsQueryRepository();
-export const blogsService = new BlogsService();
-export const blogsRepository = new BlogsRepository();
-export const getPostByBlogIdHandler = new GetPostByBlogIdHandler();
-
-export const postsQueryRepository = new PostsQueryRepository();
-export const postsRepository = new PostsRepository();
-export const createPostForBlogHandler = new CreatePostForBlogHandler();
-export const getPostListHandler = new GetPostListHandler();
-export const getPostHandler = new GetPostHandler();
-export const updatePostHandler = new UpdatePostHandler();
-export const postsService = new PostsService();
-export const createPostsHandler = new CreatePostsHandler();
-export const deletePostHandler = new DeletePostHandler();
-export const getCommentForPostHandler = new GetCommentForPostHandler();
-
-export const commentsQueryRepository = new CommentsQueryRepository();
-export const commentsRepository = new CommentsRepository();
-export const createCommentForPostHandler = new CreateCommentForPostHandler()
-export const commentsService = new CommentsService();
-export const getCommentByIdHandler = new GetCommentByIdHandler();
-export const updateCommentsHandler = new UpdateCommentsHandler();
-export const deleteCommentHandler = new DeleteCommentHandler();
-
-export const getDevicesHandler = new GetDevicesHandler();
-export const devicesQueryRepository = new DevicesQueryRepository();
-export const deleteAllDevicesHandler = new DeleteAllDevicesHandler();
-export const deleteOneDeviceHandler = new DeleteOneDeviceHandler();
-
-export const getAllUsers = new GetAllUsers();
-export const usersQueryRepository = new UsersQueryRepository();
-export const createUserHandler = new CreateUserHandler();
-export const usersService = new UsersService();
-export const deleteUserHandler = new DeleteUserHandler();
-
-
-
-export const authHandler = new AuthUserHandler();
-export const authService = new AuthService();
 export const jwtService = new JwtService();
-export const deviceService = new DeviceService()
+export const nodemailerService = new NodemailerService();
+
+export const blogsRepository = new BlogsRepository();
+export const blogsQueryRepository = new BlogsQueryRepository();
+export const postsRepository = new PostsRepository();
+export const postsQueryRepository = new PostsQueryRepository();
+export const commentsRepository = new CommentsRepository();
+export const commentsQueryRepository = new CommentsQueryRepository();
 export const devicesRepository = new DevicesRepository();
-export const authRefreshTokenHandler = new AuthRefreshTokenHandler();
-export const logoutHandler = new LogoutHandler();
-export const userRegistrationHandler = new UserRegistrationHandler();
-export const registrationConfirmHandler = new RegistrationConfirmHandler();
-export const emailResendingHandler = new EmailResendingHandler();
-export const aboutMeHandler = new AboutMeHandler();
+export const devicesQueryRepository = new DevicesQueryRepository();
+export const usersRepository = new UsersRepository();
+export const usersQueryRepository = new UsersQueryRepository();
+
+export const blogsService = new BlogsService(blogsRepository, postsRepository);
+export const getBlogsListHandler = new GetBlogsListHandler(blogsQueryRepository)
+export const getBlogHandler = new GetBlogHandler(blogsQueryRepository);
+export const createBlogHandler = new CreateBlogHandler(blogsService, blogsQueryRepository);
+export const updateBlogHandler = new UpdateBlogHandler(blogsService);
+export const deleteBlogHandler = new DeleteBlogHandler(blogsService);
+
+export const postsService = new PostsService(postsRepository, blogsRepository);
+export const getPostByBlogIdHandler = new GetPostByBlogIdHandler(blogsService, postsQueryRepository);
+export const createPostForBlogHandler = new CreatePostForBlogHandler(blogsService, postsQueryRepository);
+export const getPostListHandler = new GetPostListHandler(postsQueryRepository);
+export const getPostHandler = new GetPostHandler(postsQueryRepository);
+export const updatePostHandler = new UpdatePostHandler(postsService);
+export const createPostsHandler = new CreatePostsHandler(postsQueryRepository, postsService);
+export const deletePostHandler = new DeletePostHandler(postsService);
+export const getCommentForPostHandler = new GetCommentForPostHandler(postsService, commentsQueryRepository);
+
+
+export const commentsService = new CommentsService(commentsQueryRepository, commentsRepository, postsRepository);
+export const createCommentForPostHandler = new CreateCommentForPostHandler(commentsService, commentsQueryRepository);
+export const getCommentByIdHandler = new GetCommentByIdHandler(commentsQueryRepository);
+export const updateCommentsHandler = new UpdateCommentsHandler(commentsService);
+export const deleteCommentHandler = new DeleteCommentHandler(commentsService);
+
+export const deviceService = new DeviceService(devicesRepository, jwtService)
+export const getDevicesHandler = new GetDevicesHandler(jwtService, devicesQueryRepository);
+export const deleteAllDevicesHandler = new DeleteAllDevicesHandler(jwtService, devicesRepository, deviceService);
+export const deleteOneDeviceHandler = new DeleteOneDeviceHandler(jwtService, deviceService);
+
+export const usersService = new UsersService(bcryptService, usersRepository);
+export const getAllUsers = new GetAllUsers(usersQueryRepository);
+export const createUserHandler = new CreateUserHandler(usersQueryRepository, usersService);
+export const deleteUserHandler = new DeleteUserHandler(usersService);
+
+
+export const authService = new AuthService(bcryptService, nodemailerService, usersRepository);
+export const authHandler = new AuthUserHandler(authService, jwtService, deviceService);
+export const authRefreshTokenHandler = new AuthRefreshTokenHandler(jwtService, deviceService);
+export const logoutHandler = new LogoutHandler(jwtService, deviceService);
+export const userRegistrationHandler = new UserRegistrationHandler(authService);
+export const registrationConfirmHandler = new RegistrationConfirmHandler(authService);
+export const emailResendingHandler = new EmailResendingHandler(authService);
+export const aboutMeHandler = new AboutMeHandler(authService);
+
+export const passwordRecovery = new PasswordRecovery(authService)
 
 
 

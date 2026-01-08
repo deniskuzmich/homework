@@ -1,9 +1,9 @@
 import request from 'supertest'
 import {MongoMemoryServer} from 'mongodb-memory-server'
-import {nodemailerService} from "../../src/adapters/nodemailer-service";
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {app} from "../../src/init-app";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
+import {nodemailerService} from "../../src/core/composition/composition-root";
 
 
 describe('SESSION Tests', () => {

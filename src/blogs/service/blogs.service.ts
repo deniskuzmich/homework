@@ -3,18 +3,27 @@ import {WithId} from "mongodb";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {Post} from "../../posts/types/main-types/posts-db.type";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
-import {blogsRepository, postsRepository} from "../../core/composition/composition-root";
+import {PostsRepository} from "../../posts/repository/posts-repository";
+import {BlogsRepository} from "../repository/blogs-repository";
 
 export class BlogsService {
+  blogsRepository: BlogsRepository;
+  postsRepository: PostsRepository;
+
+  constructor(blogsRepository: BlogsRepository, postsRepository: PostsRepository) {
+    this.blogsRepository = blogsRepository;
+    this.postsRepository = postsRepository;
+  }
+
   async getBlogById(id: string): Promise<WithId<Blog> | null> {
-    return blogsRepository.getBlogById(id);
+    return this.blogsRepository.getBlogById(id);
   }
   async getPostByBlogId(id: string): Promise<WithId<Post> | null> {
-    const blog = await blogsRepository.getBlogById(id)
+    const blog = await this.blogsRepository.getBlogById(id)
     if (!blog) {
       return null;
     }
-    return await postsRepository.getPostByBlogId(blog._id.toString())
+    return await this.postsRepository.getPostByBlogId(blog._id.toString())
   }
   async createPostForBlog(blog: WithId<Blog>, inputInfo: PostInputDtoForBlog): Promise<WithId<Post>> {
     const newPostByBlogId = {
@@ -25,10 +34,10 @@ export class BlogsService {
       blogName: blog.name,
       createdAt: new Date().toISOString(),
     }
-    return postsRepository.createPost(newPostByBlogId)
+    return this.postsRepository.createPost(newPostByBlogId)
   }
   async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
-     const updatedBlog = await blogsRepository.updateBlog(id, newData);
+     const updatedBlog = await this.blogsRepository.updateBlog(id, newData);
      return
   }
   async createBlog(newData: BlogInputDto): Promise<WithId<Blog>> {
@@ -39,10 +48,10 @@ export class BlogsService {
       createdAt: new Date().toISOString(),
       isMembership: false
     }
-    return await blogsRepository.createBlog(newBlog);
+    return await this.blogsRepository.createBlog(newBlog);
   }
   async deleteBlog(id: string): Promise<void> {
-    const deletedBlog = await blogsRepository.deleteBlog(id);
+    const deletedBlog = await this.blogsRepository.deleteBlog(id);
   }
 };
 

@@ -1,10 +1,19 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
-import {deviceService, jwtService} from "../../../core/composition/composition-root";
+import {JwtService} from "../../../common/services/jwtService";
+import {DeviceService} from "../../../devices/service/deviceService";
 
 
 export class AuthRefreshTokenHandler {
-  async refreshToken(req: Request, res: Response) {
+  jwtService: JwtService;
+  deviceService: DeviceService;
+
+  constructor(jwtService: JwtService, deviceService: DeviceService) {
+    this.jwtService = jwtService;
+    this.deviceService = deviceService;
+  }
+
+  refreshToken = async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
     const ip: string | undefined = req.ip
     const deviceName = req.headers['user-agent'] ?? 'Some device'
@@ -13,12 +22,12 @@ export class AuthRefreshTokenHandler {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
 
-    const payload = jwtService.verifyRefreshToken(refreshToken);
+    const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }
 
-    const session = await deviceService.getSession(payload.deviceId);
+    const session = await this.deviceService.getSession(payload.deviceId);
     if (!session) {
       return res.sendStatus(HttpStatuses.Unauthorized);
     }
@@ -27,10 +36,10 @@ export class AuthRefreshTokenHandler {
       return res.sendStatus(HttpStatuses.Unauthorized);
     }
 
-    const newAccessToken = jwtService.createJWT(payload.userId)
-    const newRefreshToken = jwtService.createRefreshToken(payload.userId, payload.deviceId);
+    const newAccessToken = this.jwtService.createJWT(payload.userId)
+    const newRefreshToken = this.jwtService.createRefreshToken(payload.userId, payload.deviceId);
 
-    await deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
+    await this.deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
 
     res.cookie("refreshToken", newRefreshToken, {httpOnly: true, secure: true});
     res.status(HttpStatuses.Success).send({accessToken: newAccessToken});

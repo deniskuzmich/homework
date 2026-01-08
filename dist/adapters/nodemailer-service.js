@@ -12,9 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.nodemailerService = void 0;
+exports.NodemailerService = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
-exports.nodemailerService = {
+class NodemailerService {
     sendEmail(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
@@ -33,4 +33,23 @@ exports.nodemailerService = {
             return info;
         });
     }
-};
+    sendPassword(email, message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let transport = nodemailer_1.default.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_PASSWORD,
+                }
+            });
+            let info = yield transport.sendMail({
+                from: '"Denis" <kuzmichdenis21@gmail.com>',
+                to: email,
+                subject: 'Password Recovery',
+                html: message
+            });
+            return info;
+        });
+    }
+}
+exports.NodemailerService = NodemailerService;

@@ -11,10 +11,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthRefreshTokenHandler = void 0;
 const http_statuses_1 = require("../../../common/types/http-statuses");
-const composition_root_1 = require("../../../core/composition/composition-root");
 class AuthRefreshTokenHandler {
-    refreshToken(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(jwtService, deviceService) {
+        this.refreshToken = (req, res) => __awaiter(this, void 0, void 0, function* () {
             var _a;
             const refreshToken = req.cookies.refreshToken;
             const ip = req.ip;
@@ -22,23 +21,25 @@ class AuthRefreshTokenHandler {
             if (!refreshToken) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            const payload = this.jwtService.verifyRefreshToken(refreshToken);
             if (!payload) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const session = yield composition_root_1.deviceService.getSession(payload.deviceId);
+            const session = yield this.deviceService.getSession(payload.deviceId);
             if (!session) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
             if (session.iat !== payload.iat) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
             }
-            const newAccessToken = composition_root_1.jwtService.createJWT(payload.userId);
-            const newRefreshToken = composition_root_1.jwtService.createRefreshToken(payload.userId, payload.deviceId);
-            yield composition_root_1.deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
+            const newAccessToken = this.jwtService.createJWT(payload.userId);
+            const newRefreshToken = this.jwtService.createRefreshToken(payload.userId, payload.deviceId);
+            yield this.deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
             res.cookie("refreshToken", newRefreshToken, { httpOnly: true, secure: true });
             res.status(http_statuses_1.HttpStatuses.Success).send({ accessToken: newAccessToken });
         });
+        this.jwtService = jwtService;
+        this.deviceService = deviceService;
     }
 }
 exports.AuthRefreshTokenHandler = AuthRefreshTokenHandler;

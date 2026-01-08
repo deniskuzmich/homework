@@ -1,16 +1,24 @@
 import {SessionType} from "../types/session.type";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
-import {devicesRepository, jwtService} from "../../core/composition/composition-root";
+import {DevicesRepository} from "../repository/devicesRepository";
+import {JwtService} from "../../common/services/jwtService";
 
 
 export class DeviceService {
+  devicesRepository: DevicesRepository;
+  jwtService: JwtService;
+
+  constructor(devicesRepository: DevicesRepository, jwtService: JwtService) {
+    this.devicesRepository = devicesRepository;
+    this.jwtService = jwtService;
+  }
    async getSession(deviceId: string) {
-    return await devicesRepository.findSession(deviceId)
+    return await this.devicesRepository.findSession(deviceId)
   }
 
    async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
-    const payload = jwtService.verifyRefreshToken(refreshToken);
+    const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload) {
       return null
     }
@@ -25,11 +33,11 @@ export class DeviceService {
       iat,
       eat
     }
-    return await devicesRepository.createSession(session)
+    return await this.devicesRepository.createSession(session)
   }
 
    async updateSession(deviceId: string, ip: string | undefined, deviceName: string, refreshToken: string) {
-    const payload = jwtService.verifyRefreshToken(refreshToken);
+    const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload) {
       return null
     }
@@ -42,11 +50,11 @@ export class DeviceService {
       iat: payload.iat,
       eat: payload.eat,
     }
-    return await devicesRepository.updateSession(deviceId, updatedSession)
+    return await this.devicesRepository.updateSession(deviceId, updatedSession)
   }
 
    async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {
-    const session = await devicesRepository.findSession(deviceId)
+    const session = await this.devicesRepository.findSession(deviceId)
     if (!session) {
       return {
         status: ResultStatus.NotFound,
@@ -64,7 +72,7 @@ export class DeviceService {
       }
     }
 
-    await devicesRepository.deleteOneSession(deviceId)
+    await this.devicesRepository.deleteOneSession(deviceId)
     return {
       status: ResultStatus.NoContent,
       extensions: [],
@@ -81,7 +89,7 @@ export class DeviceService {
       }
     }
 
-    await devicesRepository.deleteAllSession(userId, deviceId)
+    await this.devicesRepository.deleteAllSession(userId, deviceId)
     return {
       status: ResultStatus.NoContent,
       extensions: [],

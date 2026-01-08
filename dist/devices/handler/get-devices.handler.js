@@ -11,17 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetDevicesHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetDevicesHandler {
-    getDevices(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(jwtService, devicesQueryRepository) {
+        this.getDevices = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const refreshToken = req.cookies.refreshToken;
             try {
-                const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+                const payload = this.jwtService.verifyRefreshToken(refreshToken);
                 if (!payload) {
                     return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
                 }
-                const sessionsData = yield composition_root_1.devicesQueryRepository.findAllSessions(payload.userId);
+                const sessionsData = yield this.devicesQueryRepository.findAllSessions(payload.userId);
                 if (!sessionsData) {
                     return res.sendStatus(http_statuses_1.HttpStatuses.Unauthorized);
                 }
@@ -31,6 +30,8 @@ class GetDevicesHandler {
                 console.log('Something wrong', e);
             }
         });
+        this.jwtService = jwtService;
+        this.devicesQueryRepository = devicesQueryRepository;
     }
 }
 exports.GetDevicesHandler = GetDevicesHandler;

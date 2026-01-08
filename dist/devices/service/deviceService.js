@@ -11,16 +11,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DeviceService = void 0;
 const result_status_1 = require("../../common/types/result.status");
-const composition_root_1 = require("../../core/composition/composition-root");
 class DeviceService {
+    constructor(devicesRepository, jwtService) {
+        this.devicesRepository = devicesRepository;
+        this.jwtService = jwtService;
+    }
     getSession(deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield composition_root_1.devicesRepository.findSession(deviceId);
+            return yield this.devicesRepository.findSession(deviceId);
         });
     }
     createSession(userId, refreshToken, ip, deviceName) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            const payload = this.jwtService.verifyRefreshToken(refreshToken);
             if (!payload) {
                 return null;
             }
@@ -34,12 +37,12 @@ class DeviceService {
                 iat,
                 eat
             };
-            return yield composition_root_1.devicesRepository.createSession(session);
+            return yield this.devicesRepository.createSession(session);
         });
     }
     updateSession(deviceId, ip, deviceName, refreshToken) {
         return __awaiter(this, void 0, void 0, function* () {
-            const payload = composition_root_1.jwtService.verifyRefreshToken(refreshToken);
+            const payload = this.jwtService.verifyRefreshToken(refreshToken);
             if (!payload) {
                 return null;
             }
@@ -51,12 +54,12 @@ class DeviceService {
                 iat: payload.iat,
                 eat: payload.eat,
             };
-            return yield composition_root_1.devicesRepository.updateSession(deviceId, updatedSession);
+            return yield this.devicesRepository.updateSession(deviceId, updatedSession);
         });
     }
     deleteOneSession(userId, deviceId) {
         return __awaiter(this, void 0, void 0, function* () {
-            const session = yield composition_root_1.devicesRepository.findSession(deviceId);
+            const session = yield this.devicesRepository.findSession(deviceId);
             if (!session) {
                 return {
                     status: result_status_1.ResultStatus.NotFound,
@@ -73,7 +76,7 @@ class DeviceService {
                     data: null
                 };
             }
-            yield composition_root_1.devicesRepository.deleteOneSession(deviceId);
+            yield this.devicesRepository.deleteOneSession(deviceId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
@@ -90,7 +93,7 @@ class DeviceService {
                     data: null
                 };
             }
-            yield composition_root_1.devicesRepository.deleteAllSession(userId, deviceId);
+            yield this.devicesRepository.deleteAllSession(userId, deviceId);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],

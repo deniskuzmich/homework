@@ -10,13 +10,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
-const usersRepository_1 = require("../repository/usersRepository");
 const map_register_user_1 = require("../mapper/map-register-user");
-const composition_root_1 = require("../../core/composition/composition-root");
 class UsersService {
+    constructor(bcryptService, usersRepository) {
+        this.bcryptService = bcryptService;
+        this.usersRepository = usersRepository;
+    }
     createUser(queryDto) {
         return __awaiter(this, void 0, void 0, function* () {
-            const isLoginExists = yield usersRepository_1.UsersRepository.getLoginUser(queryDto.login);
+            const isLoginExists = yield this.usersRepository.getLoginUser(queryDto.login);
             if (isLoginExists) {
                 return {
                     errorsMessages: [
@@ -24,7 +26,7 @@ class UsersService {
                     ]
                 };
             }
-            const isEmailExists = yield usersRepository_1.UsersRepository.getEmailUser(queryDto.email);
+            const isEmailExists = yield this.usersRepository.getEmailUser(queryDto.email);
             if (isEmailExists) {
                 return {
                     errorsMessages: [
@@ -32,7 +34,7 @@ class UsersService {
                     ]
                 };
             }
-            const passwordHash = yield composition_root_1.bcryptService.generateHash(queryDto.password);
+            const passwordHash = yield this.bcryptService.generateHash(queryDto.password);
             const newUser = {
                 login: queryDto.login,
                 email: queryDto.email,
@@ -40,19 +42,19 @@ class UsersService {
                 createdAt: new Date()
             };
             const mappedUser = (0, map_register_user_1.mapRegisterUser)(newUser);
-            return yield usersRepository_1.UsersRepository.createUser(mappedUser);
+            return yield this.usersRepository.createUser(mappedUser);
         });
     }
     getUserById(id) {
         return __awaiter(this, void 0, void 0, function* () {
             if (!id)
                 return null;
-            return usersRepository_1.UsersRepository.getUserById(id);
+            return this.usersRepository.getUserById(id);
         });
     }
     deleteUser(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const deletedUser = yield usersRepository_1.UsersRepository.deleteUser(id);
+            const deletedUser = yield this.usersRepository.deleteUser(id);
         });
     }
 }

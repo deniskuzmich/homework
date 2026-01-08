@@ -11,16 +11,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCommentByIdHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetCommentByIdHandler {
-    getCommentById(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const comment = yield composition_root_1.commentsQueryRepository.getCommentById(req.params.id);
+    constructor(commentsQueryRepository) {
+        this.getCommentById = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const comment = yield this.commentsQueryRepository.getCommentById(req.params.id);
             if (!comment) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
             res.status(http_statuses_1.HttpStatuses.Success).send(comment);
         });
+        this.commentsQueryRepository = commentsQueryRepository;
     }
 }
 exports.GetCommentByIdHandler = GetCommentByIdHandler;

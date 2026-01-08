@@ -12,22 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetCommentForPostHandler = void 0;
 const http_statuses_1 = require("../../common/types/http-statuses");
 const values_pagination_mapper_1 = require("../../common/mapper/values-pagination.mapper");
-const composition_root_1 = require("../../core/composition/composition-root");
 class GetCommentForPostHandler {
-    getComment(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
+    constructor(postsService, commentsQueryRepository) {
+        this.getComment = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const id = req.params.id;
             const query = (0, values_pagination_mapper_1.valuesPaginationMaper)(req.query);
-            const post = yield composition_root_1.postsService.getPostById(id);
+            const post = yield this.postsService.getPostById(id);
             if (!post) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
-            const commentForPost = yield composition_root_1.commentsQueryRepository.getCommentByPostIdWithPagination(id, query);
+            const commentForPost = yield this.commentsQueryRepository.getCommentByPostIdWithPagination(id, query);
             if (!commentForPost) {
                 return res.sendStatus(http_statuses_1.HttpStatuses.NotFound);
             }
             return res.status(http_statuses_1.HttpStatuses.Success).send(commentForPost);
         });
+        this.postsService = postsService;
+        this.commentsQueryRepository = commentsQueryRepository;
     }
 }
 exports.GetCommentForPostHandler = GetCommentForPostHandler;
