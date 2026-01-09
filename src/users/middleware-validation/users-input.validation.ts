@@ -24,10 +24,10 @@ export const emailValidation = body("email")
   .trim()
   .notEmpty()
   .withMessage('email should not be empty')
-  .isLength({ min: 6, max: 20 })
+  .matches('^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$')
   .withMessage("email length is not correct")
   .isEmail()
-  .withMessage("email length is not correct")
+  .withMessage("email is not correct")
 
 export const userInputValidation = [
   loginValidation,

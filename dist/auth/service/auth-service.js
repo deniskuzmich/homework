@@ -216,6 +216,13 @@ class AuthService {
                     data: false,
                 };
             }
+            if (recoveryCode !== user.passwordRecoveryCode) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'code', message: 'The user data in not correct' }],
+                    data: false,
+                };
+            }
             const passwordHash = yield this.bcryptService.generateHash(newPassword);
             yield this.usersRepository.createNewPassword(user === null || user === void 0 ? void 0 : user._id, passwordHash);
             return {
