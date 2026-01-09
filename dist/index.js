@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+require("dotenv/config");
 const settings_1 = require("./core/settings/settings");
 const mongo_db_1 = require("./db/mongo.db");
 const init_app_1 = require("./init-app");

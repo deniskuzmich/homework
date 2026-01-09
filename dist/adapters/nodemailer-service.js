@@ -23,9 +23,19 @@ class NodemailerService {
                     user: process.env.EMAIL_USER,
                     pass: process.env.EMAIL_PASSWORD,
                 }
+                // host: 'smtp.yandex.ru',
+                // port: 587,
+                // secure: false, // STARTTLS
+                // auth: {
+                //   user: process.env.MAIL_USER,
+                //   pass: process.env.MAIL_APP_PASSWORD,
+                // },
+                // tls: {
+                //   rejectUnauthorized: false,
+                // },
             });
             let info = yield transport.sendMail({
-                from: '"Denis" <kuzmichdenis21@gmail.com>',
+                from: `"Denis" <${process.env.MAIL_USER}>`,
                 to: email,
                 subject: 'Test Registration',
                 html: message
@@ -36,16 +46,18 @@ class NodemailerService {
     sendPassword(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
-                service: 'gmail',
+                host: 'smtp.mail.ru',
+                port: 587,
+                secure: false,
                 auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASSWORD,
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_APP_PASSWORD,
                 }
             });
             let info = yield transport.sendMail({
-                from: '"Denis" <kuzmichdenis21@gmail.com>',
+                from: `"Denis" <${process.env.MAIL_USER}>`,
                 to: email,
-                subject: 'Password Recovery',
+                subject: 'Password recovery',
                 html: message
             });
             return info;
@@ -53,3 +65,19 @@ class NodemailerService {
     }
 }
 exports.NodemailerService = NodemailerService;
+// let transport = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASSWORD,
+//   }
+// });
+//
+// let info = await transport.sendMail({
+//   from: '"Denis" <kuzmichdenis21@gmail.com>',
+//   to: email,
+//   subject: 'Test Registration',
+//   html: message
+// });
+// return info
+// }

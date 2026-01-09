@@ -54,6 +54,7 @@ class AuthService {
                 email,
                 passwordHash,
                 createdAt: new Date(),
+                passwordRecoveryCode: null,
                 emailConfirmation: {
                     confirmationCode: (0, node_crypto_1.randomUUID)(),
                     expirationDate: (0, add_1.add)(new Date(), {
@@ -176,11 +177,18 @@ class AuthService {
     passwordRecovery(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.usersRepository.getUserByLoginOrEmail(email);
-            if (!user) {
+            if (!email) {
                 return {
                     status: result_status_1.ResultStatus.NoContent,
                     extensions: [],
                     data: true,
+                };
+            }
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [],
+                    data: false,
                 };
             }
             const newCode = (0, node_crypto_1.randomUUID)();
@@ -189,8 +197,32 @@ class AuthService {
                 yield this.nodemailerService.sendPassword(user.email, email_examples_1.emailExamples.passwordRecovery(newCode));
             }
             catch (e) {
-                console.log('Send email error', e);
+                console.log('Send password recovery error', e);
             }
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: true,
+            };
+        });
+    }
+    newPassword(newPassword, recoveryCode) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield this.usersRepository.getUserByRecoveryCode(recoveryCode);
+            if (!user) {
+                return {
+                    status: result_status_1.ResultStatus.BadRequest,
+                    extensions: [{ field: 'code', message: 'The user data in not correct' }],
+                    data: false,
+                };
+            }
+            const passwordHash = yield this.bcryptService.generateHash(newPassword);
+            yield this.usersRepository.createNewPassword(user === null || user === void 0 ? void 0 : user._id, passwordHash);
+            return {
+                status: result_status_1.ResultStatus.NoContent,
+                extensions: [],
+                data: true,
+            };
         });
     }
 }

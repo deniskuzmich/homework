@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.passwordRecovery = exports.aboutMeHandler = exports.emailResendingHandler = exports.registrationConfirmHandler = exports.userRegistrationHandler = exports.logoutHandler = exports.authRefreshTokenHandler = exports.authHandler = exports.authService = exports.deleteUserHandler = exports.createUserHandler = exports.getAllUsers = exports.usersService = exports.deleteOneDeviceHandler = exports.deleteAllDevicesHandler = exports.getDevicesHandler = exports.deviceService = exports.deleteCommentHandler = exports.updateCommentsHandler = exports.getCommentByIdHandler = exports.createCommentForPostHandler = exports.commentsService = exports.getCommentForPostHandler = exports.deletePostHandler = exports.createPostsHandler = exports.updatePostHandler = exports.getPostHandler = exports.getPostListHandler = exports.createPostForBlogHandler = exports.getPostByBlogIdHandler = exports.postsService = exports.deleteBlogHandler = exports.updateBlogHandler = exports.createBlogHandler = exports.getBlogHandler = exports.getBlogsListHandler = exports.blogsService = exports.usersQueryRepository = exports.usersRepository = exports.devicesQueryRepository = exports.devicesRepository = exports.commentsQueryRepository = exports.commentsRepository = exports.postsQueryRepository = exports.postsRepository = exports.blogsQueryRepository = exports.blogsRepository = exports.nodemailerService = exports.jwtService = exports.bcryptService = void 0;
+exports.newPasswordHandler = exports.aboutMeHandler = exports.emailResendingHandler = exports.registrationConfirmHandler = exports.userRegistrationHandler = exports.logoutHandler = exports.authRefreshTokenHandler = exports.authHandler = exports.authService = exports.deleteUserHandler = exports.createUserHandler = exports.getAllUsers = exports.usersService = exports.deleteOneDeviceHandler = exports.deleteAllDevicesHandler = exports.getDevicesHandler = exports.deviceService = exports.deleteCommentHandler = exports.updateCommentsHandler = exports.getCommentByIdHandler = exports.createCommentForPostHandler = exports.commentsService = exports.getCommentForPostHandler = exports.deletePostHandler = exports.createPostsHandler = exports.updatePostHandler = exports.getPostHandler = exports.getPostListHandler = exports.createPostForBlogHandler = exports.getPostByBlogIdHandler = exports.postsService = exports.deleteBlogHandler = exports.updateBlogHandler = exports.createBlogHandler = exports.getBlogHandler = exports.getBlogsListHandler = exports.blogsService = exports.usersQueryRepository = exports.usersRepository = exports.devicesQueryRepository = exports.devicesRepository = exports.commentsQueryRepository = exports.commentsRepository = exports.postsQueryRepository = exports.postsRepository = exports.blogsQueryRepository = exports.blogsRepository = exports.nodemailerService = exports.jwtService = exports.bcryptService = void 0;
+exports.passwordRecoveryHandler = void 0;
 const auth_user_handler_1 = require("../../auth/auth-user/handler/auth-user.handler");
 const auth_service_1 = require("../../auth/service/auth-service");
 const jwtService_1 = require("../../common/services/jwtService");
@@ -51,6 +52,7 @@ const delete_user_1 = require("../../users/handlers/delete-user");
 const password_recovery_1 = require("../../auth/auth-user/handler/password-recovery");
 const nodemailer_service_1 = require("../../adapters/nodemailer-service");
 const usersRepository_1 = require("../../users/repository/usersRepository");
+const new_password_handler_1 = require("../../auth/auth-user/handler/new-password.handler");
 exports.bcryptService = new bcrypt_service_1.BcryptService();
 exports.jwtService = new jwtService_1.JwtService();
 exports.nodemailerService = new nodemailer_service_1.NodemailerService();
@@ -100,4 +102,5 @@ exports.userRegistrationHandler = new user_registration_handler_1.UserRegistrati
 exports.registrationConfirmHandler = new registration_confirm_1.RegistrationConfirmHandler(exports.authService);
 exports.emailResendingHandler = new email_resending_1.EmailResendingHandler(exports.authService);
 exports.aboutMeHandler = new auth_me_handler_1.AboutMeHandler(exports.authService);
-exports.passwordRecovery = new password_recovery_1.PasswordRecovery(exports.authService);
+exports.newPasswordHandler = new new_password_handler_1.NewPasswordHandler(exports.authService);
+exports.passwordRecoveryHandler = new password_recovery_1.PasswordRecovery(exports.authService);

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import {SETTINGS} from "./core/settings/settings";
 import {runDB} from "./db/mongo.db";
 import {app} from "./init-app";

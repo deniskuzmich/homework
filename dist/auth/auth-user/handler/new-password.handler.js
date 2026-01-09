@@ -9,13 +9,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PasswordRecovery = void 0;
+exports.NewPasswordHandler = void 0;
 const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
-class PasswordRecovery {
+class NewPasswordHandler {
     constructor(authService) {
-        this.recover = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.authService.passwordRecovery(req.body.email);
+        this.newPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
+            const result = yield this.authService.newPassword(req.body.password, req.body.code);
             if (result.status !== result_status_1.ResultStatus.NoContent) {
                 return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
             }
@@ -24,4 +24,4 @@ class PasswordRecovery {
         this.authService = authService;
     }
 }
-exports.PasswordRecovery = PasswordRecovery;
+exports.NewPasswordHandler = NewPasswordHandler;

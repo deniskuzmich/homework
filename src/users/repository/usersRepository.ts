@@ -23,6 +23,11 @@ export class UsersRepository {
     return user
   }
 
+  async getUserByRecoveryCode(code: string) {
+    const user = await usersCollection.findOne({"passwordRecoveryCode": code})
+    return user
+  }
+
    async getUserByLoginOrEmail(loginOrEmail: string): Promise<WithId<UserDbType> | null> {
     const user = await usersCollection.findOne({$or: [{email: loginOrEmail}, {login: loginOrEmail}]});
     return user;
@@ -60,13 +65,17 @@ export class UsersRepository {
   async updateCodeForPasswordRecovery(_id: ObjectId, newCode: string) {
     return usersCollection.updateOne({_id}, {
       $set: {
-        'emailConfirmation.confirmationCode': newCode,
-        'emailConfirmation.expirationDate': add(new Date(), {
-          hours: 3,
-          minutes: 30,
-        })
+        'passwordRecoveryCode': newCode,
       }
     })
+  }
+
+  async createNewPassword(_id: ObjectId, newPassword: string) {
+     return usersCollection.updateOne({_id}, {
+       $set: {
+         'passwordHash': newPassword,
+       }
+     })
   }
 }
 

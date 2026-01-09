@@ -37,6 +37,12 @@ class UsersRepository {
             return user;
         });
     }
+    getUserByRecoveryCode(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const user = yield mongo_db_1.usersCollection.findOne({ "passwordRecoveryCode": code });
+            return user;
+        });
+    }
     getUserByLoginOrEmail(loginOrEmail) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield mongo_db_1.usersCollection.findOne({ $or: [{ email: loginOrEmail }, { login: loginOrEmail }] });
@@ -80,11 +86,16 @@ class UsersRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.usersCollection.updateOne({ _id }, {
                 $set: {
-                    'emailConfirmation.confirmationCode': newCode,
-                    'emailConfirmation.expirationDate': (0, add_1.add)(new Date(), {
-                        hours: 3,
-                        minutes: 30,
-                    })
+                    'passwordRecoveryCode': newCode,
+                }
+            });
+        });
+    }
+    createNewPassword(_id, newPassword) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.updateOne({ _id }, {
+                $set: {
+                    'passwordHash': newPassword,
                 }
             });
         });

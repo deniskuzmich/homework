@@ -10,6 +10,7 @@ import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {NodemailerService} from "../../adapters/nodemailer-service";
 import {UsersRepository} from "../../users/repository/usersRepository";
+import {usersRepository} from "../../core/composition/composition-root";
 
 
 export class AuthService {
@@ -56,6 +57,7 @@ export class AuthService {
       email,
       passwordHash,
       createdAt: new Date(),
+      passwordRecoveryCode: null,
       emailConfirmation: {
         confirmationCode: randomUUID(),
         expirationDate: add(new Date(), {
@@ -183,11 +185,18 @@ export class AuthService {
 
   async passwordRecovery(email: string) {
     const user = await this.usersRepository.getUserByLoginOrEmail(email)
-    if (!user) {
+    if (!email) {
       return {
         status: ResultStatus.NoContent,
         extensions: [],
         data: true,
+      }
+    }
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [],
+        data: false,
       }
     }
 
@@ -200,7 +209,32 @@ export class AuthService {
         emailExamples.passwordRecovery(newCode)
       )
     } catch (e) {
-      console.log('Send email error', e)
+      console.log('Send password recovery error', e)
+    }
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: true,
+    }
+  }
+
+  async newPassword(newPassword: string, recoveryCode: string) {
+    const user = await this.usersRepository.getUserByRecoveryCode(recoveryCode)
+    if (!user) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'code', message: 'The user data in not correct'}],
+        data: false,
+      }
+    }
+    const passwordHash = await this.bcryptService.generateHash(newPassword)
+
+    await this.usersRepository.createNewPassword(user?._id, passwordHash)
+
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: true,
     }
   }
 }

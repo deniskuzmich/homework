@@ -48,6 +48,7 @@ import {DeleteUserHandler} from "../../users/handlers/delete-user";
 import {PasswordRecovery} from "../../auth/auth-user/handler/password-recovery";
 import {NodemailerService} from "../../adapters/nodemailer-service";
 import {UsersRepository} from "../../users/repository/usersRepository";
+import {NewPasswordHandler} from "../../auth/auth-user/handler/new-password.handler";
 
 
 export const bcryptService = new BcryptService();
@@ -109,7 +110,8 @@ export const registrationConfirmHandler = new RegistrationConfirmHandler(authSer
 export const emailResendingHandler = new EmailResendingHandler(authService);
 export const aboutMeHandler = new AboutMeHandler(authService);
 
-export const passwordRecovery = new PasswordRecovery(authService)
+export const newPasswordHandler = new NewPasswordHandler(authService)
+export const passwordRecoveryHandler = new PasswordRecovery(authService)
 
 
 
