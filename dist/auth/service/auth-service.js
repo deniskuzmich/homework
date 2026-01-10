@@ -54,7 +54,13 @@ class AuthService {
                 email,
                 passwordHash,
                 createdAt: new Date(),
-                passwordRecoveryCode: null,
+                passwordRecovery: {
+                    passwordRecoveryCode: null,
+                    expirationDate: (0, add_1.add)(new Date(), {
+                        hours: 0,
+                        minutes: 0,
+                    }),
+                },
                 emailConfirmation: {
                     confirmationCode: (0, node_crypto_1.randomUUID)(),
                     expirationDate: (0, add_1.add)(new Date(), {
@@ -177,13 +183,6 @@ class AuthService {
     passwordRecovery(email) {
         return __awaiter(this, void 0, void 0, function* () {
             const user = yield this.usersRepository.getUserByLoginOrEmail(email);
-            if (!email) {
-                return {
-                    status: result_status_1.ResultStatus.NoContent,
-                    extensions: [],
-                    data: true,
-                };
-            }
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.NoContent,
@@ -216,7 +215,7 @@ class AuthService {
                     data: false,
                 };
             }
-            if (recoveryCode !== user.passwordRecoveryCode) {
+            if (recoveryCode !== user.passwordRecovery.passwordRecoveryCode) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
                     extensions: [{ field: 'code', message: 'The user data in not correct' }],

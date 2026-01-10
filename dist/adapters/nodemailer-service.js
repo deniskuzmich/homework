@@ -46,9 +46,7 @@ class NodemailerService {
     sendPassword(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
             let transport = nodemailer_1.default.createTransport({
-                host: 'smtp.mail.ru',
-                port: 587,
-                secure: false,
+                service: 'gmail',
                 auth: {
                     user: process.env.MAIL_USER,
                     pass: process.env.MAIL_APP_PASSWORD,

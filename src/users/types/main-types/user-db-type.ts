@@ -1,13 +1,19 @@
+import {add} from "date-fns/add";
+
 export type UserDbType = {
   login: string;
   email: string;
   createdAt: Date;
   passwordHash: string;
   refreshToken?: string | null;
-  passwordRecoveryCode?: string | null,
+  passwordRecovery?: {
+    passwordRecoveryCode: string | null,
+    expirationDate: Date
+  },
   emailConfirmation: {
     confirmationCode: string,
     expirationDate: Date,
     isConfirmed: boolean,
   }
 }
+

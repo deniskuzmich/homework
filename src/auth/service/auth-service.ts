@@ -57,7 +57,13 @@ export class AuthService {
       email,
       passwordHash,
       createdAt: new Date(),
-      passwordRecoveryCode: null,
+      passwordRecovery: {
+        passwordRecoveryCode: null,
+        expirationDate: add(new Date(), {
+          hours: 0,
+          minutes: 0,
+        }),
+      },
       emailConfirmation: {
         confirmationCode: randomUUID(),
         expirationDate: add(new Date(), {
@@ -185,13 +191,6 @@ export class AuthService {
 
   async passwordRecovery(email: string) {
     const user = await this.usersRepository.getUserByLoginOrEmail(email)
-    if (!email) {
-      return {
-        status: ResultStatus.NoContent,
-        extensions: [],
-        data: true,
-      }
-    }
     if (!user) {
       return {
         status: ResultStatus.NoContent,
@@ -227,7 +226,7 @@ export class AuthService {
         data: false,
       }
     }
-    if(recoveryCode !== user.passwordRecoveryCode) {
+    if(recoveryCode !== user.passwordRecovery!.passwordRecoveryCode) {
       return {
         status: ResultStatus.BadRequest,
         extensions: [{field: 'code', message: 'The user data in not correct'}],

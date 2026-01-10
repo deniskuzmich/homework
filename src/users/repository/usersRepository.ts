@@ -65,7 +65,11 @@ export class UsersRepository {
   async updateCodeForPasswordRecovery(email: string, newCode: string) {
     return usersCollection.updateOne({email}, {
       $set: {
-        'passwordRecoveryCode': newCode,
+        'passwordRecovery.passwordRecoveryCode': newCode,
+        'expirationDate': add(new Date(), {
+          hours: 0,
+          minutes: 5,
+        })
       }
     })
   }

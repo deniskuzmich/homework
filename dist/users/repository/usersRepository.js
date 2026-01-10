@@ -82,11 +82,15 @@ class UsersRepository {
             });
         });
     }
-    updateCodeForPasswordRecovery(_id, newCode) {
+    updateCodeForPasswordRecovery(email, newCode) {
         return __awaiter(this, void 0, void 0, function* () {
-            return mongo_db_1.usersCollection.updateOne({ _id }, {
+            return mongo_db_1.usersCollection.updateOne({ email }, {
                 $set: {
-                    'passwordRecoveryCode': newCode,
+                    'passwordRecovery.passwordRecoveryCode': newCode,
+                    'expirationDate': (0, add_1.add)(new Date(), {
+                        hours: 0,
+                        minutes: 5,
+                    })
                 }
             });
         });
