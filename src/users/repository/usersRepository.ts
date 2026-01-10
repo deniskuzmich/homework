@@ -2,6 +2,7 @@ import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../types/main-types/user-db-type";
 import {add} from "date-fns/add";
+import {id} from "date-fns/locale";
 
 
 export class UsersRepository {
@@ -80,6 +81,15 @@ export class UsersRepository {
          'passwordHash': newPassword,
        }
      })
+  }
+
+  async clearRecoveryData(_id: ObjectId) {
+     return usersCollection.updateOne({_id}, {
+       $set: {
+         'passwordRecovery.recoveryCode': null,
+         'passwordRecovery.expirationDate': null,
+       }
+     });
   }
 }
 

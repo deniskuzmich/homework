@@ -240,11 +240,14 @@ export class AuthService {
 
     await this.usersRepository.createNewPassword(user?._id, passwordHash)
 
+    await this.usersRepository.clearRecoveryData(user?._id)
+
     return {
       status: ResultStatus.NoContent,
       extensions: [],
       data: true,
     }
+
   }
 }
 

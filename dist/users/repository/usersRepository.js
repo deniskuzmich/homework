@@ -104,5 +104,15 @@ class UsersRepository {
             });
         });
     }
+    clearRecoveryData(_id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return mongo_db_1.usersCollection.updateOne({ _id }, {
+                $set: {
+                    'passwordRecovery.recoveryCode': null,
+                    'passwordRecovery.expirationDate': null,
+                }
+            });
+        });
+    }
 }
 exports.UsersRepository = UsersRepository;

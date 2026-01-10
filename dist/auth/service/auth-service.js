@@ -228,6 +228,7 @@ class AuthService {
             }
             const passwordHash = yield this.bcryptService.generateHash(newPassword);
             yield this.usersRepository.createNewPassword(user === null || user === void 0 ? void 0 : user._id, passwordHash);
+            yield this.usersRepository.clearRecoveryData(user === null || user === void 0 ? void 0 : user._id);
             return {
                 status: result_status_1.ResultStatus.NoContent,
                 extensions: [],
