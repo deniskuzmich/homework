@@ -208,14 +208,14 @@ class AuthService {
             if (!user) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'code', message: 'The user data in not correct' }],
-                    data: false,
+                    extensions: [],
+                    data: true,
                 };
             }
             if (recoveryCode !== user.passwordRecovery.recoveryCode) {
                 return {
                     status: result_status_1.ResultStatus.BadRequest,
-                    extensions: [{ field: 'code', message: 'The user data in not correct' }],
+                    extensions: [{ field: 'newPassword', message: 'The new password in not correct' }],
                     data: false,
                 };
             }
