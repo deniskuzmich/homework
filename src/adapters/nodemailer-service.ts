@@ -21,7 +21,7 @@ export class NodemailerService {
     });
 
     let info = await transport.sendMail({
-      from: `"Denis" <${process.env.MAIL_USER}>`,
+      from: `"Denis" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Test',
       html: message
