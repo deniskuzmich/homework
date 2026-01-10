@@ -10,7 +10,7 @@ export class PasswordRecovery {
     this.authService = authService;
   }
 
-  recover = async (req: Request, res: Response) => {
+  recovery = async (req: Request, res: Response) => {
     const result = await this.authService.passwordRecovery(req.body.email);
     if (result.status !== ResultStatus.NoContent) {
       return res.sendStatus(mapResultCodeToHttpExtension(result.status))

@@ -14,7 +14,7 @@ const result_status_1 = require("../../../common/types/result.status");
 const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResultCodeToHttpExtention");
 class PasswordRecovery {
     constructor(authService) {
-        this.recover = (req, res) => __awaiter(this, void 0, void 0, function* () {
+        this.recovery = (req, res) => __awaiter(this, void 0, void 0, function* () {
             const result = yield this.authService.passwordRecovery(req.body.email);
             if (result.status !== result_status_1.ResultStatus.NoContent) {
                 return res.sendStatus((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status));
