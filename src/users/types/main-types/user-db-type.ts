@@ -7,7 +7,7 @@ export type UserDbType = {
   passwordHash: string;
   refreshToken?: string | null;
   passwordRecovery?: {
-    passwordRecoveryCode: string | null,
+    recoveryCode: string | null,
     expirationDate: Date
   },
   emailConfirmation: {

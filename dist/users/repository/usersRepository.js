@@ -86,8 +86,8 @@ class UsersRepository {
         return __awaiter(this, void 0, void 0, function* () {
             return mongo_db_1.usersCollection.updateOne({ email }, {
                 $set: {
-                    'passwordRecovery.passwordRecoveryCode': newCode,
-                    'expirationDate': (0, add_1.add)(new Date(), {
+                    'passwordRecovery.recoveryCode': newCode,
+                    'passwordRecovery.expirationDate': (0, add_1.add)(new Date(), {
                         hours: 0,
                         minutes: 5,
                     })

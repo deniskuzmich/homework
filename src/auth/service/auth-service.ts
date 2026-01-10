@@ -58,7 +58,7 @@ export class AuthService {
       passwordHash,
       createdAt: new Date(),
       passwordRecovery: {
-        passwordRecoveryCode: null,
+        recoveryCode: null,
         expirationDate: add(new Date(), {
           hours: 0,
           minutes: 0,
@@ -226,7 +226,7 @@ export class AuthService {
         data: false,
       }
     }
-    if(recoveryCode !== user.passwordRecovery!.passwordRecoveryCode) {
+    if(recoveryCode !== user.passwordRecovery!.recoveryCode) {
       return {
         status: ResultStatus.BadRequest,
         extensions: [{field: 'code', message: 'The user data in not correct'}],
