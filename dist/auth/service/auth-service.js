@@ -186,13 +186,13 @@ class AuthService {
             }
             if (!user) {
                 return {
-                    status: result_status_1.ResultStatus.BadRequest,
+                    status: result_status_1.ResultStatus.NoContent,
                     extensions: [],
                     data: false,
                 };
             }
             const newCode = (0, node_crypto_1.randomUUID)();
-            yield this.usersRepository.updateCodeForPasswordRecovery(user._id, newCode);
+            yield this.usersRepository.updateCodeForPasswordRecovery(email, newCode);
             try {
                 yield this.nodemailerService.sendPassword(user.email, email_examples_1.emailExamples.passwordRecovery(newCode));
             }

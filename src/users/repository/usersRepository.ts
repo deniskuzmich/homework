@@ -62,8 +62,8 @@ export class UsersRepository {
     })
   }
 
-  async updateCodeForPasswordRecovery(_id: ObjectId, newCode: string) {
-    return usersCollection.updateOne({_id}, {
+  async updateCodeForPasswordRecovery(email: string, newCode: string) {
+    return usersCollection.updateOne({email}, {
       $set: {
         'passwordRecoveryCode': newCode,
       }

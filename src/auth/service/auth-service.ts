@@ -194,7 +194,7 @@ export class AuthService {
     }
     if (!user) {
       return {
-        status: ResultStatus.BadRequest,
+        status: ResultStatus.NoContent,
         extensions: [],
         data: false,
       }
@@ -202,7 +202,7 @@ export class AuthService {
 
     const newCode = randomUUID()
 
-    await this.usersRepository.updateCodeForPasswordRecovery(user._id, newCode)
+    await this.usersRepository.updateCodeForPasswordRecovery(email, newCode)
     try {
       await this.nodemailerService.sendPassword(
         user.email,
