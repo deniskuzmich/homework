@@ -10,7 +10,6 @@ import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {NodemailerService} from "../../adapters/nodemailer-service";
 import {UsersRepository} from "../../users/repository/usersRepository";
-import {usersRepository} from "../../core/composition/composition-root";
 
 
 export class AuthService {
@@ -59,10 +58,7 @@ export class AuthService {
       createdAt: new Date(),
       passwordRecovery: {
         recoveryCode: null,
-        expirationDate: add(new Date(), {
-          hours: 0,
-          minutes: 0,
-        }),
+        expirationDate: null,
       },
       emailConfirmation: {
         confirmationCode: randomUUID(),

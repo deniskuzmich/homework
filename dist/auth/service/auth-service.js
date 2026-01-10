@@ -56,10 +56,7 @@ class AuthService {
                 createdAt: new Date(),
                 passwordRecovery: {
                     recoveryCode: null,
-                    expirationDate: (0, add_1.add)(new Date(), {
-                        hours: 0,
-                        minutes: 0,
-                    }),
+                    expirationDate: null,
                 },
                 emailConfirmation: {
                     confirmationCode: (0, node_crypto_1.randomUUID)(),

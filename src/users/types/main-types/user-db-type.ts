@@ -8,7 +8,7 @@ export type UserDbType = {
   refreshToken?: string | null;
   passwordRecovery?: {
     recoveryCode: string | null,
-    expirationDate: Date
+    expirationDate: Date | null
   },
   emailConfirmation: {
     confirmationCode: string,
