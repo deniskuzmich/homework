@@ -39,7 +39,7 @@ class UsersRepository {
     }
     getUserByRecoveryCode(code) {
         return __awaiter(this, void 0, void 0, function* () {
-            const user = yield mongo_db_1.usersCollection.findOne({ "passwordRecoveryCode": code });
+            const user = yield mongo_db_1.usersCollection.findOne({ "passwordRecovery.recoveryCode": code });
             return user;
         });
     }

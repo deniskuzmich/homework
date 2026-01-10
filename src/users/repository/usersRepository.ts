@@ -25,7 +25,7 @@ export class UsersRepository {
   }
 
   async getUserByRecoveryCode(code: string) {
-    const user = await usersCollection.findOne({"passwordRecoveryCode": code})
+    const user = await usersCollection.findOne({"passwordRecovery.recoveryCode": code})
     return user
   }
 
