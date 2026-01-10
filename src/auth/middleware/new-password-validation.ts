@@ -1,6 +1,6 @@
 import {body} from "express-validator";
 
-export const newPasswordValidation = body("password")
+export const newPasswordValidation = body("newPassword")
   .isString()
   .withMessage("password is not correct")
   .notEmpty()
