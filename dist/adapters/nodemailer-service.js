@@ -17,25 +17,17 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 class NodemailerService {
     sendEmail(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log('mail', process.env.EMAIL_USER);
+            console.log('mail', process.env.EMAIL_APP_PASSWORD);
             let transport = nodemailer_1.default.createTransport({
                 service: 'gmail',
                 auth: {
-                    user: process.env.EMAIL_USER,
-                    pass: process.env.EMAIL_PASSWORD,
+                    user: 'kuzmichdenis21@gmail.com',
+                    pass: 'diopzqaonsluurll',
                 }
-                // host: 'smtp.yandex.ru',
-                // port: 587,
-                // secure: false, // STARTTLS
-                // auth: {
-                //   user: process.env.MAIL_USER,
-                //   pass: process.env.MAIL_APP_PASSWORD,
-                // },
-                // tls: {
-                //   rejectUnauthorized: false,
-                // },
             });
             let info = yield transport.sendMail({
-                from: `"Denis" <${process.env.EMAIL_USER}>`,
+                from: `"Denis" <kuzmichdenis21@gmail.com>`,
                 to: email,
                 subject: 'Test',
                 html: message
@@ -45,19 +37,3 @@ class NodemailerService {
     }
 }
 exports.NodemailerService = NodemailerService;
-// let transport = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: process.env.EMAIL_USER,
-//     pass: process.env.EMAIL_PASSWORD,
-//   }
-// });
-//
-// let info = await transport.sendMail({
-//   from: '"Denis" <kuzmichdenis21@gmail.com>',
-//   to: email,
-//   subject: 'Test Registration',
-//   html: message
-// });
-// return info
-// }

@@ -2,26 +2,18 @@ import nodemailer from "nodemailer";
 
 export class NodemailerService {
   async sendEmail(email: string, message: string) {
+    console.log('mail', process.env.EMAIL_USER);
+    console.log('mail', process.env.EMAIL_APP_PASSWORD);
     let transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD,
+        user: 'kuzmichdenis21@gmail.com',
+        pass: 'diopzqaonsluurll',
       }
-      // host: 'smtp.yandex.ru',
-      // port: 587,
-      // secure: false, // STARTTLS
-      // auth: {
-      //   user: process.env.MAIL_USER,
-      //   pass: process.env.MAIL_APP_PASSWORD,
-      // },
-      // tls: {
-      //   rejectUnauthorized: false,
-      // },
     });
 
     let info = await transport.sendMail({
-      from: `"Denis" <${process.env.EMAIL_USER}>`,
+      from: `"Denis" <kuzmichdenis21@gmail.com>`,
       to: email,
       subject: 'Test',
       html: message
@@ -29,21 +21,3 @@ export class NodemailerService {
     return info
   }
 }
-
-
-// let transport = nodemailer.createTransport({
-//   service: 'gmail',
-//   auth: {
-//     user: process.env.EMAIL_USER,
-//     pass: process.env.EMAIL_PASSWORD,
-//   }
-// });
-//
-// let info = await transport.sendMail({
-//   from: '"Denis" <kuzmichdenis21@gmail.com>',
-//   to: email,
-//   subject: 'Test Registration',
-//   html: message
-// });
-// return info
-// }
