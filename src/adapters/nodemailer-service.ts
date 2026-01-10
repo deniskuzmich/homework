@@ -7,13 +7,13 @@ export class NodemailerService {
     let transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'kuzmichdenis21@gmail.com',
-        pass: 'diopzqaonsluurll',
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_APP_PASSWORD,
       }
     });
 
     let info = await transport.sendMail({
-      from: `"Denis" <kuzmichdenis21@gmail.com>`,
+      from: `"Denis" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Test',
       html: message
