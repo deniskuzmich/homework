@@ -18,7 +18,7 @@ class NodemailerService {
     sendEmail(email, message) {
         return __awaiter(this, void 0, void 0, function* () {
             console.log('mail', process.env.EMAIL_USER);
-            console.log('mail', process.env.EMAIL_APP_PASSWORD);
+            console.log('password', process.env.EMAIL_APP_PASSWORD);
             let transport = nodemailer_1.default.createTransport({
                 service: 'gmail',
                 auth: {

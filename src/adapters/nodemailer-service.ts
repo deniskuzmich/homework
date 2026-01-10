@@ -3,7 +3,7 @@ import nodemailer from "nodemailer";
 export class NodemailerService {
   async sendEmail(email: string, message: string) {
     console.log('mail', process.env.EMAIL_USER);
-    console.log('mail', process.env.EMAIL_APP_PASSWORD);
+    console.log('password', process.env.EMAIL_APP_PASSWORD);
     let transport = nodemailer.createTransport({
       service: 'gmail',
       auth: {

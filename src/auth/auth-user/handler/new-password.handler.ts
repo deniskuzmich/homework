@@ -13,7 +13,7 @@ export class NewPasswordHandler {
   newPassword = async (req: Request, res: Response) => {
     const result = await this.authService.newPassword(req.body.password, req.body.code);
     if (result.status !== ResultStatus.NoContent) {
-      return res.sendStatus(mapResultCodeToHttpExtension(result.status))
+      return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions })
     }
     return res.sendStatus(mapResultCodeToHttpExtension(result.status))
   }

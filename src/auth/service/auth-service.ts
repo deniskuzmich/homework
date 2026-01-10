@@ -229,6 +229,13 @@ export class AuthService {
         data: false,
       }
     }
+    if(!newPassword) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [{field: 'newPassword', message: 'The new password in not correct'}],
+        data: false,
+      }
+    }
     const passwordHash = await this.bcryptService.generateHash(newPassword)
 
     await this.usersRepository.createNewPassword(user?._id, passwordHash)
