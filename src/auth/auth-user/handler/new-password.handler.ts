@@ -11,7 +11,7 @@ export class NewPasswordHandler {
   }
 
   newPassword = async (req: Request, res: Response) => {
-    const result = await this.authService.newPassword(req.body.password, req.body.code);
+    const result = await this.authService.newPassword(req.body.newPassword, req.body.recoveryCode);
     if (result.status !== ResultStatus.NoContent) {
       return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions })
     }

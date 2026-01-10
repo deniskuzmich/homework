@@ -1,16 +1,21 @@
 import {Router} from "express";
 import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
-import {authInputValidation, emailValidation, passwordValidation} from "../auth/middleware/auth-validation";
+import {authInputValidation, emailValidation} from "../auth/middleware/auth-validation";
 import {requestLoggerMiddleware} from "../devices/middleware/request-log-middleware";
 import {requestCountMiddleware} from "../devices/middleware/request-count-middleware";
 import {
   aboutMeHandler,
   authHandler,
-  authRefreshTokenHandler, emailResendingHandler,
-  logoutHandler, newPasswordHandler, passwordRecoveryHandler, registrationConfirmHandler,
+  authRefreshTokenHandler,
+  emailResendingHandler,
+  logoutHandler,
+  newPasswordHandler,
+  passwordRecoveryHandler,
+  registrationConfirmHandler,
   userRegistrationHandler
 } from "../core/composition/composition-root";
+import {newPasswordValidation} from "../auth/middleware/new-password-validation";
 
 export const authRouter = Router()
   .post('/login', requestCountMiddleware, requestLoggerMiddleware, authHandler.login)
@@ -20,5 +25,5 @@ export const authRouter = Router()
   .post('/registration-confirmation', requestCountMiddleware, requestLoggerMiddleware, inputValidationResultMiddleware, registrationConfirmHandler.confirmation)
   .post('/registration-email-resending', requestCountMiddleware, requestLoggerMiddleware, inputValidationResultMiddleware, emailResendingHandler.resending)
   .post('/password-recovery', requestCountMiddleware, requestLoggerMiddleware, emailValidation, inputValidationResultMiddleware, passwordRecoveryHandler.recovery)
-  .post('/new-password', requestCountMiddleware, requestLoggerMiddleware, passwordValidation, newPasswordHandler.newPassword)
+  .post('/new-password', requestCountMiddleware, requestLoggerMiddleware,newPasswordValidation,inputValidationResultMiddleware, newPasswordHandler.newPassword)
   .get('/me', authMiddleware, aboutMeHandler.me)

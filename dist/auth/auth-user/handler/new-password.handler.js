@@ -15,7 +15,7 @@ const mapResultCodeToHttpExtention_1 = require("../../../common/mapper/mapResult
 class NewPasswordHandler {
     constructor(authService) {
         this.newPassword = (req, res) => __awaiter(this, void 0, void 0, function* () {
-            const result = yield this.authService.newPassword(req.body.password, req.body.code);
+            const result = yield this.authService.newPassword(req.body.newPassword, req.body.recoveryCode);
             if (result.status !== result_status_1.ResultStatus.NoContent) {
                 return res.status((0, mapResultCodeToHttpExtention_1.mapResultCodeToHttpExtension)(result.status)).send({ errorsMessages: result.extensions });
             }
