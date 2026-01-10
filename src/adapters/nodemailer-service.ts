@@ -23,25 +23,7 @@ export class NodemailerService {
     let info = await transport.sendMail({
       from: `"Denis" <${process.env.MAIL_USER}>`,
       to: email,
-      subject: 'Test Registration',
-      html: message
-    });
-    return info
-  }
-
-  async sendPassword(email: string, message: string) {
-    let transport = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.MAIL_USER,
-        pass: process.env.MAIL_APP_PASSWORD,
-      }
-    });
-
-    let info = await transport.sendMail({
-      from: `"Denis" <${process.env.MAIL_USER}>`,
-      to: email,
-      subject: 'Password recovery',
+      subject: 'Test',
       html: message
     });
     return info

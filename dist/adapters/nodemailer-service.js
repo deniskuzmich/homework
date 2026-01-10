@@ -37,25 +37,7 @@ class NodemailerService {
             let info = yield transport.sendMail({
                 from: `"Denis" <${process.env.MAIL_USER}>`,
                 to: email,
-                subject: 'Test Registration',
-                html: message
-            });
-            return info;
-        });
-    }
-    sendPassword(email, message) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let transport = nodemailer_1.default.createTransport({
-                service: 'gmail',
-                auth: {
-                    user: process.env.MAIL_USER,
-                    pass: process.env.MAIL_APP_PASSWORD,
-                }
-            });
-            let info = yield transport.sendMail({
-                from: `"Denis" <${process.env.MAIL_USER}>`,
-                to: email,
-                subject: 'Password recovery',
+                subject: 'Test',
                 html: message
             });
             return info;

@@ -191,7 +191,7 @@ export class AuthService {
       return {
         status: ResultStatus.NoContent,
         extensions: [],
-        data: false,
+        data: true,
       }
     }
 
@@ -199,7 +199,7 @@ export class AuthService {
 
     await this.usersRepository.updateCodeForPasswordRecovery(email, newCode)
     try {
-      await this.nodemailerService.sendPassword(
+      await this.nodemailerService.sendEmail(
         user.email,
         emailExamples.passwordRecovery(newCode)
       )

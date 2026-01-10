@@ -184,13 +184,13 @@ class AuthService {
                 return {
                     status: result_status_1.ResultStatus.NoContent,
                     extensions: [],
-                    data: false,
+                    data: true,
                 };
             }
             const newCode = (0, node_crypto_1.randomUUID)();
             yield this.usersRepository.updateCodeForPasswordRecovery(email, newCode);
             try {
-                yield this.nodemailerService.sendPassword(user.email, email_examples_1.emailExamples.passwordRecovery(newCode));
+                yield this.nodemailerService.sendEmail(user.email, email_examples_1.emailExamples.passwordRecovery(newCode));
             }
             catch (e) {
                 console.log('Send password recovery error', e);
