@@ -6,15 +6,13 @@ import {NodemailerService} from "../../src/adapters/nodemailer-service";
 import {AuthService} from "../../src/auth/service/auth-service";
 import {container} from "../../src/core/ioc/ioc";
 
-authService = new AuthService();
-
-const nodeMailerMock = {
-  sendEmail: jest.fn().mockResolvedValue({})
-}
-
-
 describe('AUTH Integration Tests', () => {
   let mongoServer: MongoMemoryServer;
+  let authService: AuthService;
+
+  const nodemailerMock = {
+    sendEmail: jest.fn().mockResolvedValue(true)
+  };
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
@@ -22,12 +20,13 @@ describe('AUTH Integration Tests', () => {
 
     await runDB(uri);
 
-    jest
-      .spyOn(nodemailerService, 'sendEmail')
-      .mockResolvedValue({} as any);
+    container.snapshot();
+    (await container.rebind(NodemailerService)).toConstantValue(nodemailerMock as any);
+    authService = container.get<AuthService>(AuthService);
   });
 
   afterAll(async () => {
+    container.restore()
     await stopDb();
     await mongoServer.stop();
   });
@@ -38,6 +37,7 @@ describe('AUTH Integration Tests', () => {
 
       const result = await authService.registerUser(login, password, email);
       expect(result.status).toBe(ResultStatus.NoContent);
+      expect(nodemailerMock.sendEmail).toHaveBeenCalled();
     });
 
     it('Should not register user twice', async () => {

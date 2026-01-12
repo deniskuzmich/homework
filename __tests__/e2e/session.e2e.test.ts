@@ -3,12 +3,17 @@ import {MongoMemoryServer} from 'mongodb-memory-server'
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {app} from "../../src/init-app";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
-import {NodemailerService} from "../../src/adapters/nodemailer-service";
-import {container} from "../../src/core/ioc/ioc";
 
-const nodeMailerMock = {
-  sendEmail: jest.fn().mockResolvedValue({})
-}
+
+jest.mock("../../src/adapters/nodemailer-service", () => {
+  return {
+    NodemailerService: jest.fn().mockImplementation(() => ({
+      sendEmail: jest.fn().mockResolvedValue(true)
+    }))
+  };
+});
+import {NodemailerService} from "../../src/adapters/nodemailer-service";
+const nodeMailerMock = new NodemailerService() as jest.Mocked<NodemailerService>;
 
 describe('SESSION Tests', () => {
   let mongoServer: MongoMemoryServer
@@ -35,9 +40,9 @@ describe('SESSION Tests', () => {
     mongoServer = await MongoMemoryServer.create()
     await runDB(mongoServer.getUri());
 
-    (await container.rebind(NodemailerService)).toConstantValue(
-      nodeMailerMock as NodemailerService
-    )
+    // (await container.rebind(NodemailerService)).toConstantValue(
+    //   nodeMailerMock as NodemailerService
+    // )
   })
 
   afterAll(async () => {
@@ -51,8 +56,6 @@ describe('SESSION Tests', () => {
       .post('/auth/registration')
       .send({login, password, email})
       .expect(HttpStatuses.NoContent)
-
-      expect(nodeMailerMock.sendEmail).toHaveBeenCalled()
   })
 
   it('should login user from 4 different devices', async () => {

@@ -51,13 +51,14 @@ import {GetDevicesHandler} from "../../devices/handler/get-devices.handler";
 import {DevicesRepository} from "../../devices/repository/devicesRepository";
 import {DeleteAllDevicesHandler} from "../../devices/handler/delete-all-devices.handler";
 import {DeleteOneDeviceHandler} from "../../devices/handler/delete-one-device.handler";
-
+import {AuthMiddleWare} from "../../auth/middleware/auth.middleware";
 
 export const container = new Container();
 
 container.bind(BcryptService).to(BcryptService);
 container.bind(JwtService).to(JwtService);
 container.bind(NodemailerService).to(NodemailerService);
+container.bind(AuthMiddleWare).to(AuthMiddleWare);
 
 container.bind(BlogsQueryRepository).to(BlogsQueryRepository);
 container.bind(BlogsRepository).to(BlogsRepository);

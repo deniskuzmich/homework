@@ -4,7 +4,6 @@ import {inputValidationResultMiddleware} from "../common/middleware-validation/i
 import {postInputValidation} from "../posts/middleware-validation/posts.input.validation-middleware";
 import {superAdminGuardMiddleware} from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
-import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {contentValidation} from "../comments/validation/comments-validation";
 import {container} from "../core/ioc/ioc";
 import {GetPostListHandler} from "../posts/handlers/get-posts-list.hanlder";
@@ -14,6 +13,7 @@ import {CreatePostsHandler} from "../posts/handlers/create-posts.hanlder";
 import {DeletePostHandler} from "../posts/handlers/delete-post.hanlder";
 import {GetCommentForPostHandler} from "../comments/handler/get-comment-for-post.handler";
 import {CreateCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
+import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
 
 const getPostListHandler = container.get(GetPostListHandler);
 const getPostHandler = container.get(GetPostHandler);
@@ -22,6 +22,7 @@ const createPostsHandler = container.get(CreatePostsHandler);
 const deletePostHandler = container.get(DeletePostHandler);
 const getCommentForPostHandler = container.get(GetCommentForPostHandler);
 const createCommentForPostHandler = container.get(CreateCommentForPostHandler);
+const authMiddleware = container.get(AuthMiddleWare);
 
 export const postRouter = Router();
 postRouter
@@ -65,7 +66,7 @@ postRouter
     getCommentForPostHandler.getComment.bind(getCommentForPostHandler))
 
   .post('/:id/comments',
-    authMiddleware,
+    authMiddleware.authMiddleWare.bind(authMiddleware),
     contentValidation,
     inputValidationResultMiddleware,
     createCommentForPostHandler.createComment.bind(createCommentForPostHandler))

@@ -1,5 +1,4 @@
 import {Router} from "express";
-import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
 import {authInputValidation, emailValidation} from "../auth/middleware/auth-validation";
 import {requestLoggerMiddleware} from "../devices/middleware/request-log-middleware";
@@ -15,6 +14,7 @@ import {EmailResendingHandler} from "../auth/auth-user/handler/email-resending";
 import {PasswordRecovery} from "../auth/auth-user/handler/password-recovery";
 import {NewPasswordHandler} from "../auth/auth-user/handler/new-password.handler";
 import {AboutMeHandler} from "../auth/auth-user/handler/auth-me-handler";
+import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
 
 const authHandler = container.get(AuthUserHandler)
 const authRefreshTokenHandler = container.get(AuthRefreshTokenHandler)
@@ -25,6 +25,7 @@ const emailResendingHandler = container.get(EmailResendingHandler)
 const passwordRecoveryHandler = container.get(PasswordRecovery)
 const newPasswordHandler = container.get(NewPasswordHandler)
 const aboutMeHandler = container.get(AboutMeHandler)
+const authMiddleware = container.get(AuthMiddleWare);
 
 export const authRouter = Router()
   .post('/login',
@@ -72,5 +73,5 @@ export const authRouter = Router()
     newPasswordHandler.newPassword.bind(newPasswordHandler))
 
   .get('/me',
-    authMiddleware,
+    authMiddleware.authMiddleWare.bind(authMiddleware),
     aboutMeHandler.me.bind(aboutMeHandler),)
