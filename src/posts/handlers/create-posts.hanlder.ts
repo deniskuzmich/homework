@@ -3,18 +3,19 @@ import {PostInputDto} from "../types/main-types/post.input-dto";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {PostsQueryRepository} from "../repository/posts-query-repository";
 import {PostsService} from "../service/posts.service";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CreatePostsHandler {
-  postsQueryRepository: PostsQueryRepository;
-  postsService: PostsService;
 
-  constructor(postsQueryRepository: PostsQueryRepository, postsService: PostsService) {
-    this.postsQueryRepository = postsQueryRepository;
-    this.postsService = postsService;
+  constructor(
+    @inject(PostsQueryRepository)
+    public postsQueryRepository: PostsQueryRepository,
+    @inject(PostsService)
+    public postsService: PostsService) {
   }
 
-  createPost = async (req: Request<{}, {}, PostInputDto>, res: Response) => {
+  async createPost(req: Request<{}, {}, PostInputDto>, res: Response) {
     try {
       const createdPost = await this.postsService.createPost(req.body);
       if (!createdPost) {

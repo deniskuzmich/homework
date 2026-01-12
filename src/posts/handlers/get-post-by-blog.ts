@@ -3,17 +3,19 @@ import {HttpStatuses} from "../../common/types/http-statuses";
 import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 import {BlogsService} from "../../blogs/service/blogs.service";
 import {PostsQueryRepository} from "../repository/posts-query-repository";
+import {injectable, inject} from "inversify";
 
-
+@injectable()
 export class GetPostByBlogIdHandler {
-  blogsService: BlogsService;
-  postsQueryRepository: PostsQueryRepository;
 
-  constructor(blogsService: BlogsService, postsQueryRepository: PostsQueryRepository) {
-    this.blogsService = blogsService;
-    this.postsQueryRepository = postsQueryRepository;
+  constructor(
+    @inject(BlogsService)
+    public blogsService: BlogsService,
+    @inject(PostsQueryRepository)
+    public postsQueryRepository: PostsQueryRepository) {
   }
-   getPost = async(req: Request, res: Response) => {
+
+  async getPost(req: Request, res: Response) {
     const query = valuesPaginationMaper(req.query);
 
     const blog = await this.blogsService.getBlogById(req.params.id);

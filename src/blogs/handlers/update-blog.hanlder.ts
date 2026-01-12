@@ -2,15 +2,17 @@ import {Request, Response} from "express";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {BlogsService} from "../service/blogs.service";
+import {injectable, inject} from "inversify";
 
+@injectable()
 export class UpdateBlogHandler {
-  blogsService: BlogsService;
 
-  constructor(blogsService: BlogsService) {
-    this.blogsService = blogsService;
+  constructor(
+    @inject(BlogsService)
+    public blogsService: BlogsService) {
   }
 
-  update = async (req: Request<{ id: string }, {}, BlogInputDto>, res: Response) => {
+  async update(req: Request<{ id: string }, {}, BlogInputDto>, res: Response) {
     const blog = await this.blogsService.getBlogById(req.params.id);
 
     if (!blog) {

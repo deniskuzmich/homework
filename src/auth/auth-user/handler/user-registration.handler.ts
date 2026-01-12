@@ -2,15 +2,17 @@ import {Request, Response} from "express";
 import {ResultStatus} from "../../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../../common/mapper/mapResultCodeToHttpExtention";
 import {AuthService} from "../../service/auth-service";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UserRegistrationHandler {
-  authService: AuthService;
 
-  constructor(authService: AuthService) {
-    this.authService = authService;
+  constructor(
+    @inject(AuthService)
+    public authService: AuthService) {
   }
 
-  registration = async (req: Request, res: Response) => {
+  async registration(req: Request, res: Response) {
     const login = req.body.login;
     const email = req.body.email;
     const password = req.body.password;

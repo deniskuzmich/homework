@@ -5,20 +5,21 @@ import {ResultStatus} from "../../common/types/result.status";
 import {JwtService} from "../../common/services/jwtService";
 import {DevicesRepository} from "../repository/devicesRepository";
 import {DeviceService} from "../service/deviceService";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class DeleteAllDevicesHandler {
-  jwtService: JwtService;
-  devicesRepository: DevicesRepository;
-  deviceService: DeviceService
 
-  constructor(jwtService: JwtService, devicesRepository: DevicesRepository, deviceService: DeviceService) {
-    this.jwtService = jwtService;
-    this.devicesRepository = devicesRepository;
-    this.deviceService = deviceService;
+  constructor(
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DevicesRepository)
+    public devicesRepository: DevicesRepository,
+    @inject(DeviceService)
+    public deviceService: DeviceService) {
   }
 
-  delete = async (req: Request, res: Response) => {
+  async delete(req: Request, res: Response) {
     const refreshToken = req.cookies.refreshToken;
     if (!refreshToken) {
       return res.sendStatus(HttpStatuses.Unauthorized)

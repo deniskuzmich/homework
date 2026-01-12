@@ -3,8 +3,12 @@ import {MongoMemoryServer} from 'mongodb-memory-server'
 import {runDB, stopDb} from "../../src/db/mongo.db";
 import {app} from "../../src/init-app";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
-import {nodemailerService} from "../../src/core/composition/composition-root";
+import {NodemailerService} from "../../src/adapters/nodemailer-service";
+import {container} from "../../src/core/ioc/ioc";
 
+const nodeMailerMock = {
+  sendEmail: jest.fn().mockResolvedValue({})
+}
 
 describe('SESSION Tests', () => {
   let mongoServer: MongoMemoryServer
@@ -21,19 +25,19 @@ describe('SESSION Tests', () => {
   }
 
   const devices: TestDevice[] = [
-    { deviceName: 'Chrome' },
-    { deviceName: 'Firefox' },
-    { deviceName: 'Safari' },
-    { deviceName: 'Edge' },
+    {deviceName: 'Chrome'},
+    {deviceName: 'Firefox'},
+    {deviceName: 'Safari'},
+    {deviceName: 'Edge'},
   ]
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
-    await runDB(mongoServer.getUri())
+    await runDB(mongoServer.getUri());
 
-    jest
-      .spyOn(nodemailerService, 'sendEmail')
-      .mockResolvedValue({} as any)
+    (await container.rebind(NodemailerService)).toConstantValue(
+      nodeMailerMock as NodemailerService
+    )
   })
 
   afterAll(async () => {
@@ -45,8 +49,10 @@ describe('SESSION Tests', () => {
   it('should register user', async () => {
     await request(app)
       .post('/auth/registration')
-      .send({ login, password, email })
+      .send({login, password, email})
       .expect(HttpStatuses.NoContent)
+
+      expect(nodeMailerMock.sendEmail).toHaveBeenCalled()
   })
 
   it('should login user from 4 different devices', async () => {
@@ -54,7 +60,7 @@ describe('SESSION Tests', () => {
       const res = await request(app)
         .post('/auth/login')
         .set('User-Agent', device.deviceName)
-        .send({ loginOrEmail: login, password })
+        .send({loginOrEmail: login, password})
         .expect(HttpStatuses.Success)
 
       device.refreshToken = res.headers['set-cookie'][0]

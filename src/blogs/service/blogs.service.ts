@@ -5,25 +5,19 @@ import {Post} from "../../posts/types/main-types/posts-db.type";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
 import {PostsRepository} from "../../posts/repository/posts-repository";
 import {BlogsRepository} from "../repository/blogs-repository";
+import {injectable, inject} from "inversify";
 
+@injectable()
 export class BlogsService {
-  blogsRepository: BlogsRepository;
-  postsRepository: PostsRepository;
 
-  constructor(blogsRepository: BlogsRepository, postsRepository: PostsRepository) {
-    this.blogsRepository = blogsRepository;
-    this.postsRepository = postsRepository;
-  }
+  constructor(
+    @inject(BlogsRepository)
+    public blogsRepository: BlogsRepository,
+    @inject(PostsRepository)
+    public postsRepository: PostsRepository) {}
 
   async getBlogById(id: string): Promise<WithId<Blog> | null> {
     return this.blogsRepository.getBlogById(id);
-  }
-  async getPostByBlogId(id: string): Promise<WithId<Post> | null> {
-    const blog = await this.blogsRepository.getBlogById(id)
-    if (!blog) {
-      return null;
-    }
-    return await this.postsRepository.getPostByBlogId(blog._id.toString())
   }
   async createPostForBlog(blog: WithId<Blog>, inputInfo: PostInputDtoForBlog): Promise<WithId<Post>> {
     const newPostByBlogId = {
@@ -37,8 +31,7 @@ export class BlogsService {
     return this.postsRepository.createPost(newPostByBlogId)
   }
   async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
-     const updatedBlog = await this.blogsRepository.updateBlog(id, newData);
-     return
+    return await this.blogsRepository.updateBlog(id, newData);
   }
   async createBlog(newData: BlogInputDto): Promise<WithId<Blog>> {
     const newBlog: Blog = {
@@ -51,7 +44,7 @@ export class BlogsService {
     return await this.blogsRepository.createBlog(newBlog);
   }
   async deleteBlog(id: string): Promise<void> {
-    const deletedBlog = await this.blogsRepository.deleteBlog(id);
+    return await this.blogsRepository.deleteBlog(id);
   }
 };
 

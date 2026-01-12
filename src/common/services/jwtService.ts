@@ -1,6 +1,8 @@
 import {SETTINGS} from "../../core/settings/settings";
 import jwt from 'jsonwebtoken';
+import {injectable} from "inversify";
 
+@injectable()
 export class JwtService {
    createJWT(userId: string) {
     return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: "10s"});

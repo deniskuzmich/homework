@@ -5,15 +5,18 @@ import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
 import {mapRegisterUser} from "../mapper/map-register-user";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {UsersRepository} from "../repository/usersRepository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UsersService {
-  bcryptService: BcryptService;
-  usersRepository: UsersRepository;
 
-  constructor(bcryptService: BcryptService, usersRepository: UsersRepository) {
-    this.bcryptService = bcryptService;
-    this.usersRepository = usersRepository;
+  constructor(
+    @inject(BcryptService)
+    public bcryptService: BcryptService,
+    @inject(UsersRepository)
+    public usersRepository: UsersRepository) {
   }
+
   async createUser(queryDto: UserInputDto): Promise<WithId<UserDbType> | ErrorTypeOutput> {
     const isLoginExists = await this.usersRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {

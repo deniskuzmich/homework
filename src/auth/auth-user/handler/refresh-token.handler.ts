@@ -2,18 +2,19 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {JwtService} from "../../../common/services/jwtService";
 import {DeviceService} from "../../../devices/service/deviceService";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class AuthRefreshTokenHandler {
-  jwtService: JwtService;
-  deviceService: DeviceService;
 
-  constructor(jwtService: JwtService, deviceService: DeviceService) {
-    this.jwtService = jwtService;
-    this.deviceService = deviceService;
+  constructor(
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DeviceService)
+    public deviceService: DeviceService) {
   }
 
-  refreshToken = async (req: Request, res: Response) => {
+  async refreshToken(req: Request, res: Response) {
     const refreshToken = req.cookies.refreshToken;
     const ip: string | undefined = req.ip
     const deviceName = req.headers['user-agent'] ?? 'Some device'

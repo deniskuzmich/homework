@@ -4,18 +4,19 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {CommentsService} from "../service/comments.service";
 import {CommentsQueryRepository} from "../repository/comments-query.repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CreateCommentForPostHandler {
-  commentsService: CommentsService;
-  commentsQueryRepository: CommentsQueryRepository;
 
-  constructor(commentsService: CommentsService, commentsQueryRepository: CommentsQueryRepository) {
-    this.commentsService = commentsService;
-    this.commentsQueryRepository = commentsQueryRepository;
+  constructor(
+    @inject(CommentsService)
+    public commentsService: CommentsService,
+    @inject(CommentsQueryRepository)
+    public commentsQueryRepository: CommentsQueryRepository) {
   }
 
-  createComment = async (req: Request, res: Response) => {
+  async createComment(req: Request, res: Response) {
     const user = req.user
     const content = req.body.content
     const postId = req.params.id;

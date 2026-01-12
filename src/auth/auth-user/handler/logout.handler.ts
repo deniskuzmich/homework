@@ -2,18 +2,19 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {JwtService} from "../../../common/services/jwtService";
 import {DeviceService} from "../../../devices/service/deviceService";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class LogoutHandler {
-  jwtService: JwtService;
-  deviceService: DeviceService;
 
-  constructor(jwtService: JwtService, deviceService: DeviceService) {
-    this.jwtService = jwtService;
-    this.deviceService = deviceService;
+  constructor(
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DeviceService)
+    public deviceService: DeviceService) {
   }
 
-  logout = async (req: Request, res: Response) => {
+  async logout(req: Request, res: Response) {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {

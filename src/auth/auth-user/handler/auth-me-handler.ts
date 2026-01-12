@@ -1,15 +1,17 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../../common/types/http-statuses";
 import {AuthService} from "../../service/auth-service";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class AboutMeHandler {
-  authService: AuthService;
 
-  constructor(authService: AuthService) {
-    this.authService = authService;
+  constructor(
+    @inject(AuthService)
+    public authService: AuthService) {
   }
 
-  me = async (req: Request, res: Response) => {
+  async me(req: Request, res: Response) {
     if (!req.user) {
       return res.sendStatus(HttpStatuses.Unauthorized)
     }

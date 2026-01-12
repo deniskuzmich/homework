@@ -3,17 +3,20 @@ import {HttpStatuses} from "../../common/types/http-statuses";
 import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 import {PostsService} from "../../posts/service/posts.service";
 import {CommentsQueryRepository} from "../repository/comments-query.repository";
+import {inject, injectable} from "inversify";
 
+
+@injectable()
 export class GetCommentForPostHandler {
-  postsService: PostsService;
-  commentsQueryRepository: CommentsQueryRepository;
 
-  constructor(postsService: PostsService, commentsQueryRepository: CommentsQueryRepository) {
-    this.postsService = postsService;
-    this.commentsQueryRepository = commentsQueryRepository;
+  constructor(
+    @inject(PostsService)
+    public postsService: PostsService,
+    @inject(CommentsQueryRepository)
+    public commentsQueryRepository: CommentsQueryRepository) {
   }
 
-  getComment = async (req: Request, res: Response) => {
+  async getComment(req: Request, res: Response) {
     const id = req.params.id;
     const query = valuesPaginationMaper(req.query);
 

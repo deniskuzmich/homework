@@ -4,16 +4,16 @@ import {PostOutput} from "../types/main-types/post-output.type";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {valuesPaginationMaper} from "../../common/mapper/values-pagination.mapper";
 import {PostsQueryRepository} from "../repository/posts-query-repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class GetPostListHandler {
-  postsQueryRepository: PostsQueryRepository
 
-  constructor(postsQueryRepository: PostsQueryRepository) {
-    this.postsQueryRepository = postsQueryRepository
-  }
+  constructor(
+    @inject(PostsQueryRepository)
+    public postsQueryRepository: PostsQueryRepository) {}
 
-  getPostList = async (req: Request, res: Response) => {
+  async getPostList (req: Request, res: Response) {
     const queryInput = valuesPaginationMaper(req.query)
 
     const foundPosts: OutputTypeWithPagination<PostOutput> = await this.postsQueryRepository.findPosts(queryInput);

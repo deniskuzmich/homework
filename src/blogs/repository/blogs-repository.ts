@@ -2,7 +2,9 @@ import {Blog} from "../types/main-types/blog-db.type";
 import {ObjectId, WithId} from "mongodb";
 import {blogsCollection} from "../../db/mongo.db";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsRepository {
   async getBlogById(id: string): Promise<WithId<Blog> | null> {
     return blogsCollection.findOne({_id: new ObjectId(id)});

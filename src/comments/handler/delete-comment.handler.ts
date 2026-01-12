@@ -2,13 +2,14 @@ import {Request, Response} from "express";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {CommentsService} from "../service/comments.service";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class DeleteCommentHandler {
-  commentsService: CommentsService
 
-  constructor(commentsService: CommentsService) {
-    this.commentsService = commentsService;
+  constructor(
+    @inject(CommentsService)
+    public commentsService: CommentsService) {
   }
 
   delete = async (req: Request, res: Response) => {

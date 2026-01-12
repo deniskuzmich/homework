@@ -1,25 +1,37 @@
-import { Router } from "express";
-import { idValidation } from "../common/middleware-validation/id.validation-middleware";
-import { inputValidationResultMiddleware } from "../common/middleware-validation/input.validation-result.middleware";
-import { postInputValidation } from "../posts/middleware-validation/posts.input.validation-middleware";
-import { superAdminGuardMiddleware } from "../auth/auth-admin/super-admin.guard.middleware";
+import {Router} from "express";
+import {idValidation} from "../common/middleware-validation/id.validation-middleware";
+import {inputValidationResultMiddleware} from "../common/middleware-validation/input.validation-result.middleware";
+import {postInputValidation} from "../posts/middleware-validation/posts.input.validation-middleware";
+import {superAdminGuardMiddleware} from "../auth/auth-admin/super-admin.guard.middleware";
 import {paginationValidation} from "../common/validation/pagination-validation";
 import {authMiddleware} from "../auth/middleware/auth.middleware";
 import {contentValidation} from "../comments/validation/comments-validation";
+import {container} from "../core/ioc/ioc";
+import {GetPostListHandler} from "../posts/handlers/get-posts-list.hanlder";
+import {GetPostHandler} from "../posts/handlers/get-post.hanlder";
+import {UpdatePostHandler} from "../posts/handlers/update-post.hanlder";
+import {CreatePostsHandler} from "../posts/handlers/create-posts.hanlder";
+import {DeletePostHandler} from "../posts/handlers/delete-post.hanlder";
+import {GetCommentForPostHandler} from "../comments/handler/get-comment-for-post.handler";
+import {CreateCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
 
-import {
-  createCommentForPostHandler,
-  createPostsHandler, deletePostHandler, getCommentForPostHandler,
-  getPostHandler,
-  getPostListHandler,
-  updatePostHandler
-} from "../core/composition/composition-root";
+const getPostListHandler = container.get(GetPostListHandler);
+const getPostHandler = container.get(GetPostHandler);
+const updatePostHandler = container.get(UpdatePostHandler);
+const createPostsHandler = container.get(CreatePostsHandler);
+const deletePostHandler = container.get(DeletePostHandler);
+const getCommentForPostHandler = container.get(GetCommentForPostHandler);
+const createCommentForPostHandler = container.get(CreateCommentForPostHandler);
 
 export const postRouter = Router();
 postRouter
-  .get("",paginationValidation, getPostListHandler.getPostList)
+  .get("",
+    paginationValidation,
+    getPostListHandler.getPostList.bind(getPostListHandler))
 
-  .get("/:id", idValidation, inputValidationResultMiddleware, getPostHandler.getPost)
+  .get("/:id",
+    idValidation,
+    inputValidationResultMiddleware, getPostHandler.getPost.bind(getPostHandler))
 
   .put(
     "/:id",
@@ -27,7 +39,7 @@ postRouter
     idValidation,
     postInputValidation,
     inputValidationResultMiddleware,
-    updatePostHandler.updatePost,
+    updatePostHandler.updatePost.bind(updatePostHandler),
   )
 
   .post(
@@ -35,7 +47,7 @@ postRouter
     superAdminGuardMiddleware,
     postInputValidation,
     inputValidationResultMiddleware,
-    createPostsHandler.createPost,
+    createPostsHandler.createPost.bind(createPostsHandler),
   )
 
   .delete(
@@ -43,11 +55,20 @@ postRouter
     superAdminGuardMiddleware,
     idValidation,
     inputValidationResultMiddleware,
-    deletePostHandler.deletePost,
+    deletePostHandler.deletePost.bind(deletePostHandler),
   )
 
-  .get('/:id/comments', idValidation, paginationValidation,inputValidationResultMiddleware, getCommentForPostHandler.getComment)
-  .post('/:id/comments', authMiddleware, contentValidation, inputValidationResultMiddleware, createCommentForPostHandler.createComment)
+  .get('/:id/comments',
+    idValidation,
+    paginationValidation,
+    inputValidationResultMiddleware,
+    getCommentForPostHandler.getComment.bind(getCommentForPostHandler))
+
+  .post('/:id/comments',
+    authMiddleware,
+    contentValidation,
+    inputValidationResultMiddleware,
+    createCommentForPostHandler.createComment.bind(createCommentForPostHandler))
 
 
 

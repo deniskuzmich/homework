@@ -6,19 +6,21 @@ import {CommentDbType} from "../types/main-types/comment-db.type";
 import {CommentsQueryRepository} from "../repository/comments-query.repository";
 import {PostsRepository} from "../../posts/repository/posts-repository";
 import {CommentsRepository} from "../repository/comments.repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CommentsService {
-  commentsQueryRepository: CommentsQueryRepository;
-  commentsRepository: CommentsRepository;
-  postsRepository: PostsRepository;
 
-  constructor(commentsQueryRepository: CommentsQueryRepository, commentsRepository: CommentsRepository, postsRepository: PostsRepository) {
-    this.commentsQueryRepository = commentsQueryRepository;
-    this.commentsRepository = commentsRepository;
-    this.postsRepository = postsRepository;
+  constructor(
+    @inject(CommentsQueryRepository)
+    public commentsQueryRepository: CommentsQueryRepository,
+    @inject(CommentsRepository)
+    public commentsRepository: CommentsRepository,
+    @inject(PostsRepository)
+    public postsRepository: PostsRepository) {
   }
-  async updateComment(id: string, newContent: string, userId: string ): Promise<ResultType> {
+
+  async updateComment(id: string, newContent: string, userId: string): Promise<ResultType> {
     const comment = await this.commentsQueryRepository.getCommentById(id);
     if (!comment) {
       return {
@@ -29,7 +31,7 @@ export class CommentsService {
       }
     }
 
-    if(comment.commentatorInfo?.userId?.toString() !== userId) {
+    if (comment.commentatorInfo?.userId?.toString() !== userId) {
       return {
         status: ResultStatus.Forbidden,
         errorMessage: 'User is not own this comment',
@@ -101,7 +103,7 @@ export class CommentsService {
 
   async deleteComment(commentId: string, userId: string): Promise<ResultType> {
     const comment = await this.commentsRepository.getCommentById(commentId);
-    if(!comment) {
+    if (!comment) {
       return {
         status: ResultStatus.NotFound,
         errorMessage: 'Comment not found',

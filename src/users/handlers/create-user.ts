@@ -2,18 +2,19 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {UsersQueryRepository} from "../repository/users-query.repository";
 import {UsersService} from "../service/users.service";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class CreateUserHandler {
-  usersQueryRepository: UsersQueryRepository;
-  usersService: UsersService;
 
-  constructor(usersQueryRepository: UsersQueryRepository, usersService: UsersService) {
-    this.usersQueryRepository = usersQueryRepository;
-    this.usersService = usersService;
+  constructor(
+    @inject(UsersQueryRepository)
+    public usersQueryRepository: UsersQueryRepository,
+    @inject(UsersService)
+    public usersService: UsersService) {
   }
 
-  createUser = async (req: Request, res: Response) => {
+  async createUser (req: Request, res: Response) {
     const result = await this.usersService.createUser(req.body);
 
     if ("errorsMessages" in result) {

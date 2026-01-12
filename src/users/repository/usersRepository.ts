@@ -2,9 +2,9 @@ import {usersCollection} from "../../db/mongo.db";
 import {ObjectId, WithId} from "mongodb";
 import {UserDbType} from "../types/main-types/user-db-type";
 import {add} from "date-fns/add";
-import {id} from "date-fns/locale";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class UsersRepository {
    async getUserById(id: string): Promise<WithId<UserDbType> | null> {
     if (!ObjectId.isValid(id)) return null;

@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
-import {jwtService, usersService} from "../../core/composition/composition-root";
+import {jwtService, usersService} from "../../core/ioc/composition-root";
 
 export const authMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   try {

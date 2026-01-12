@@ -4,14 +4,16 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {JwtService} from "../../common/services/jwtService";
 import {DeviceService} from "../service/deviceService";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class DeleteOneDeviceHandler {
-  jwtService: JwtService;
-  deviceService: DeviceService
 
-  constructor(jwtService: JwtService, deviceService: DeviceService) {
-    this.jwtService = jwtService;
-    this.deviceService = deviceService;
+  constructor(
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DeviceService)
+    public deviceService: DeviceService) {
   }
 
   deleteOne = async (req: Request, res: Response) => {

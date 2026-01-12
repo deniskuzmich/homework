@@ -6,17 +6,18 @@ import {randomUUID} from "node:crypto";
 import {AuthService} from "../../service/auth-service";
 import {JwtService} from "../../../common/services/jwtService";
 import {DeviceService} from "../../../devices/service/deviceService";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class AuthUserHandler {
-  authService: AuthService;
-  jwtService: JwtService;
-  deviceService: DeviceService;
 
-  constructor(authService: AuthService, jwtService: JwtService, deviceService: DeviceService) {
-    this.authService = authService;
-    this.jwtService = jwtService;
-    this.deviceService = deviceService;
+  constructor(
+    @inject(AuthService)
+    public authService: AuthService,
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DeviceService)
+    public deviceService: DeviceService) {
   }
 
   login = async (req: Request, res: Response) => {

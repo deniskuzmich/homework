@@ -2,8 +2,10 @@ import {Post} from "../types/main-types/posts-db.type";
 import {ObjectId, WithId} from "mongodb";
 import {postsCollection} from "../../db/mongo.db";
 import {PostInputDto} from "../types/main-types/post.input-dto";
+import {injectable} from "inversify";
 
 
+@injectable()
 export class PostsRepository {
   async getPostById(id: string): Promise<WithId<Post> | null> {
     return postsCollection.findOne({_id: new ObjectId(id)});

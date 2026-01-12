@@ -2,16 +2,17 @@ import {Request, Response} from "express";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {CommentsService} from "../service/comments.service";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class UpdateCommentsHandler {
-  commentsService: CommentsService;
 
-  constructor(commentsService: CommentsService) {
-    this.commentsService = commentsService;
+  constructor(
+    @inject(CommentsService)
+    public commentsService: CommentsService) {
   }
 
-  update = async (req: Request, res: Response) => {
+  async update(req: Request, res: Response) {
     const commentId = req.params.commentId
     const content = req.body.content;
     const userId = req.user!.userId;

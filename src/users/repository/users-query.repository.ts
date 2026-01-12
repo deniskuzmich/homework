@@ -5,7 +5,9 @@ import {UsersInput} from "../types/main-types/user-Input.type";
 import {usersCollection} from "../../db/mongo.db";
 import {mapToUserViewModel} from "../mapper/map-to-user-view-model";
 import {userForFrontMapper} from "../mapper/map-user-for-front";
+import {injectable} from "inversify";
 
+@injectable()
 export class UsersQueryRepository {
   async getAllUsers(queryDto: UsersInput): Promise<OutputTypeWithPagination<UserOutput>> {
     const skip = (queryDto.pageNumber - 1) * queryDto.pageSize;

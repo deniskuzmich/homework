@@ -3,24 +3,25 @@ import {ObjectId, WithId} from "mongodb";
 import {PostInputDto} from "../types/main-types/post.input-dto";
 import {PostsRepository} from "../repository/posts-repository";
 import {BlogsRepository} from "../../blogs/repository/blogs-repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class PostsService {
-  postsRepository: PostsRepository
-  blogsRepository: BlogsRepository
 
-  constructor(postsRepository: PostsRepository, blogsRepository: BlogsRepository) {
-    this.postsRepository = postsRepository
-    this.blogsRepository = blogsRepository
-  }
+  constructor(
+    @inject(PostsRepository)
+    public postsRepository: PostsRepository,
+    @inject(BlogsRepository)
+    public blogsRepository: BlogsRepository) {}
+
   async getPostById(id: string): Promise<WithId<Post> | null> {
     return this.postsRepository.getPostById(id);
   }
 
   async updatePost(id: string, newData: PostInputDto): Promise<void> {
-    const updatedPost = await this.postsRepository.updatePost(id, newData);
-    return
+    return await this.postsRepository.updatePost(id, newData);
   }
+
   async createPost(newData: PostInputDto): Promise<WithId<Post> | null> {
 
     const blog = await this.blogsRepository.getBlogById(newData.blogId);
@@ -39,7 +40,7 @@ export class PostsService {
   }
 
   async deletePost(id: string) {
-    const deletedPost = await this.postsRepository.deletePost(id);
+   return await this.postsRepository.deletePost(id);
   }
 };
 

@@ -1,8 +1,9 @@
 import {sessionsCollection} from "../../db/mongo.db";
 import {SessionType} from "../types/session.type";
 import {UpdateSessionType} from "../types/update-session.type";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class DevicesRepository {
    async findSession(deviceId: string) {
     return await sessionsCollection.findOne({deviceId: deviceId});

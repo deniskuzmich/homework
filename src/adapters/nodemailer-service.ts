@@ -1,5 +1,7 @@
 import nodemailer from "nodemailer";
+import {injectable} from "inversify";
 
+@injectable()
 export class NodemailerService {
   async sendEmail(email: string, message: string) {
     console.log('mail', process.env.EMAIL_USER);

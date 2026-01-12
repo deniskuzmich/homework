@@ -3,17 +3,19 @@ import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {BlogsService} from "../service/blogs.service";
 import {BlogsQueryRepository} from "../repository/blogs-query-repository";
+import {injectable, inject} from "inversify";
 
+@injectable()
 export class CreateBlogHandler {
-  blogsService: BlogsService;
-  blogsQueryRepository: BlogsQueryRepository;
 
-  constructor(blogsService: BlogsService, blogsQueryRepository: BlogsQueryRepository) {
-    this.blogsService = blogsService;
-    this.blogsQueryRepository = blogsQueryRepository;
+  constructor(
+    @inject(BlogsService)
+    public blogsService: BlogsService,
+    @inject(BlogsQueryRepository)
+    public blogsQueryRepository: BlogsQueryRepository) {
   }
 
-  create = async (req: Request<{}, {}, BlogInputDto>, res: Response) => {
+  async create(req: Request<{}, {}, BlogInputDto>, res: Response) {
     const createdBlog = await this.blogsService.createBlog(req.body);
 
     if (!createdBlog) {

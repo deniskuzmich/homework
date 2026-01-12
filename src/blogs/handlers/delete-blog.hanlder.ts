@@ -1,14 +1,17 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {BlogsService} from "../service/blogs.service";
+import {injectable, inject} from "inversify";
 
+@injectable()
 export class DeleteBlogHandler {
-  blogsService: BlogsService;
 
-  constructor(blogsService: BlogsService) {
-    this.blogsService = blogsService;
+  constructor(
+    @inject(BlogsService)
+    public blogsService: BlogsService) {
   }
-   delete = async(req: Request, res: Response) => {
+
+  async delete(req: Request, res: Response) {
     const blog = await this.blogsService.getBlogById(req.params.id);
     if (!blog) {
       res.sendStatus(HttpStatuses.NotFound);

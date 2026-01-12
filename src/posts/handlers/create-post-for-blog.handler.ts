@@ -2,17 +2,19 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {BlogsService} from "../../blogs/service/blogs.service";
 import {PostsQueryRepository} from "../repository/posts-query-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class CreatePostForBlogHandler {
-  blogsService: BlogsService;
-  postsQueryRepository: PostsQueryRepository;
 
-  constructor(blogsService: BlogsService, postsQueryRepository: PostsQueryRepository) {
-    this.blogsService = blogsService;
-    this.postsQueryRepository = postsQueryRepository;
+  constructor(
+    @inject(BlogsService)
+    public blogsService: BlogsService,
+    @inject(PostsQueryRepository)
+    public postsQueryRepository: PostsQueryRepository) {
   }
 
-  createPost = async (req: Request<{ id: string }>, res: Response) => {
+  async createPost(req: Request<{ id: string }>, res: Response) {
     const blogId = req.params.id;
 
     const blog = await this.blogsService.getBlogById(blogId);

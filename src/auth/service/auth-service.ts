@@ -10,17 +10,18 @@ import {mapToUserViewModel} from "../../users/mapper/map-to-user-view-model";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {NodemailerService} from "../../adapters/nodemailer-service";
 import {UsersRepository} from "../../users/repository/usersRepository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class AuthService {
-  bcryptService: BcryptService;
-  nodemailerService: NodemailerService;
-  usersRepository: UsersRepository;
 
-  constructor(bcryptService: BcryptService, nodemailerService: NodemailerService, usersRepository: UsersRepository) {
-    this.bcryptService = bcryptService;
-    this.nodemailerService = nodemailerService;
-    this.usersRepository = usersRepository;
+  constructor(
+    @inject(BcryptService)
+    public bcryptService: BcryptService,
+    @inject(NodemailerService)
+    public nodemailerService: NodemailerService,
+    @inject(UsersRepository)
+    public usersRepository: UsersRepository) {
   }
 
   async getInfo(user: UserInfoType): Promise<UserInfoType> {

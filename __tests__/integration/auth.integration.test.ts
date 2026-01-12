@@ -2,7 +2,16 @@ import {MongoMemoryServer} from 'mongodb-memory-server';
 import {runDB, stopDb} from '../../src/db/mongo.db';
 import {testSeeder} from '../../src/utils-for-tests/utils-for-auth-tests';
 import {ResultStatus} from '../../src/common/types/result.status';
-import {authService, nodemailerService} from "../../src/core/composition/composition-root";
+import {NodemailerService} from "../../src/adapters/nodemailer-service";
+import {AuthService} from "../../src/auth/service/auth-service";
+import {container} from "../../src/core/ioc/ioc";
+
+authService = new AuthService();
+
+const nodeMailerMock = {
+  sendEmail: jest.fn().mockResolvedValue({})
+}
+
 
 describe('AUTH Integration Tests', () => {
   let mongoServer: MongoMemoryServer;

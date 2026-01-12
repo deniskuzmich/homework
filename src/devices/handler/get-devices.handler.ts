@@ -2,18 +2,19 @@ import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {JwtService} from "../../common/services/jwtService";
 import {DevicesQueryRepository} from "../repository/devices-query.repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class GetDevicesHandler {
-  jwtService: JwtService;
-  devicesQueryRepository: DevicesQueryRepository;
 
-  constructor(jwtService: JwtService, devicesQueryRepository: DevicesQueryRepository) {
-    this.jwtService = jwtService;
-    this.devicesQueryRepository = devicesQueryRepository;
+  constructor(
+    @inject(JwtService)
+    public jwtService: JwtService,
+    @inject(DevicesQueryRepository)
+    public devicesQueryRepository: DevicesQueryRepository) {
   }
 
-  getDevices = async (req: Request, res: Response) => {
+  async getDevices(req: Request, res: Response) {
     const refreshToken = req.cookies.refreshToken;
 
     try {

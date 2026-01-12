@@ -1,15 +1,17 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {PostsQueryRepository} from "../repository/posts-query-repository";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class GetPostHandler {
-  postsQueryRepository: PostsQueryRepository
 
-  constructor(postsQueryRepository: PostsQueryRepository) {
-    this.postsQueryRepository = postsQueryRepository
+  constructor(
+    @inject(PostsQueryRepository)
+    public postsQueryRepository: PostsQueryRepository) {
   }
 
-  getPost = async (req: Request, res: Response) => {
+  async getPost(req: Request, res: Response) {
     try {
       const post = await this.postsQueryRepository.getPostById(req.params.id);
       if (!post) {

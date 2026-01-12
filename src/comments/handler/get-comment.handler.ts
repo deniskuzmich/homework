@@ -1,16 +1,17 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {CommentsQueryRepository} from "../repository/comments-query.repository";
+import {inject, injectable} from "inversify";
 
-
+@injectable()
 export class GetCommentByIdHandler {
-  commentsQueryRepository: CommentsQueryRepository;
 
-  constructor(commentsQueryRepository: CommentsQueryRepository) {
-    this.commentsQueryRepository = commentsQueryRepository;
+  constructor(
+    @inject(CommentsQueryRepository)
+    public commentsQueryRepository: CommentsQueryRepository) {
   }
 
-  getCommentById = async (req: Request, res: Response) => {
+  async getCommentById(req: Request, res: Response) {
     const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
 
     if (!comment) {

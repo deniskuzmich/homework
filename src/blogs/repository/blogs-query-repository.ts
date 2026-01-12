@@ -5,7 +5,9 @@ import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaio
 import {BlogOutput} from "../types/main-types/blog-output.type";
 import {mapToBlogViewModel} from "../mapper/map-to-blog-view-model";
 import {finalBlogMapper} from "../mapper/final-blog-map";
+import {injectable} from "inversify";
 
+@injectable()
 export class BlogsQueryRepository {
   async findBlogs(queryDto: BlogInput): Promise<OutputTypeWithPagination<BlogOutput>> {
 

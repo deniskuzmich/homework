@@ -2,15 +2,16 @@ import {Request, Response} from "express";
 import {PostInputDto} from "../types/main-types/post.input-dto";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {PostsService} from "../service/posts.service";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class UpdatePostHandler {
-  postsService: PostsService;
 
-  constructor(postsService: PostsService) {
-    this.postsService = postsService;
-  }
+  constructor(
+    @inject(PostsService)
+    public postsService: PostsService) {}
 
-  updatePost = async (req: Request<{ id: string }, {}, PostInputDto>, res: Response) => {
+  async updatePost (req: Request<{ id: string }, {}, PostInputDto>, res: Response) {
     try {
       const post = await this.postsService.getPostById(req.params.id);
 

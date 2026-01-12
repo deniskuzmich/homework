@@ -5,8 +5,9 @@ import {CommentOutput} from "../types/main-types/comment-output.type";
 import {finalCommentMapper} from "../mapper/final-comment-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
+import {injectable} from "inversify";
 
-
+@injectable()
 export class CommentsQueryRepository {
   async getCommentById(postId: string): Promise<CommentOutput | null> {
     const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})

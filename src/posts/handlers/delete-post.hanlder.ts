@@ -1,12 +1,14 @@
 import {Request, Response} from "express";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {PostsService} from "../service/posts.service";
+import {inject, injectable} from "inversify";
 
+@injectable()
 export class DeletePostHandler {
-  postsService: PostsService;
 
-  constructor(postsService: PostsService) {
-    this.postsService = postsService;
+  constructor(
+    @inject(PostsService)
+    public postsService: PostsService) {
   }
 
   deletePost = async (req: Request, res: Response) => {
