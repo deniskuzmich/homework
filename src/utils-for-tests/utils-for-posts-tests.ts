@@ -14,7 +14,6 @@ export const testPostData = {
   shortDescription: "string",
   content: "string",
   blogId: new ObjectId(),
-  blogName: "string",
 };
 
 export const paginationWithoutData: TestOutputTypeWithPagination = {

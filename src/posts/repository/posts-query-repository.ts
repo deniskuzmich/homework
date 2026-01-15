@@ -1,5 +1,3 @@
-import {ObjectId} from "mongodb";
-import {postsCollection} from "../../db/mongo.db";
 import {InputWithoutSearch} from "../../blogs/types/input-types/input-without-search";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {PostOutput} from "../types/main-types/post-output.type";
@@ -7,6 +5,7 @@ import {mapToPostViewModel} from "../mapper/map-to-post-view-model";
 import {finalPostMapper} from "../mapper/final-post-map";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 import {injectable} from "inversify";
+import {PostModel} from "../../entity/posts.entity";
 
 @injectable()
 export class PostsQueryRepository {
@@ -16,14 +15,13 @@ export class PostsQueryRepository {
 
     const sort = {[query.sortBy]: query.sortDirection}
 
-    const posts = await postsCollection
+    const posts = await PostModel
       .find()
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
-      .toArray();
 
-    const totalCount = await postsCollection.countDocuments();
+    const totalCount = await PostModel.countDocuments();
 
     const paramsForFront = { //мазоль, которая идет во фронт
       pagesCount: Math.ceil(totalCount / query.pageSize),
@@ -37,7 +35,7 @@ export class PostsQueryRepository {
   }
 
   async getPostById(id: string): Promise<PostOutput | null> {
-    const post = await postsCollection.findOne({_id: new ObjectId(id)});
+    const post = await PostModel.findOne({_id: id});
     if (!post) return null
     return  mapToPostViewModel(post)
   }
@@ -48,14 +46,14 @@ export class PostsQueryRepository {
 
     const sort = {[query.sortBy]: query.sortDirection}
 
-    const posts = await postsCollection
-      .find({blogId: new ObjectId(id)})
+    const posts = await PostModel
+      .find({blogId: id})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
-      .toArray();
 
-    const totalCount = await postsCollection.countDocuments({blogId: new ObjectId(id)});
+
+    const totalCount = await PostModel.countDocuments({blogId: id});
 
     const paramsForFront = { //мазоль, которая идет во фронт
       pagesCount: Math.ceil(totalCount / query.pageSize),

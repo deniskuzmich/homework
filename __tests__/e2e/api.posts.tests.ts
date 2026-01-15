@@ -3,7 +3,7 @@ import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
 import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
-import {runDB, stopDb} from "../../src/db/mongo.db";
+import {runDB, runDbMongoose, stopDb, stopDbMongoose} from "../../src/db/mongo.db";
 import {SETTINGS} from "../../src/core/settings/settings";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
 import {dataWithPagination, paginationWithoutData, testPostData} from "../../src/utils-for-tests/utils-for-posts-tests";
@@ -14,6 +14,7 @@ describe("Posts API", () => {
 
   beforeAll(async () => {
     await runDB(SETTINGS.MONGO_URL)
+    await runDbMongoose()
 
     app = express();
     setupApp(app);
@@ -25,6 +26,7 @@ describe("Posts API", () => {
 
   afterAll(async () => {
     await stopDb();
+    await stopDbMongoose();
   })
 
   it('should return 200 and empty array', async () => {
@@ -100,7 +102,6 @@ describe("Posts API", () => {
         shortDescription: "awdawdawd",
         content: "adawdaadawdwadwdsadawdsdd",
         blogId: createdBlog.id,
-        blogName: "string",
       })
       .expect(HttpStatuses.Created)
 

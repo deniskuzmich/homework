@@ -23,7 +23,7 @@ export class GetPostByBlogIdHandler {
       return res.sendStatus(HttpStatuses.NotFound)
     }
 
-    const post = await this.postsQueryRepository.getPostByBlogId(blog._id.toString(), query)
+    const post = await this.postsQueryRepository.getPostByBlogId(blog.id, query)
     if (!post) {
       return res.sendStatus(HttpStatuses.NotFound)
     }

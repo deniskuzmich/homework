@@ -22,9 +22,9 @@ export class CreatePostForBlogHandler {
       return res.sendStatus(HttpStatuses.NotFound);
     }
 
-    const createdPost = await this.blogsService.createPostForBlog(blog, req.body);
+    const createdPostId = await this.blogsService.createPostForBlog(blog, req.body);
 
-    const postForBlog = await this.postsQueryRepository.getPostById(createdPost._id.toString())
+    const postForBlog = await this.postsQueryRepository.getPostById(createdPostId)
 
     return res.status(HttpStatuses.Created).send(postForBlog);
   }

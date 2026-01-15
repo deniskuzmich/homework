@@ -17,16 +17,16 @@ export class CreatePostsHandler {
 
   async createPost(req: Request<{}, {}, PostInputDto>, res: Response) {
     try {
-      const createdPost = await this.postsService.createPost(req.body);
-      if (!createdPost) {
+      const postId = await this.postsService.createPost(req.body);
+      if (!postId) {
         return res.sendStatus(HttpStatuses.BadRequest);
       }
 
-      const postViewModel = await this.postsQueryRepository.getPostById(createdPost._id.toString())
-      res.status(HttpStatuses.Created).send(postViewModel);
+      const postViewModel = await this.postsQueryRepository.getPostById(postId)
+      return res.status(HttpStatuses.Created).send(postViewModel);
 
     } catch (e: unknown) {
-      res.status(HttpStatuses.ServerError);
+     return res.sendStatus(HttpStatuses.ServerError);
     }
   }
 }

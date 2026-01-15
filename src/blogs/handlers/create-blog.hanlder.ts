@@ -3,7 +3,7 @@ import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {HttpStatuses} from "../../common/types/http-statuses";
 import {BlogsService} from "../service/blogs.service";
 import {BlogsQueryRepository} from "../repository/blogs-query-repository";
-import {injectable, inject} from "inversify";
+import {inject, injectable} from "inversify";
 
 @injectable()
 export class CreateBlogHandler {
@@ -16,14 +16,14 @@ export class CreateBlogHandler {
   }
 
   async create(req: Request<{}, {}, BlogInputDto>, res: Response) {
-    const createdBlog = await this.blogsService.createBlog(req.body);
+    const blogId = await this.blogsService.createBlog(req.body);
 
-    if (!createdBlog) {
-      res.status(HttpStatuses.BadRequest);
+    if (!blogId) {
+      return res.sendStatus(HttpStatuses.BadRequest);
     }
 
-    const blogViewModel = await this.blogsQueryRepository.getBlogById(createdBlog._id.toString())
-    res.status(HttpStatuses.Created).send(blogViewModel);
+    const blogViewModel = await this.blogsQueryRepository.getBlogById(blogId)
+    return res.status(HttpStatuses.Created).send(blogViewModel);
   }
 }
 

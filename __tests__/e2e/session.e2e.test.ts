@@ -39,10 +39,6 @@ describe('SESSION Tests', () => {
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
     await runDB(mongoServer.getUri());
-
-    // (await container.rebind(NodemailerService)).toConstantValue(
-    //   nodeMailerMock as NodemailerService
-    // )
   })
 
   afterAll(async () => {

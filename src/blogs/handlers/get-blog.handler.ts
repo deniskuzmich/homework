@@ -16,6 +16,6 @@ export class GetBlogHandler {
       return res.sendStatus(HttpStatuses.NotFound);
     }
 
-    res.status(HttpStatuses.Success).send(blog);
+    return res.status(HttpStatuses.Success).send(blog);
   }
 }

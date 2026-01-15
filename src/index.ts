@@ -1,12 +1,14 @@
 import 'dotenv/config';
 import {SETTINGS} from "./core/settings/settings";
-import {runDB} from "./db/mongo.db";
 import {app} from "./init-app";
+import {runDB, runDbMongoose} from "./db/mongo.db";
+
 
 const bootstrap = async () => {
   const PORT = SETTINGS.PORT;
 
-  await runDB(SETTINGS.MONGO_URL)
+  // await runDB(SETTINGS.MONGO_URL)
+  await runDbMongoose()
 
   app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);

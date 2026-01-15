@@ -15,7 +15,7 @@ export class GetBlogsListHandler {
     const queryInput = parseQueryInput(req.query)
     const blogsListOutput = await this.blogsQueryRepository.findBlogs(queryInput)
 
-    res.status(HttpStatuses.Success).send(blogsListOutput);
+    return res.status(HttpStatuses.Success).send(blogsListOutput);
   }
 }
 

@@ -1,38 +1,20 @@
-import {Blog} from "../types/main-types/blog-db.type";
-import {ObjectId, WithId} from "mongodb";
-import {blogsCollection} from "../../db/mongo.db";
-import {BlogInputDto} from "../types/input-types/blog.input-dto";
 import {injectable} from "inversify";
+import {BlogDocument, BlogModel} from "../../entity/blogs.entity";
 
 @injectable()
 export class BlogsRepository {
-  async getBlogById(id: string): Promise<WithId<Blog> | null> {
-    return blogsCollection.findOne({_id: new ObjectId(id)});
+  async save(blog: BlogDocument) {
+    await blog.save();
   }
-  async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
-    const updatedBlog = await blogsCollection.updateOne(
-      {_id: new ObjectId(id)},
-      {
-        $set: {
-          name: newData.name,
-          description: newData.description,
-          websiteUrl: newData.websiteUrl
-        }
-      }
-    );
-    if (updatedBlog.matchedCount < 1) {
-      throw new Error("Blog not exist")
-    }
-    return
+
+  async getBlogById(id: string): Promise<BlogDocument | null> {
+    return BlogModel.findOne({_id: id});
   }
-  async createBlog(newBlog: Blog): Promise<WithId<Blog>> {
-    const insertResult = await blogsCollection.insertOne(newBlog);
-    return {...newBlog, _id: insertResult.insertedId};
-  }
+
   async deleteBlog(id: string): Promise<void> {
-    const deletedBlog = await blogsCollection.deleteOne({_id: new ObjectId(id)});
+    const deletedBlog = await BlogModel.deleteOne({_id: id});
     if (deletedBlog.deletedCount < 1) {
-      throw new Error("Blog not exist");
+      return
     }
   }
 };

@@ -1,11 +1,10 @@
-import {Blog} from "../types/main-types/blog-db.type";
-import {WithId} from "mongodb";
 import {BlogInputDto} from "../types/input-types/blog.input-dto";
-import {Post} from "../../posts/types/main-types/posts-db.type";
 import {PostInputDtoForBlog} from "../../posts/types/input-types/input-dto-pagination-for-blog.type";
 import {PostsRepository} from "../../posts/repository/posts-repository";
 import {BlogsRepository} from "../repository/blogs-repository";
-import {injectable, inject} from "inversify";
+import {inject, injectable} from "inversify";
+import {BlogDocument, BlogModel} from "../../entity/blogs.entity";
+import {PostModel} from "../../entity/posts.entity";
 
 @injectable()
 export class BlogsService {
@@ -14,35 +13,51 @@ export class BlogsService {
     @inject(BlogsRepository)
     public blogsRepository: BlogsRepository,
     @inject(PostsRepository)
-    public postsRepository: PostsRepository) {}
+    public postsRepository: PostsRepository) {
+  }
 
-  async getBlogById(id: string): Promise<WithId<Blog> | null> {
+  async getBlogById(id: string): Promise<BlogDocument | null> {
     return this.blogsRepository.getBlogById(id);
   }
-  async createPostForBlog(blog: WithId<Blog>, inputInfo: PostInputDtoForBlog): Promise<WithId<Post>> {
-    const newPostByBlogId = {
+
+  async createBlog(newData: BlogInputDto): Promise<string> {
+    const newBlog = new BlogModel()
+    newBlog.name = newData.name,
+      newBlog.description = newData.description,
+      newBlog.websiteUrl = newData.websiteUrl,
+      newBlog.createdAt = new Date().toISOString(),
+      newBlog.isMembership = false
+
+    await this.blogsRepository.save(newBlog);
+    return newBlog.id
+  }
+
+  async updateBlog(id: string, newData: BlogInputDto): Promise<boolean> {
+    const blog = await this.blogsRepository.getBlogById(id)
+    if (!blog) {
+      return false
+    }
+      blog.name = newData.name,
+      blog.description = newData.description,
+      blog.websiteUrl = newData.websiteUrl
+
+    await this.blogsRepository.save(blog);
+    return true
+  }
+
+  async createPostForBlog(blog: BlogDocument, inputInfo: PostInputDtoForBlog): Promise<string> {
+    const newPostByBlogId = new PostModel({
       title: inputInfo.title,
       shortDescription: inputInfo.shortDescription,
       content: inputInfo.content,
       blogId: blog._id,
       blogName: blog.name,
       createdAt: new Date().toISOString(),
-    }
-    return this.postsRepository.createPost(newPostByBlogId)
+    })
+    await this.postsRepository.save(newPostByBlogId)
+    return newPostByBlogId.id
   }
-  async updateBlog(id: string, newData: BlogInputDto): Promise<void> {
-    return await this.blogsRepository.updateBlog(id, newData);
-  }
-  async createBlog(newData: BlogInputDto): Promise<WithId<Blog>> {
-    const newBlog: Blog = {
-      name: newData.name,
-      description: newData.description,
-      websiteUrl: newData.websiteUrl,
-      createdAt: new Date().toISOString(),
-      isMembership: false
-    }
-    return await this.blogsRepository.createBlog(newBlog);
-  }
+
   async deleteBlog(id: string): Promise<void> {
     return await this.blogsRepository.deleteBlog(id);
   }
