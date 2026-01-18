@@ -1,3 +1,5 @@
+import {LikeStatus} from "../../enum/like-enum";
+
 export type CommentDbType = {
   content: string,
   commentatorInfo: {
@@ -5,6 +7,9 @@ export type CommentDbType = {
     userLogin: string
   },
   createdAt: string,
-  likeCount: number,
-  dislikeCount: number
+  likesInfo: {
+    likesCount: number,
+    dislikesCount: number,
+    myStatus: LikeStatus
+  }
 }

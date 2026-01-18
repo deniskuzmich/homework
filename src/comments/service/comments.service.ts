@@ -44,6 +44,11 @@ export class CommentsService {
         userLogin: user.login,
       },
       createdAt: new Date().toISOString(),
+      likesInfo: {
+        likesCount: 0,
+        dislikesCount: 0,
+        myStatus: 'None'
+      }
     })
 
     const createdComment = await this.commentsRepository.save(newCommentForPost)
