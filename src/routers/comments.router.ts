@@ -16,6 +16,7 @@ const authMiddleware = container.get(AuthMiddleWare);
 
 export const commentsRouter = Router()
   .get('/:id',
+    authMiddleware.authMiddleWare.bind(authMiddleware),
     inputValidationResultMiddleware,
     getCommentByIdHandler.getCommentById.bind(getCommentByIdHandler))
 
@@ -29,7 +30,7 @@ export const commentsRouter = Router()
   .put('/:commentId/like-status',
     authMiddleware.authMiddleWare.bind(authMiddleware),
     inputValidationResultMiddleware,
-    likeHandler.likeStatus.bind(likeHandler),
+    likeHandler.updateLikeStatus.bind(likeHandler),
   )
 
   .delete('/:commentId',

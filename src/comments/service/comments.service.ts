@@ -5,6 +5,8 @@ import {PostsRepository} from "../../posts/repository/posts-repository";
 import {CommentsRepository} from "../repository/comments.repository";
 import {inject, injectable} from "inversify";
 import {CommentDocument, CommentModel} from "../../entity/comments.entity";
+import {UsersRepository} from "../../users/repository/usersRepository";
+import {LikeStatus} from "../enum/like-enum";
 
 @injectable()
 export class CommentsService {
@@ -13,8 +15,10 @@ export class CommentsService {
     @inject(CommentsRepository)
     public commentsRepository: CommentsRepository,
     @inject(PostsRepository)
-    public postsRepository: PostsRepository) {
-  }
+    public postsRepository: PostsRepository,
+    @inject(UsersRepository)
+    public usersRepository: UsersRepository,
+    ) {}
 
   async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentDocument | null>> {
     const isPostExists = await this.postsRepository.getPostById(postId);
@@ -128,6 +132,27 @@ export class CommentsService {
     await this.commentsRepository.deleteComment(commentId);
     return {
       status: ResultStatus.NoContent,
+      extensions: [],
+      data: null
+    }
+  }
+
+  async updateLikeForComment(commentId: string): Promise<ResultType> {
+    const comment = await this.commentsRepository.getCommentById(commentId);
+    if(!comment) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: 'Comment not found',
+        extensions: [],
+        data: null
+      }
+    }
+    comment.likesInfo.myStatus = LikeStatus.None
+
+    await this.commentsRepository.save(comment);
+
+    return {
+      status: ResultStatus.Success,
       extensions: [],
       data: null
     }

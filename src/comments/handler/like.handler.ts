@@ -11,7 +11,11 @@ export class LikeHandler {
     public commentsService: CommentsService) {
   }
 
-  async likeStatus(req: Request, res: Response) {
+  async updateLikeStatus(req: Request, res: Response) {
     const commentId = req.params.commentId;
+    // const userId = req.user!.userId;
+
+
+    const result = await this.commentsService.updateLikeForComment(commentId)
   }
 }
