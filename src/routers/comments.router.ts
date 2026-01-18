@@ -16,7 +16,6 @@ const authMiddleware = container.get(AuthMiddleWare);
 
 export const commentsRouter = Router()
   .get('/:id',
-    // authMiddleware.authMiddleWare.bind(authMiddleware),
     inputValidationResultMiddleware,
     getCommentByIdHandler.getCommentById.bind(getCommentByIdHandler))
 
