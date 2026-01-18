@@ -1,4 +1,3 @@
-import {add} from "date-fns/add";
 
 export type UserDbType = {
   login: string;

@@ -40,7 +40,7 @@ export class AuthRefreshTokenHandler {
     const newAccessToken = this.jwtService.createJWT(payload.userId)
     const newRefreshToken = this.jwtService.createRefreshToken(payload.userId, payload.deviceId);
 
-    await this.deviceService.updateSession(payload.deviceId, ip, deviceName, newRefreshToken);
+    await this.deviceService.updateSession(ip, deviceName, newRefreshToken);
 
     res.cookie("refreshToken", newRefreshToken, {httpOnly: true, secure: true});
     res.status(HttpStatuses.Success).send({accessToken: newAccessToken});

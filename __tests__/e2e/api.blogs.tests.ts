@@ -4,22 +4,14 @@ import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
 import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
-import {runDB, runDbMongoose, stopDb, stopDbMongoose,} from "../../src/db/mongo.db";
-import {SETTINGS} from "../../src/core/settings/settings";
-import {
-  dataWithPagination,
-  paginationWithoutData,
-  testBlogData
-} from "../../src/utils-for-tests/utils-for-blog-tests";
-
-
+import {runDbMongoose, stopDbMongoose,} from "../../src/db/mongo.db";
+import {dataWithPagination, paginationWithoutData, testBlogData} from "../../src/utils-for-tests/utils-for-blog-tests";
 
 describe("Blogs API", () => {
   let app: Express
   const adminToken = basicAuthToken()
 
   beforeAll(async () => {
-    await runDB(SETTINGS.MONGO_URL)
     await runDbMongoose()
 
     app = express();
@@ -31,7 +23,6 @@ describe("Blogs API", () => {
   })
 
   afterAll(async () => {
-    await stopDb();
     await stopDbMongoose();
   })
 

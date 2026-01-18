@@ -1,6 +1,5 @@
 import express, {Express} from "express";
-import {runDB, stopDb} from "../../src/db/mongo.db";
-import {SETTINGS} from "../../src/core/settings/settings";
+import {runDbMongoose, stopDbMongoose} from "../../src/db/mongo.db";
 import {setupApp} from "../../src/setup-app";
 import request from "supertest";
 import {AUTH_PATH, BLOGS_PATH, POSTS_PATH, TESTING_PATH, USERS_PATH} from "../../src/core/paths/paths";
@@ -19,7 +18,7 @@ describe("Comments", () => {
     app = express();
     setupApp(app);
 
-    await runDB(SETTINGS.MONGO_URL)
+    await runDbMongoose()
 
     await request(app)
       .delete(`${TESTING_PATH}/all-data`)
@@ -71,7 +70,7 @@ describe("Comments", () => {
   })
 
   afterAll(async () => {
-    await stopDb()
+    await stopDbMongoose();
   })
 
 

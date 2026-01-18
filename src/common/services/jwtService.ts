@@ -5,7 +5,7 @@ import {injectable} from "inversify";
 @injectable()
 export class JwtService {
    createJWT(userId: string) {
-    return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: "10s"});
+    return jwt.sign({userId}, SETTINGS.JWT_SECRET, {expiresIn: "10m"});
   }
 
    getUserInfoByToken(token: string) {

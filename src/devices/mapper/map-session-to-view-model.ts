@@ -1,6 +1,6 @@
-import {SessionType} from "../types/session.type";
+import {SessionDocument} from "../../entity/sessions.entity";
 
-export function mapSessionToViewModel(session: SessionType) {
+export function mapSessionToViewModel(session: SessionDocument) {
   return {
       ip: session.ip,
       title: session.deviceName,

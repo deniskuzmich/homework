@@ -1,8 +1,7 @@
-import {CommentDbType} from "../types/main-types/comment-db.type";
-import {WithId} from "mongodb";
 import {CommentOutput} from "../types/main-types/comment-output.type";
+import {CommentDocument} from "../../entity/comments.entity";
 
-export function mapToCommentViewModel (data: WithId<CommentDbType>): CommentOutput {
+export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
 
   return {
     id: data._id.toString(),

@@ -6,10 +6,12 @@ import {GetCommentByIdHandler} from "../comments/handler/get-comment.handler";
 import {UpdateCommentsHandler} from "../comments/handler/update-comments.handler";
 import {DeleteCommentHandler} from "../comments/handler/delete-comment.handler";
 import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
+import {LikeHandler} from "../comments/handler/like.handler";
 
 const getCommentByIdHandler = container.get(GetCommentByIdHandler);
 const updateCommentsHandler = container.get(UpdateCommentsHandler);
 const deleteCommentHandler = container.get(DeleteCommentHandler);
+const likeHandler = container.get(LikeHandler);
 const authMiddleware = container.get(AuthMiddleWare);
 
 export const commentsRouter = Router()
@@ -21,12 +23,20 @@ export const commentsRouter = Router()
     authMiddleware.authMiddleWare.bind(authMiddleware),
     commentInputValidation,
     inputValidationResultMiddleware,
-    updateCommentsHandler.update.bind(updateCommentsHandler))
+    updateCommentsHandler.update.bind(updateCommentsHandler)
+  )
+
+  .put('/:commentId/like-status',
+    authMiddleware.authMiddleWare.bind(authMiddleware),
+    inputValidationResultMiddleware,
+    likeHandler.likeStatus.bind(likeHandler),
+  )
 
   .delete('/:commentId',
     authMiddleware.authMiddleWare.bind(authMiddleware),
     inputValidationResultMiddleware,
-    deleteCommentHandler.delete.bind(deleteCommentHandler))
+    deleteCommentHandler.delete.bind(deleteCommentHandler)
+  )
 
 
 

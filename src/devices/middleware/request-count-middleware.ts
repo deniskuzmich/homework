@@ -1,6 +1,6 @@
 import {NextFunction, Request, Response} from "express";
-import {requestLogCollection} from "../../db/mongo.db";
 import {HttpStatuses} from "../../common/types/http-statuses";
+import {RequestsModel} from "../../entity/requests.entity";
 
 export const requestCountMiddleware = async (
   req: Request,
@@ -10,7 +10,7 @@ export const requestCountMiddleware = async (
 
   const dateTenSecondAgo = new Date(Date.now() - 10000);
 
-  const requestCount = await requestLogCollection.countDocuments({
+  const requestCount = await RequestsModel.countDocuments({
     IP: req.ip,
     URL: req.originalUrl,
     date: {$gte: dateTenSecondAgo}

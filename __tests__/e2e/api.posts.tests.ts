@@ -3,8 +3,7 @@ import {setupApp} from "../../src/setup-app";
 import {BLOGS_PATH, POSTS_PATH, TESTING_PATH} from "../../src/core/paths/paths";
 import request from "supertest";
 import {basicAuthToken} from "../../src/auth/auth-admin/admin-auth-token";
-import {runDB, runDbMongoose, stopDb, stopDbMongoose} from "../../src/db/mongo.db";
-import {SETTINGS} from "../../src/core/settings/settings";
+import {runDbMongoose, stopDbMongoose} from "../../src/db/mongo.db";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
 import {dataWithPagination, paginationWithoutData, testPostData} from "../../src/utils-for-tests/utils-for-posts-tests";
 
@@ -13,7 +12,6 @@ describe("Posts API", () => {
   const adminToken = basicAuthToken()
 
   beforeAll(async () => {
-    await runDB(SETTINGS.MONGO_URL)
     await runDbMongoose()
 
     app = express();
@@ -25,7 +23,6 @@ describe("Posts API", () => {
   })
 
   afterAll(async () => {
-    await stopDb();
     await stopDbMongoose();
   })
 

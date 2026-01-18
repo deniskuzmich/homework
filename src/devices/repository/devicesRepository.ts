@@ -1,27 +1,19 @@
-import {sessionsCollection} from "../../db/mongo.db";
-import {SessionType} from "../types/session.type";
-import {UpdateSessionType} from "../types/update-session.type";
 import {injectable} from "inversify";
+import {SessionDocument, SessionModel} from "../../entity/sessions.entity";
 
 @injectable()
 export class DevicesRepository {
-   async findSession(deviceId: string) {
-    return await sessionsCollection.findOne({deviceId: deviceId});
+  async save(session: SessionDocument) {
+    await session.save();
+    return
   }
-
-   async createSession(session: SessionType) {
-    return await sessionsCollection.insertOne(session);
-  }
-
-   async updateSession(deviceId: string, updatedSession: UpdateSessionType) {
-    await sessionsCollection.updateOne(
-      {deviceId},
-      {$set: updatedSession}
-    )
+   async findSession(deviceId: string): Promise<SessionDocument | null> {
+    const session = await SessionModel.findOne({deviceId: deviceId});
+     return session
   }
 
    async deleteOneSession(deviceId: string) {
-    const deletedSession = await sessionsCollection.deleteOne({deviceId: deviceId});
+    const deletedSession = await SessionModel.deleteOne({deviceId: deviceId});
     if (deletedSession.deletedCount < 1) {
       return null
     }
@@ -29,7 +21,7 @@ export class DevicesRepository {
   }
 
    async deleteAllSession(userId: string, deviceId: string) {
-    const deletedSessions = await sessionsCollection.deleteMany({
+    const deletedSessions = await SessionModel.deleteMany({
       userId: userId,
       deviceId: {$ne: deviceId},
     });

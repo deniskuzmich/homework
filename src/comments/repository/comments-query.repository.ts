@@ -1,17 +1,17 @@
-import {commentsCollection} from "../../db/mongo.db";
-import {ObjectId} from "mongodb";
 import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 import {CommentOutput} from "../types/main-types/comment-output.type";
 import {finalCommentMapper} from "../mapper/final-comment-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 import {injectable} from "inversify";
+import {CommentModel} from "../../entity/comments.entity";
 
 @injectable()
 export class CommentsQueryRepository {
   async getCommentById(postId: string): Promise<CommentOutput | null> {
-    const comment = await commentsCollection.findOne({_id: new ObjectId(postId)})
+    const comment = await CommentModel.findOne({_id: postId})
     if (!comment) return null;
+
     return mapToCommentViewModel(comment)
   }
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
@@ -19,14 +19,14 @@ export class CommentsQueryRepository {
 
     const sort = {[query.sortBy]: query.sortDirection}
 
-    const comments = await commentsCollection
+    const comments = await CommentModel
       .find({postId: id})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
-      .toArray();
 
-    const totalCount = await commentsCollection.countDocuments({postId: id});
+
+    const totalCount = await CommentModel.countDocuments({postId: id});
 
     const paramsForFront = {
       pagesCount: Math.ceil(totalCount / query.pageSize),

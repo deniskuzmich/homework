@@ -37,7 +37,7 @@ export const authRouter = Router()
     authRefreshTokenHandler.refreshToken.bind(authRefreshTokenHandler))
 
   .post('/logout',
-    logoutHandler.logout)
+    logoutHandler.logout.bind(logoutHandler))
 
   .post('/registration',
     requestCountMiddleware,

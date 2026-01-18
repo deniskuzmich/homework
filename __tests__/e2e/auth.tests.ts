@@ -1,7 +1,6 @@
 import express, {Express} from "express";
 import {setupApp} from "../../src/setup-app";
-import {runDB, stopDb} from "../../src/db/mongo.db";
-import {SETTINGS} from "../../src/core/settings/settings";
+import {runDbMongoose, stopDbMongoose} from "../../src/db/mongo.db";
 import request from "supertest";
 import {AUTH_PATH, TESTING_PATH, USERS_PATH} from "../../src/core/paths/paths";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
@@ -13,16 +12,17 @@ describe('Auth', () => {
   let testUserId: string
   let testUserEmail: string
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     app = express()
     setupApp(app)
 
-    await runDB(SETTINGS.MONGO_URL)
-
-    await request(app)
+    await runDbMongoose()
+    request(app)
       .delete(`${TESTING_PATH}/all-data`)
       .expect(HttpStatuses.NoContent)
+  })
 
+  beforeEach(async () => {
     const createdUser = await request(app)
       .post(USERS_PATH)
       .set('Authorization', `Basic YWRtaW46cXdlcnR5`)
@@ -42,13 +42,18 @@ describe('Auth', () => {
 
     token = auth.body.accessToken;
 
-    testUserLogin = createdUser.body.login;
-    testUserId = createdUser.body.id;
-    testUserEmail = createdUser.body.email;
-  }, 60000)
+    const meResponse = await request(app)
+      .get(`${AUTH_PATH}/me`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(HttpStatuses.Success)
+
+    testUserLogin = meResponse.body.login;
+    testUserId = meResponse.body.userId;
+    testUserEmail = meResponse.body.email;
+  })
 
   afterAll(async () => {
-    await stopDb()
+    await stopDbMongoose();
   })
 
 

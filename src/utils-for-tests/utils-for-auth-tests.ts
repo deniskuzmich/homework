@@ -1,8 +1,7 @@
-import {UserDbType} from "../users/types/main-types/user-db-type";
 import {randomUUID} from "node:crypto";
 import {add} from "date-fns/add";
-import {WithId} from "mongodb";
-import {usersCollection} from "../db/mongo.db";
+import {UserDocument, UserModel} from "../entity/users.entity";
+
 
 type RegisterUserPayloadType = {
   login: string,
@@ -29,8 +28,8 @@ export const testSeeder = {
     code,
     expirationDate,
     isConfirmed
-  }: RegisterUserPayloadType): Promise<UserDbType> {
-    const newUser = {
+  }: RegisterUserPayloadType): Promise<UserDocument> {
+    const newUser = new UserModel({
       login,
       email,
       passwordHash: password,
@@ -42,11 +41,9 @@ export const testSeeder = {
         }),
         isConfirmed: isConfirmed ?? false
       }
-  };
-    const res = await usersCollection.insertOne({...newUser});
-    return {
-      _id: res.insertedId,
-      ...newUser
-    } as WithId<UserDbType>
+    })
+
+    await newUser.save()
+    return newUser
   }
 }

@@ -1,10 +1,11 @@
 import {MongoMemoryServer} from 'mongodb-memory-server';
-import {runDB, stopDb} from '../../src/db/mongo.db';
+import {runDbMongoose, stopDbMongoose} from '../../src/db/mongo.db';
 import {testSeeder} from '../../src/utils-for-tests/utils-for-auth-tests';
 import {ResultStatus} from '../../src/common/types/result.status';
 import {NodemailerService} from "../../src/adapters/nodemailer-service";
 import {AuthService} from "../../src/auth/service/auth-service";
 import {container} from "../../src/core/ioc/ioc";
+import mongoose from "mongoose";
 
 describe('AUTH Integration Tests', () => {
   let mongoServer: MongoMemoryServer;
@@ -16,20 +17,27 @@ describe('AUTH Integration Tests', () => {
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create();
-    const uri = mongoServer.getUri();
 
-    await runDB(uri);
+    await runDbMongoose()
 
     container.snapshot();
     (await container.rebind(NodemailerService)).toConstantValue(nodemailerMock as any);
+
     authService = container.get<AuthService>(AuthService);
   });
 
   afterAll(async () => {
     container.restore()
-    await stopDb();
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
     await mongoServer.stop();
+    await stopDbMongoose();
   });
+
+  beforeEach(async () => {
+    nodemailerMock.sendEmail.mockClear();
+    await mongoose.connection.dropDatabase();
+  })
 
   describe('registration user', () => {
     it('Should register user with correct input data', async () => {

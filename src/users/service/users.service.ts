@@ -1,11 +1,9 @@
-import {UserDbType} from "../types/main-types/user-db-type";
 import {UserInputDto} from "../types/input-types/user-input-dto.type";
-import {WithId} from "mongodb";
 import {ErrorTypeOutput} from "../../core/types/error-types/ErrorTypeOutput";
-import {mapRegisterUser} from "../mapper/map-register-user";
 import {BcryptService} from "../../common/services/bcrypt.service";
 import {UsersRepository} from "../repository/usersRepository";
 import {inject, injectable} from "inversify";
+import {UserDocument, UserModel} from "../../entity/users.entity";
 
 @injectable()
 export class UsersService {
@@ -17,7 +15,7 @@ export class UsersService {
     public usersRepository: UsersRepository) {
   }
 
-  async createUser(queryDto: UserInputDto): Promise<WithId<UserDbType> | ErrorTypeOutput> {
+  async createUser(queryDto: UserInputDto): Promise<UserDocument | ErrorTypeOutput> {
     const isLoginExists = await this.usersRepository.getLoginUser(queryDto.login)
     if (isLoginExists) {
       return {
@@ -38,19 +36,29 @@ export class UsersService {
 
     const passwordHash = await this.bcryptService.generateHash(queryDto.password);
 
-    const newUser = {
+    const newUser = new UserModel({
       login: queryDto.login,
       email: queryDto.email,
       passwordHash,
-      createdAt: new Date()
-    }
-    const mappedUser = mapRegisterUser(newUser)
-    return await this.usersRepository.createUser(mappedUser);
+      createdAt: new Date(),
+      passwordRecovery: {
+        recoveryCode: null,
+        expirationDate: null,
+      },
+      emailConfirmation: {
+        confirmationCode: '',
+        expirationDate: new Date(),
+        isConfirmed: true,
+      }
+    })
+
+    return await this.usersRepository.save(newUser);
   }
 
-  async getUserById(id: string): Promise<WithId<UserDbType> | null> {
+  async getUserById(id: string): Promise<UserDocument | null> {
     if (!id) return null
-    return this.usersRepository.getUserById(id);
+    const user = await this.usersRepository.getUserById(id);
+    return user
   }
 
   async deleteUser(id: string): Promise<void> {

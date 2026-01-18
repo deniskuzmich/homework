@@ -2,7 +2,6 @@ import {UserInfoType} from "../../users/types/output-types/user-info.type";
 import {add} from "date-fns/add";
 import {ResultStatus} from "../../common/types/result.status";
 import {randomUUID} from "node:crypto";
-import {UserDbType} from "../../users/types/main-types/user-db-type";
 import {ResultType} from "../../common/types/result.type";
 import {emailExamples} from "../../adapters/email-examples";
 import {UserOutput} from "../../users/types/main-types/user-output.type";
@@ -11,6 +10,7 @@ import {BcryptService} from "../../common/services/bcrypt.service";
 import {NodemailerService} from "../../adapters/nodemailer-service";
 import {UsersRepository} from "../../users/repository/usersRepository";
 import {inject, injectable} from "inversify";
+import {UserDocument, UserModel} from "../../entity/users.entity";
 
 @injectable()
 export class AuthService {
@@ -32,7 +32,7 @@ export class AuthService {
     }
   }
 
-  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDbType | null>> {
+  async registerUser(login: string, email: string, password: string): Promise<ResultType<UserDocument | null>> {
     const isLoginExists = await this.usersRepository.getLoginUser(login)
     if (isLoginExists) {
       return {
@@ -52,7 +52,7 @@ export class AuthService {
 
     const passwordHash = await this.bcryptService.generateHash(password)
 
-    const newUser: UserDbType = {
+    const newUser = new UserModel({
       login,
       email,
       passwordHash,
@@ -69,8 +69,8 @@ export class AuthService {
         }),
         isConfirmed: false,
       }
-    }
-    await this.usersRepository.createUser(newUser)
+    })
+    await this.usersRepository.save(newUser)
 
     try {
       await this.nodemailerService.sendEmail(
@@ -144,11 +144,13 @@ export class AuthService {
       }
     }
 
-    let result = await this.usersRepository.updateConfirmation(user._id)
+    user.emailConfirmation.isConfirmed = true
+
+    await this.usersRepository.save(user)
     return {
       status: ResultStatus.NoContent,
       extensions: [],
-      data: result,
+      data: true,
     }
   }
 
@@ -170,7 +172,14 @@ export class AuthService {
 
     const newCode = randomUUID()
 
-    await this.usersRepository.updateConfirmationCode(user._id, newCode)
+    user.emailConfirmation.confirmationCode = newCode
+    user.emailConfirmation.expirationDate = add(new Date(), {
+      hours: 3,
+      minutes: 30,
+    })
+
+    await this.usersRepository.save(user)
+
     try {
       await this.nodemailerService.sendEmail(
         user.email,
@@ -198,7 +207,14 @@ export class AuthService {
 
     const newCode = randomUUID()
 
-    await this.usersRepository.updateCodeForPasswordRecovery(email, newCode)
+    user.passwordRecovery!.recoveryCode = newCode
+    user.passwordRecovery!.expirationDate = add(new Date(), {
+      hours: 0,
+      minutes: 30,
+    })
+
+    await this.usersRepository.save(user)
+
     try {
       await this.nodemailerService.sendEmail(
         user.email,
@@ -225,9 +241,11 @@ export class AuthService {
     }
     const passwordHash = await this.bcryptService.generateHash(newPassword)
 
-    await this.usersRepository.createNewPassword(user?._id, passwordHash)
-
-    await this.usersRepository.clearRecoveryData(user?._id)
+    user.passwordHash = passwordHash
+    user.passwordRecovery!.recoveryCode = null
+    user.passwordRecovery!.expirationDate = null
+    //Create new passWord and clear recoveryData
+    await this.usersRepository.save(user)
 
     return {
       status: ResultStatus.NoContent,

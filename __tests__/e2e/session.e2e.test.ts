@@ -1,8 +1,9 @@
 import request from 'supertest'
 import {MongoMemoryServer} from 'mongodb-memory-server'
-import {runDB, stopDb} from "../../src/db/mongo.db";
+import {runDbMongoose, stopDbMongoose} from "../../src/db/mongo.db";
 import {app} from "../../src/init-app";
 import {HttpStatuses} from "../../src/common/types/http-statuses";
+import {NodemailerService} from "../../src/adapters/nodemailer-service";
 
 
 jest.mock("../../src/adapters/nodemailer-service", () => {
@@ -12,7 +13,7 @@ jest.mock("../../src/adapters/nodemailer-service", () => {
     }))
   };
 });
-import {NodemailerService} from "../../src/adapters/nodemailer-service";
+
 const nodeMailerMock = new NodemailerService() as jest.Mocked<NodemailerService>;
 
 describe('SESSION Tests', () => {
@@ -38,12 +39,12 @@ describe('SESSION Tests', () => {
 
   beforeAll(async () => {
     mongoServer = await MongoMemoryServer.create()
-    await runDB(mongoServer.getUri());
+    await runDbMongoose()
   })
 
   afterAll(async () => {
-    await stopDb()
     await mongoServer.stop()
+    await stopDbMongoose();
   })
 
 

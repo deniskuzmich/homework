@@ -1,61 +1,22 @@
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 import {UserInfoType} from "../../users/types/output-types/user-info.type";
-import {WithId} from "mongodb";
-import {CommentDbType} from "../types/main-types/comment-db.type";
-import {CommentsQueryRepository} from "../repository/comments-query.repository";
 import {PostsRepository} from "../../posts/repository/posts-repository";
 import {CommentsRepository} from "../repository/comments.repository";
 import {inject, injectable} from "inversify";
+import {CommentDocument, CommentModel} from "../../entity/comments.entity";
 
 @injectable()
 export class CommentsService {
 
   constructor(
-    @inject(CommentsQueryRepository)
-    public commentsQueryRepository: CommentsQueryRepository,
     @inject(CommentsRepository)
     public commentsRepository: CommentsRepository,
     @inject(PostsRepository)
     public postsRepository: PostsRepository) {
   }
 
-  async updateComment(id: string, newContent: string, userId: string): Promise<ResultType> {
-    const comment = await this.commentsQueryRepository.getCommentById(id);
-    if (!comment) {
-      return {
-        status: ResultStatus.NotFound,
-        errorMessage: 'Comment not found',
-        extensions: [],
-        data: null
-      }
-    }
-
-    if (comment.commentatorInfo?.userId?.toString() !== userId) {
-      return {
-        status: ResultStatus.Forbidden,
-        errorMessage: 'User is not own this comment',
-        extensions: [],
-        data: null
-      }
-    }
-    const updatedComment = await this.commentsRepository.updateComment(id, newContent);
-    if (!updatedComment) {
-      return {
-        status: ResultStatus.BadRequest,
-        errorMessage: 'Bad request',
-        extensions: [{field: 'content', message: 'Bad request to update comment'}],
-        data: null
-      }
-    }
-    return {
-      status: ResultStatus.NoContent,
-      extensions: [],
-      data: null
-    }
-  }
-
-  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<WithId<CommentDbType> | null>> {
+  async createCommentForPost(user: UserInfoType, content: string, postId: string): Promise<ResultType<CommentDocument | null>> {
     const isPostExists = await this.postsRepository.getPostById(postId);
     if (!isPostExists) {
       return {
@@ -75,7 +36,7 @@ export class CommentsService {
       }
     }
 
-    const newCommentForPost = {
+    const newCommentForPost = new CommentModel({
       postId,
       content,
       commentatorInfo: {
@@ -83,8 +44,9 @@ export class CommentsService {
         userLogin: user.login,
       },
       createdAt: new Date().toISOString(),
-    }
-    const createdComment = await this.commentsRepository.createCommentForPost(newCommentForPost)
+    })
+
+    const createdComment = await this.commentsRepository.save(newCommentForPost)
 
     if (!createdComment) {
       return {
@@ -98,6 +60,44 @@ export class CommentsService {
       status: ResultStatus.Created,
       extensions: [],
       data: createdComment
+    }
+  }
+
+  async updateComment(id: string, newContent: string, userId: string): Promise<ResultType> {
+    const comment = await this.commentsRepository.getCommentById(id);
+    if (!comment) {
+      return {
+        status: ResultStatus.NotFound,
+        errorMessage: 'Comment not found',
+        extensions: [],
+        data: null
+      }
+    }
+
+    if (comment.commentatorInfo?.userId?.toString() !== userId) {
+      return {
+        status: ResultStatus.Forbidden,
+        errorMessage: 'User is not own this comment',
+        extensions: [],
+        data: null
+      }
+    }
+
+    comment.content = newContent;
+
+    const updatedComment = await this.commentsRepository.save(comment);
+    if (!updatedComment) {
+      return {
+        status: ResultStatus.BadRequest,
+        errorMessage: 'Bad request',
+        extensions: [{field: 'content', message: 'Bad request to update comment'}],
+        data: null
+      }
+    }
+    return {
+      status: ResultStatus.NoContent,
+      extensions: [],
+      data: null
     }
   }
 

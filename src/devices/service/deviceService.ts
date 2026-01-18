@@ -1,9 +1,9 @@
-import {SessionType} from "../types/session.type";
 import {ResultStatus} from "../../common/types/result.status";
 import {ResultType} from "../../common/types/result.type";
 import {DevicesRepository} from "../repository/devicesRepository";
 import {JwtService} from "../../common/services/jwtService";
 import {inject, injectable} from "inversify";
+import {SessionDocument, SessionModel} from "../../entity/sessions.entity";
 
 @injectable()
 export class DeviceService {
@@ -15,8 +15,9 @@ export class DeviceService {
     public jwtService: JwtService) {
   }
 
-  async getSession(deviceId: string) {
-    return await this.devicesRepository.findSession(deviceId)
+  async getSession(deviceId: string): Promise<SessionDocument | null> {
+    const session = await this.devicesRepository.findSession(deviceId)
+    return session
   }
 
   async createSession(userId: string, refreshToken: string, ip: string | undefined, deviceName: string) {
@@ -26,7 +27,7 @@ export class DeviceService {
     }
     const {deviceId, iat, eat} = payload;
 
-    const session: SessionType = {
+    const session = new SessionModel({
       userId,
       deviceId,
       deviceName,
@@ -34,25 +35,28 @@ export class DeviceService {
       ip,
       iat,
       eat
-    }
-    return await this.devicesRepository.createSession(session)
+    })
+
+    await this.devicesRepository.save(session)
+    return session
   }
 
-  async updateSession(deviceId: string, ip: string | undefined, deviceName: string, refreshToken: string) {
+  async updateSession(ip: string | undefined, deviceName: string, refreshToken: string) {
     const payload = this.jwtService.verifyRefreshToken(refreshToken);
     if (!payload) {
       return null
     }
 
-    const updatedSession = {
+    const updatedSession = new SessionModel({
       deviceId: payload.deviceId,
       deviceName,
       refreshToken,
       ip,
       iat: payload.iat,
       eat: payload.eat,
-    }
-    return await this.devicesRepository.updateSession(deviceId, updatedSession)
+    })
+    await this.devicesRepository.save(updatedSession)
+    return
   }
 
   async deleteOneSession(userId: string, deviceId: string): Promise<ResultType> {

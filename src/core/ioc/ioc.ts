@@ -52,6 +52,7 @@ import {DevicesRepository} from "../../devices/repository/devicesRepository";
 import {DeleteAllDevicesHandler} from "../../devices/handler/delete-all-devices.handler";
 import {DeleteOneDeviceHandler} from "../../devices/handler/delete-one-device.handler";
 import {AuthMiddleWare} from "../../auth/middleware/auth.middleware";
+import {LikeHandler} from "../../comments/handler/like.handler";
 
 export const container = new Container();
 
@@ -88,6 +89,7 @@ container.bind(CommentsService).to(CommentsService)
 container.bind(GetCommentByIdHandler).to(GetCommentByIdHandler)
 container.bind(UpdateCommentsHandler).to(UpdateCommentsHandler)
 container.bind(DeleteCommentHandler).to(DeleteCommentHandler)
+container.bind(LikeHandler).to(LikeHandler)
 
 container.bind(UsersQueryRepository).to(UsersQueryRepository)
 container.bind(UsersRepository).to(UsersRepository)

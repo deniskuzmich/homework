@@ -33,7 +33,7 @@ export class AuthMiddleWare {
       }
 
       const userInfo: UserInfoType = {
-        userId: userFromDb._id.toString(),
+        userId: userFromDb.id,
         login: userFromDb.login,
         email: userFromDb.email
       };

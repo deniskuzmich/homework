@@ -1,5 +1,5 @@
 import * as mongoose from "mongoose";
-import {HydratedDocument, model, Model, Schema} from "mongoose";
+import {HydratedDocument, model, Model} from "mongoose";
 import {Post} from "../posts/types/main-types/posts-db.type";
 
 
