@@ -3,6 +3,7 @@ import {CommentsService} from "../service/comments.service";
 import {inject, injectable} from "inversify";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 
 @injectable()
@@ -15,6 +16,9 @@ export class LikeHandler {
 
   async updateLikeStatus(req: Request, res: Response) {
     const commentId = req.params.commentId;
+    if (!commentId) {
+      return res.sendStatus(HttpStatuses.NotFound)
+    }
     // const userId = req.user!.userId;
 
 
