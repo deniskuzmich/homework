@@ -6,7 +6,7 @@ export type CommentDbType = {
     userId: string,
     userLogin: string
   },
-  createdAt: string,
+  createdAt: Date,
   likesInfo: {
     likesCount: number,
     dislikesCount: number,

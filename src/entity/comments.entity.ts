@@ -9,11 +9,15 @@ const CommentsSchema = new mongoose.Schema<CommentDbType> ({
     userId: {type: String, required: true},
     userLogin: {type: String, required: true},
   },
-  createdAt: {type: String},
+  createdAt: {type: Date},
   likesInfo: {
-    likesCount: {type: Number},
-    dislikesCount: {type: Number},
-    myStatus: LikeStatus
+    likesCount: {type: Number, default: 0},
+    dislikesCount: {type: Number, default: 0},
+    myStatus: {
+      type: String,
+      enum: Object.values(LikeStatus),
+      default: LikeStatus.None
+    },
   }
 })
 
