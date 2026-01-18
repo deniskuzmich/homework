@@ -160,7 +160,7 @@ export class CommentsService {
     await this.commentsRepository.save(comment);
 
     return {
-      status: ResultStatus.Success,
+      status: ResultStatus.NoContent,
       extensions: [{field: 'likeStatus', message: 'Bad Request from likeStatus'}],
       data: null
     }
