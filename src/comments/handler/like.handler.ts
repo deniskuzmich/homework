@@ -5,7 +5,6 @@ import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 
 
-
 @injectable()
 export class LikeHandler {
 
