@@ -137,7 +137,7 @@ export class CommentsService {
     }
   }
 
-  async updateLikeForComment(commentId: string): Promise<ResultType> {
+  async updateLikeForComment(commentId: string, likeStatus: LikeStatus): Promise<ResultType> {
     const comment = await this.commentsRepository.getCommentById(commentId);
     if(!comment) {
       return {
@@ -147,13 +147,21 @@ export class CommentsService {
         data: null
       }
     }
-    comment.likesInfo.myStatus = LikeStatus.None
+
+    if(!Object.values(LikeStatus).includes(likeStatus)) {
+      return {
+        status: ResultStatus.BadRequest,
+        extensions: [],
+        data: null
+      }
+    }
+    comment.likesInfo.myStatus = likeStatus
 
     await this.commentsRepository.save(comment);
 
     return {
       status: ResultStatus.Success,
-      extensions: [],
+      extensions: [{field: 'likeStatus', message: 'Bad Request from likeStatus'}],
       data: null
     }
   }
