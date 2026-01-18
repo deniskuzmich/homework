@@ -47,7 +47,7 @@ export class UsersQueryRepository {
   }
 
   async getUserById(id: string): Promise<UserOutput | null> {
-    if(id) return null;
+    if(!id) return null;
     const user = await UserModel.findOne({_id: id});
     if(!user) return null;
     return mapToUserViewModel(user);
