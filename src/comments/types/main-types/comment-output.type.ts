@@ -1,3 +1,4 @@
+import {LikeStatus} from "../../enum/like-enum";
 
 export type CommentOutput = {
   id: string,
@@ -6,5 +7,10 @@ export type CommentOutput = {
     userId: string,
     userLogin: string
   },
-  createdAt: string
+  createdAt: Date,
+  likesInfo: {
+    likesCount: number,
+    dislikesCount: number,
+    myStatus: LikeStatus
+  }
 }

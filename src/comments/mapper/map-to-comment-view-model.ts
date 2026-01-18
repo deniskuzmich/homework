@@ -11,5 +11,10 @@ export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
       userLogin: data.commentatorInfo.userLogin,
     },
     createdAt: data.createdAt,
+    likesInfo: {
+      likesCount: data.likesInfo.likesCount,
+      dislikesCount: data.likesInfo.dislikesCount,
+      myStatus: data.likesInfo.myStatus
+    }
   }
 }
