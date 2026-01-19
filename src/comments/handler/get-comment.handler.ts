@@ -17,7 +17,7 @@ export class GetCommentByIdHandler {
     if (!userId) {
       return res.sendStatus(HttpStatuses.NotFound)
     }
-    const comment = await this.commentsQueryRepository.getCommentById(req.params.id, userId);
+    const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
 
     if (!comment) {
       return res.sendStatus(HttpStatuses.NotFound)
