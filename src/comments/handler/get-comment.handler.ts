@@ -13,12 +13,25 @@ export class GetCommentByIdHandler {
 
   async getCommentById(req: Request, res: Response) {
     const userId = req.user?.userId ?? null
-    const comment = await this.commentsQueryRepository.getCommentWithLike(req.params.id, userId);
 
-    if (!comment) {
+    if(!userId) {
+      const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
+
+      if (!comment) {
+        return res.sendStatus(HttpStatuses.NotFound)
+      }
+
+      res.status(HttpStatuses.Success).send(comment);
+    }
+
+    const commentWithLike = await this.commentsQueryRepository.getCommentWithLike(req.params.id, userId);
+
+    if (!commentWithLike) {
       return res.sendStatus(HttpStatuses.NotFound)
     }
-    res.status(HttpStatuses.Success).send(comment);
+
+    res.status(HttpStatuses.Success).send(commentWithLike);
+    res.status(HttpStatuses.Success).send(commentWithLike);
   }
 }
 
