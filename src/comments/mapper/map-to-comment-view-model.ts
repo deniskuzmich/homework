@@ -1,6 +1,6 @@
 import {CommentOutput} from "../types/main-types/comment-output.type";
 import {CommentDocument} from "../../entity/comments.entity";
-import {LikeStatus} from "../enum/like-enum";
+
 
 export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
 
