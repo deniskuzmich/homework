@@ -8,8 +8,8 @@ import {CommentModel} from "../../entity/comments.entity";
 
 @injectable()
 export class CommentsQueryRepository {
-  async getCommentById(postId: string): Promise<CommentOutput | null> {
-    const comment = await CommentModel.findOne({_id: postId})
+  async getCommentById(commentId: string): Promise<CommentOutput | null> {
+    const comment = await CommentModel.findOne({_id: commentId})
     if (!comment) return null;
 
     return mapToCommentViewModel(comment)

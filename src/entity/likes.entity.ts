@@ -3,15 +3,15 @@ import {HydratedDocument, model, Model} from "mongoose";
 import {LikeStatus} from "../comments/enum/like-enum";
 
 type Like = {
-  myStatus: LikeStatus
+  likesCount: number,
+  dislikesCount: number,
+  myStatus: string
 }
 
 const LikesSchema = new mongoose.Schema<Like> ({
-  myStatus: {
-    type: String,
-    enum: Object.values(LikeStatus),
-    default: LikeStatus.None
-  },
+  likesCount: {type: Number},
+  dislikesCount: {type: Number},
+  myStatus: {type: String, default: LikeStatus.None},
 })
 
 type LikeModel = Model<Like>
