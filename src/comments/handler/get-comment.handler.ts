@@ -12,7 +12,12 @@ export class GetCommentByIdHandler {
   }
 
   async getCommentById(req: Request, res: Response) {
-    const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
+    const userId = req.user!.userId;
+
+    if (!userId) {
+      return res.sendStatus(HttpStatuses.NotFound)
+    }
+    const comment = await this.commentsQueryRepository.getCommentById(req.params.id, userId);
 
     if (!comment) {
       return res.sendStatus(HttpStatuses.NotFound)

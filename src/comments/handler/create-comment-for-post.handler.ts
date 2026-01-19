@@ -33,7 +33,7 @@ export class CreateCommentForPostHandler {
       return res.status(mapResultCodeToHttpExtension(createdComment.status)).send(createdComment.extensions)
     }
 
-    const commentForPost = await this.commentsQueryRepository.getCommentById(createdComment.data!._id.toString())
+    const commentForPost = await this.commentsQueryRepository.getCommentById(createdComment.data!.id, user.userId)
     return res.status(HttpStatuses.Created).send(commentForPost)
   }
 }

@@ -19,13 +19,14 @@ export class GetCommentForPostHandler {
   async getComment(req: Request, res: Response) {
     const id = req.params.id;
     const query = valuesPaginationMaper(req.query);
+    const userId = req.user!.userId
 
     const post = await this.postsService.getPostById(id);
     if (!post) {
       return res.sendStatus(HttpStatuses.NotFound)
     }
 
-    const commentForPost = await this.commentsQueryRepository.getCommentByPostIdWithPagination(id, query);
+    const commentForPost = await this.commentsQueryRepository.getCommentByPostIdWithPagination(id, query, userId);
 
     if (!commentForPost) {
       return res.sendStatus(HttpStatuses.NotFound)
