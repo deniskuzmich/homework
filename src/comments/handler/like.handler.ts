@@ -15,9 +15,9 @@ export class LikeHandler {
   async updateLikeStatus(req: Request, res: Response) {
     const commentId = req.params.commentId;
     const likeStatus = req.body.likeStatus;
-    // const userId = req.user!.userId;
+    const userId = req.user!.userId;
 
-    const result = await this.commentsService.updateLikeForComment(commentId, likeStatus)
+    const result = await this.commentsService.updateLikeForComment(commentId,userId, likeStatus)
 
     if(result.status === ResultStatus.Success)  {
       return res.status(mapResultCodeToHttpExtension(result.status)).send(result.extensions)

@@ -10,7 +10,7 @@ import {LikeModel} from "../../entity/likes.entity";
 
 @injectable()
 export class CommentsQueryRepository {
-  async getCommentById(
+  async getCommentWithLike(
     commentId: string,
     userId: string | null
   ): Promise<CommentOutput | null> {
@@ -39,12 +39,12 @@ export class CommentsQueryRepository {
       }
     }
   }
-  // async getCommentById(commentId: string, userId: string | null): Promise<CommentOutput | null> {
-  //   const comment = await CommentModel.findOne({_id: commentId})
-  //   if (!comment) return null;
-  //
-  //   return mapToCommentViewModel(comment)
-  // }
+  async getCommentById(commentId: string): Promise<CommentOutput | null> {
+    const comment = await CommentModel.findOne({_id: commentId})
+    if (!comment) return null;
+
+    return mapToCommentViewModel(comment)
+  }
 
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
