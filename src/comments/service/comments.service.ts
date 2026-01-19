@@ -7,6 +7,7 @@ import {inject, injectable} from "inversify";
 import {CommentDocument, CommentModel} from "../../entity/comments.entity";
 import {UsersRepository} from "../../users/repository/usersRepository";
 import {LikeStatus} from "../enum/like-enum";
+import {LikeModel} from "../../entity/likes.entity";
 
 @injectable()
 export class CommentsService {
@@ -137,33 +138,109 @@ export class CommentsService {
     }
   }
 
-  async updateLikeForComment(commentId: string, likeStatus: LikeStatus): Promise<ResultType> {
-    const comment = await this.commentsRepository.getCommentById(commentId);
-    if(!comment) {
+  async updateLikeForComment(
+    commentId: string,
+    userId: string,
+    likeStatus: LikeStatus
+  ): Promise<ResultType> {
+
+    const comment = await CommentModel.findById(commentId)
+    if (!comment) {
       return {
         status: ResultStatus.NotFound,
-        errorMessage: 'Comment not found',
+        data: null,
         extensions: [],
-        data: null
+        errorMessage: 'Comment not found'
       }
     }
 
-    if(!Object.values(LikeStatus).includes(likeStatus)) {
+    const existingLike = await LikeModel.findOne({userId, commentId})
+
+    // 1. Если статус тот же — НИЧЕГО НЕ ДЕЛАЕМ
+    if (existingLike && existingLike.status === likeStatus) {
       return {
-        status: ResultStatus.BadRequest,
-        extensions: [],
-        data: null
+        status: ResultStatus.NoContent,
+        data: null,
+        extensions: []
       }
     }
-    comment.likesInfo.myStatus = likeStatus
 
-    await this.commentsRepository.save(comment);
+    // 2. Если лайка не было
+    if (!existingLike) {
+      await LikeModel.create({userId, commentId, status: likeStatus})
+
+      if (likeStatus === LikeStatus.Like) {
+        comment.likesInfo.likesCount += 1
+      }
+
+      if (likeStatus === LikeStatus.Dislike) {
+        comment.likesInfo.dislikesCount += 1
+      }
+
+      await comment.save()
+
+      return {
+        status: ResultStatus.NoContent,
+        data: null,
+        extensions: []
+      }
+    }
+
+    // 3. Если лайк был — МЕНЯЕМ СТАТУС
+    if (existingLike.status === LikeStatus.Like) {
+      comment.likesInfo.likesCount -= 1
+    }
+
+    if (existingLike.status === LikeStatus.Dislike) {
+      comment.likesInfo.dislikesCount -= 1
+    }
+
+    if (likeStatus === LikeStatus.Like) {
+      comment.likesInfo.likesCount += 1
+    }
+
+    if (likeStatus === LikeStatus.Dislike) {
+      comment.likesInfo.dislikesCount += 1
+    }
+
+    existingLike.status = likeStatus
+    await existingLike.save()
+    await comment.save()
 
     return {
       status: ResultStatus.NoContent,
-      extensions: [{field: 'likeStatus', message: 'Bad Request from likeStatus'}],
-      data: null
+      data: null,
+      extensions: []
     }
   }
 }
 
+
+// async updateLikeForComment(commentId: string, likeStatus: LikeStatus): Promise<ResultType> {
+//   const comment = await this.commentsRepository.getCommentById(commentId);
+//   if(!comment) {
+//   return {
+//     status: ResultStatus.NotFound,
+//     errorMessage: 'Comment not found',
+//     extensions: [],
+//     data: null
+//   }
+// }
+//
+// if(!Object.values(LikeStatus).includes(likeStatus)) {
+//   return {
+//     status: ResultStatus.BadRequest,
+//     extensions: [],
+//     data: null
+//   }
+// }
+// comment.likesInfo.myStatus = likeStatus
+//
+// await this.commentsRepository.save(comment);
+//
+// return {
+//   status: ResultStatus.NoContent,
+//   extensions: [{field: 'likeStatus', message: 'Bad Request from likeStatus'}],
+//   data: null
+// }
+// }

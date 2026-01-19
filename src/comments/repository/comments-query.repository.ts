@@ -5,15 +5,47 @@ import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaio
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 import {injectable} from "inversify";
 import {CommentModel} from "../../entity/comments.entity";
+import {LikeStatus} from "../enum/like-enum";
+import {LikeModel} from "../../entity/likes.entity";
 
 @injectable()
 export class CommentsQueryRepository {
-  async getCommentById(commentId: string): Promise<CommentOutput | null> {
-    const comment = await CommentModel.findOne({_id: commentId})
-    if (!comment) return null;
+  async getCommentById(
+    commentId: string,
+    userId: string | null
+  ): Promise<CommentOutput | null> {
 
-    return mapToCommentViewModel(comment)
+    const comment = await CommentModel.findById(commentId)
+    if (!comment) return null
+
+    let myStatus = LikeStatus.None
+
+    if (userId) {
+      const like = await LikeModel.findOne({userId, commentId})
+      if (like) {
+        myStatus = like.status
+      }
+    }
+
+    return {
+      id: comment._id.toString(),
+      content: comment.content,
+      commentatorInfo: comment.commentatorInfo,
+      createdAt: comment.createdAt,
+      likesInfo: {
+        likesCount: comment.likesInfo.likesCount,
+        dislikesCount: comment.likesInfo.dislikesCount,
+        myStatus
+      }
+    }
   }
+  // async getCommentById(commentId: string, userId: string | null): Promise<CommentOutput | null> {
+  //   const comment = await CommentModel.findOne({_id: commentId})
+  //   if (!comment) return null;
+  //
+  //   return mapToCommentViewModel(comment)
+  // }
+
   async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
