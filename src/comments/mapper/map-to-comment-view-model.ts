@@ -1,5 +1,6 @@
-import {CommentOutput} from "../types/main-types/comment-output.type";
 import {CommentDocument} from "../../entity/comments.entity";
+import {LikeStatus} from "../enum/like-enum";
+import {CommentOutput} from "../types/main-types/comment-output.type";
 
 
 export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
@@ -15,7 +16,7 @@ export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
     likesInfo: {
       likesCount: data.likesInfo.likesCount,
       dislikesCount: data.likesInfo.dislikesCount,
-      // myStatus: data.likesInfo.myStatus
+      myStatus: LikeStatus.None
     }
   }
   // return {

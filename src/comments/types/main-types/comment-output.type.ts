@@ -11,6 +11,6 @@ export type CommentOutput = {
   likesInfo: {
     likesCount: number,
     dislikesCount: number,
-    // myStatus: LikeStatus
+    myStatus: LikeStatus
   }
 }
