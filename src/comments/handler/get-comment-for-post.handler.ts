@@ -18,7 +18,7 @@ export class GetCommentForPostHandler {
 
   async getComment(req: Request, res: Response) {
     try {
-      const postId = req.params.id;
+      const postId = req.params.postId;
       const query = valuesPaginationMaper(req.query);
       const userId = req.user?.userId ?? null
 
