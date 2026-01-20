@@ -59,7 +59,7 @@ export class CommentsQueryRepository {
     return mapToCommentViewModel(comment)
   }
 
-  async getCommentByPostIdWithPagination(postId: string, query: InputPaginationForRepo, userId: string): Promise<OutputTypeWithPagination<CommentWithLikesOutput>> {
+  async getCommentByPostIdWithPagination(postId: string, query: InputPaginationForRepo, userId: string | null): Promise<OutputTypeWithPagination<CommentWithLikesOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const sort = {[query.sortBy]: query.sortDirection}
