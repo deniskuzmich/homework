@@ -73,19 +73,19 @@ export class CommentsQueryRepository {
 
     const totalCount = await CommentModel.countDocuments({postId: postId});
 
-    const commentId = comments.map(comment => comment._id.toString());
+    const commentIds = comments.map(c => c._id.toString());
 
-    let likesMap = new Map<string, LikeStatus>()
+    let likesMap = new Map<string, LikeStatus>();
 
-    if (userId) {
+    if (userId && commentIds.length > 0) {
       const likes = await LikeModel.find({
         userId,
-        commentId: {$in: commentId},
-      })
+        commentId: { $in: commentIds },
+      });
 
       likes.forEach(like => {
-        likesMap.set(like.commentId, like.status)
-      })
+        likesMap.set(like.commentId, like.status);
+      });
     }
 
     const commentsForFront: CommentWithLikesOutput[] = comments.map(comment => ({

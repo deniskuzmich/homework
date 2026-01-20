@@ -17,21 +17,26 @@ export class GetCommentForPostHandler {
   }
 
   async getComment(req: Request, res: Response) {
-    const postId = req.params.id;
-    const query = valuesPaginationMaper(req.query);
-    const userId = req.user!.userId
+    try {
+      const postId = req.params.id;
+      const query = valuesPaginationMaper(req.query);
+      const userId = req.user!.userId
 
-    const post = await this.postsService.getPostById(postId);
-    if (!post) {
-      return res.sendStatus(HttpStatuses.NotFound)
+      const post = await this.postsService.getPostById(postId);
+      if (!post) {
+        return res.sendStatus(HttpStatuses.NotFound)
+      }
+
+      const commentForPost = await this.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query, userId);
+
+      if (!commentForPost) {
+        return res.sendStatus(HttpStatuses.NotFound)
+      }
+      return res.status(HttpStatuses.Success).send(commentForPost)
+    } catch (e) {
+      console.error('getComment Error',e);
+      return res.sendStatus(HttpStatuses.ServerError)
     }
-
-    const commentForPost = await this.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query, userId);
-
-    if (!commentForPost) {
-      return res.sendStatus(HttpStatuses.NotFound)
-    }
-    return res.status(HttpStatuses.Success).send(commentForPost)
   }
 }
 
