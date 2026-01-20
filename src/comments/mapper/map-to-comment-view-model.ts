@@ -15,7 +15,7 @@ export function mapToCommentViewModel (data:CommentDocument): CommentOutput {
     likesInfo: {
       likesCount: data.likesInfo.likesCount,
       dislikesCount: data.likesInfo.dislikesCount,
-      myStatus: data.likesInfo.myStatus
+      // myStatus: data.likesInfo.myStatus
     }
   }
   // return {

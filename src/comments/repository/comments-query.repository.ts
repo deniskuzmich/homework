@@ -8,12 +8,28 @@ import {CommentModel} from "../../entity/comments.entity";
 import {LikeStatus} from "../enum/like-enum";
 import {LikeModel} from "../../entity/likes.entity";
 
+
+export type CommentWithLikesOutput = {
+  id: string
+  content: string
+  commentatorInfo: {
+    userId: string
+    userLogin: string
+  }
+  createdAt: Date
+  likesInfo: {
+    likesCount: number
+    dislikesCount: number
+    myStatus: LikeStatus
+  }
+}
+
 @injectable()
 export class CommentsQueryRepository {
   async getCommentWithLike(
     commentId: string,
     userId: string | null
-  ): Promise<CommentOutput | null> {
+  ): Promise<CommentWithLikesOutput | null> {
 
     const comment = await CommentModel.findById(commentId)
     if (!comment) return null
