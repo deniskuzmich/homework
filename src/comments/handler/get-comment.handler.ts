@@ -30,8 +30,7 @@ export class GetCommentByIdHandler {
       return res.sendStatus(HttpStatuses.NotFound)
     }
 
-    res.status(HttpStatuses.Success).send(commentWithLike);
-    res.status(HttpStatuses.Success).send(commentWithLike);
+    return res.status(HttpStatuses.Success).send(commentWithLike);
   }
 }
 
