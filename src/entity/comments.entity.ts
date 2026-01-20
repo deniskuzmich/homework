@@ -1,7 +1,6 @@
 import * as mongoose from "mongoose";
 import {HydratedDocument, model, Model} from "mongoose";
 import {CommentDbType} from "../comments/types/main-types/comment-db.type";
-import {LikeStatus} from "../comments/enum/like-enum";
 
 const CommentsSchema = new mongoose.Schema<CommentDbType> ({
   content: {type: String, required: true},
@@ -13,11 +12,6 @@ const CommentsSchema = new mongoose.Schema<CommentDbType> ({
   likesInfo: {
     likesCount: {type: Number, default: 0},
     dislikesCount: {type: Number, default: 0},
-    // myStatus: {
-    //   type: String,
-    //   enum: Object.values(LikeStatus),
-    //   default: LikeStatus.None
-    // },
   }
 })
 

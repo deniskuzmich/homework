@@ -7,6 +7,7 @@ import {UpdateCommentsHandler} from "../comments/handler/update-comments.handler
 import {DeleteCommentHandler} from "../comments/handler/delete-comment.handler";
 import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
 import {LikeHandler} from "../comments/handler/like.handler";
+import {softAuthMiddleware} from "../common/middleware-validation/soft-auth-middleware";
 
 const getCommentByIdHandler = container.get(GetCommentByIdHandler);
 const updateCommentsHandler = container.get(UpdateCommentsHandler);
@@ -16,6 +17,7 @@ const authMiddleware = container.get(AuthMiddleWare);
 
 export const commentsRouter = Router()
   .get('/:id',
+    softAuthMiddleware,
     inputValidationResultMiddleware,
     getCommentByIdHandler.getCommentById.bind(getCommentByIdHandler))
 
