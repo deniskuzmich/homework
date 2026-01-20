@@ -29,9 +29,6 @@ export class GetCommentForPostHandler {
 
       const commentForPost = await this.commentsQueryRepository.getCommentByPostIdWithPagination(postId, query, userId);
 
-      if (!commentForPost) {
-        return res.sendStatus(HttpStatuses.NotFound)
-      }
       return res.status(HttpStatuses.Success).send(commentForPost)
     } catch (e) {
       console.error('getComment Error',e);

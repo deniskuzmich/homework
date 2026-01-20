@@ -3,6 +3,7 @@ import {HydratedDocument, model, Model} from "mongoose";
 import {CommentDbType} from "../comments/types/main-types/comment-db.type";
 
 const CommentsSchema = new mongoose.Schema<CommentDbType> ({
+  postId: {type: String, required: true},
   content: {type: String, required: true},
   commentatorInfo: {
     userId: {type: String, required: true},
