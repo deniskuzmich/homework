@@ -9,8 +9,8 @@ type Like = {
 }
 
 const LikesSchema = new mongoose.Schema<Like> ({
-  // userId: {type: String, required: true},
-  // commentId: {type: String, required: true},
+  userId: {type: String, required: true},
+  commentId: {type: String, required: true},
   status: {
     type: String,
     enum: Object.values(LikeStatus),
