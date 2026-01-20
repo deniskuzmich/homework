@@ -153,20 +153,16 @@ export class CommentsService {
       }
     }
 
-    const existingLike = await LikeModel.findOne({userId, commentId})
+    const existingLike = await LikeModel.findOne({ userId, commentId })
 
-    // 1. Если статус тот же — НИЧЕГО НЕ ДЕЛАЕМ
-    if (existingLike && existingLike.status === likeStatus) {
-      return {
-        status: ResultStatus.NoContent,
-        data: null,
-        extensions: []
-      }
-    }
-
-    // 2. Если лайка не было
+    // ====== CASE 1: лайка нет ======
     if (!existingLike) {
-      await LikeModel.create({userId, commentId, status: likeStatus})
+
+      if (likeStatus === LikeStatus.None) {
+        return { status: ResultStatus.NoContent, data: null, extensions: [] }
+      }
+
+      await LikeModel.create({ userId, commentId, status: likeStatus })
 
       if (likeStatus === LikeStatus.Like) {
         comment.likesInfo.likesCount += 1
@@ -177,15 +173,32 @@ export class CommentsService {
       }
 
       await comment.save()
-
-      return {
-        status: ResultStatus.NoContent,
-        data: null,
-        extensions: []
-      }
+      return { status: ResultStatus.NoContent, data: null, extensions: [] }
     }
 
-    // 3. Если лайк был — МЕНЯЕМ СТАТУС
+    // ====== CASE 2: статус тот же ======
+    if (existingLike.status === likeStatus) {
+      return { status: ResultStatus.NoContent, data: null, extensions: [] }
+    }
+
+    // ====== CASE 3: удаление лайка (None) ======
+    if (likeStatus === LikeStatus.None) {
+
+      if (existingLike.status === LikeStatus.Like) {
+        comment.likesInfo.likesCount -= 1
+      }
+
+      if (existingLike.status === LikeStatus.Dislike) {
+        comment.likesInfo.dislikesCount -= 1
+      }
+
+      await existingLike.deleteOne()
+      await comment.save()
+
+      return { status: ResultStatus.NoContent, data: null, extensions: [] }
+    }
+
+    // ====== CASE 4: смена Like ↔ Dislike ======
     if (existingLike.status === LikeStatus.Like) {
       comment.likesInfo.likesCount -= 1
     }
@@ -206,11 +219,7 @@ export class CommentsService {
     await existingLike.save()
     await comment.save()
 
-    return {
-      status: ResultStatus.NoContent,
-      data: null,
-      extensions: []
-    }
+    return { status: ResultStatus.NoContent, data: null, extensions: [] }
   }
 }
 
