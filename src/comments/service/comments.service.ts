@@ -143,7 +143,7 @@ export class CommentsService {
     likeStatus: LikeStatus
   ): Promise<ResultType> {
 
-    const comment = await CommentModel.findById(commentId)
+    const comment = await this.commentsRepository.getCommentById(commentId);
     if (!comment) {
       return {
         status: ResultStatus.NotFound,
