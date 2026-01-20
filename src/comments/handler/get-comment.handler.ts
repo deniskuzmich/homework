@@ -12,7 +12,7 @@ export class GetCommentByIdHandler {
   }
 
   async getCommentById(req: Request, res: Response) {
-    const userId = req.user?.userId ?? null
+    const userId = req.user!.userId ?? null
 
     if(!userId) {
       const comment = await this.commentsQueryRepository.getCommentById(req.params.id);

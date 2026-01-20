@@ -222,33 +222,3 @@ export class CommentsService {
     return { status: ResultStatus.NoContent, data: null, extensions: [] }
   }
 }
-
-
-// async updateLikeForComment(commentId: string, likeStatus: LikeStatus): Promise<ResultType> {
-//   const comment = await this.commentsRepository.getCommentById(commentId);
-//   if(!comment) {
-//   return {
-//     status: ResultStatus.NotFound,
-//     errorMessage: 'Comment not found',
-//     extensions: [],
-//     data: null
-//   }
-// }
-//
-// if(!Object.values(LikeStatus).includes(likeStatus)) {
-//   return {
-//     status: ResultStatus.BadRequest,
-//     extensions: [],
-//     data: null
-//   }
-// }
-// comment.likesInfo.myStatus = likeStatus
-//
-// await this.commentsRepository.save(comment);
-//
-// return {
-//   status: ResultStatus.NoContent,
-//   extensions: [{field: 'likeStatus', message: 'Bad Request from likeStatus'}],
-//   data: null
-// }
-// }
