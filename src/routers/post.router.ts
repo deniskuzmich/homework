@@ -14,6 +14,7 @@ import {DeletePostHandler} from "../posts/handlers/delete-post.hanlder";
 import {GetCommentForPostHandler} from "../comments/handler/get-comment-for-post.handler";
 import {CreateCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
 import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
+import {softAuthMiddleware} from "../common/middleware-validation/soft-auth-middleware";
 
 const getPostListHandler = container.get(GetPostListHandler);
 const getPostHandler = container.get(GetPostHandler);
@@ -60,6 +61,7 @@ postRouter
   )
 
   .get('/:id/comments',
+    softAuthMiddleware,
     idValidation,
     paginationValidation,
     inputValidationResultMiddleware,
