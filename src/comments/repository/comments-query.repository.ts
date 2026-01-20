@@ -28,20 +28,14 @@ export type CommentWithLikesOutput = {
 export class CommentsQueryRepository {
   async getCommentWithLike(
     commentId: string,
-    userId: string | null
+    userId: string
   ): Promise<CommentWithLikesOutput | null> {
-
     const comment = await CommentModel.findById(commentId)
     if (!comment) return null
 
     let myStatus = LikeStatus.None
-
-    if (userId) {
-      const like = await LikeModel.findOne({userId, commentId})
-      if (like) {
-        myStatus = like.status
-      }
-    }
+    const like = await LikeModel.findOne({ userId, commentId })
+    if (like) myStatus = like.status
 
     return {
       id: comment._id.toString(),
