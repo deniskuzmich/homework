@@ -21,7 +21,7 @@ export class GetCommentByIdHandler {
         return res.sendStatus(HttpStatuses.NotFound)
       }
 
-      res.status(HttpStatuses.Success).send(comment);
+      return res.status(HttpStatuses.Success).send(comment);
     }
 
     const commentWithLike = await this.commentsQueryRepository.getCommentWithLike(req.params.id, userId);
