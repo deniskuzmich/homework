@@ -62,28 +62,63 @@ export class CommentsQueryRepository {
     return mapToCommentViewModel(comment)
   }
 
-  async getCommentByPostIdWithPagination(id: string, query: InputPaginationForRepo): Promise<OutputTypeWithPagination<CommentOutput>> {
+  async getCommentByPostIdWithPagination(postId: string, query: InputPaginationForRepo, userId: string): Promise<OutputTypeWithPagination<CommentWithLikesOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const sort = {[query.sortBy]: query.sortDirection}
 
     const comments = await CommentModel
-      .find({postId: id})
+      .find({postId: postId})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort)
 
 
-    const totalCount = await CommentModel.countDocuments({postId: id});
+    const totalCount = await CommentModel.countDocuments({postId: postId});
 
-    const paramsForFront = {
+    const commentId = comments.map(comment => comment._id.toString());
+
+    let likesMap = new Map<string, LikeStatus>()
+
+    if (userId) {
+      const likes = await LikeModel.find({
+        userId,
+        commentId: {$in: commentId},
+      })
+
+      likes.forEach(like => {
+        likesMap.set(like.commentId, like.status)
+      })
+    }
+
+    const commentsForFront: CommentWithLikesOutput[] = comments.map(comment => ({
+      id: comment._id.toString(),
+      content: comment.content,
+      commentatorInfo: comment.commentatorInfo,
+      createdAt: comment.createdAt,
+      likesInfo: {
+        likesCount: comment.likesInfo.likesCount,
+        dislikesCount: comment.likesInfo.dislikesCount,
+        myStatus: likesMap.get(comment._id.toString()) ?? LikeStatus.None
+      }
+    }))
+
+    return {
       pagesCount: Math.ceil(totalCount / query.pageSize),
       page: query.pageNumber,
       pageSize: query.pageSize,
-      totalCount: totalCount,
+      totalCount,
+      items: commentsForFront
     }
-    const commentsForFront = comments.map(mapToCommentViewModel)
-    return finalCommentMapper(commentsForFront, paramsForFront);
+
+    // const paramsForFront = {
+    //   pagesCount: Math.ceil(totalCount / query.pageSize),
+    //   page: query.pageNumber,
+    //   pageSize: query.pageSize,
+    //   totalCount: totalCount,
+    // }
+    // const commentsForFront = comments.map(mapToCommentViewModel)
+    // return finalCommentMapper(commentsForFront, paramsForFront);
   }
 }
 
