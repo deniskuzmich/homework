@@ -153,71 +153,48 @@ export class CommentsService {
       }
     }
 
-    const existingLike = await LikeModel.findOne({ userId, commentId })
+    const existingLike = await LikeModel.findOne({ userId, commentId });
 
-    // ====== CASE 1: лайка нет ======
-    if (!existingLike) {
-
-      if (likeStatus === LikeStatus.None) {
-        return { status: ResultStatus.NoContent, data: null, extensions: [] }
-      }
-
-      await LikeModel.create({ userId, commentId, status: likeStatus })
-
-      if (likeStatus === LikeStatus.Like) {
-        comment.likesInfo.likesCount += 1
-      }
-
-      if (likeStatus === LikeStatus.Dislike) {
-        comment.likesInfo.dislikesCount += 1
-      }
-
-      await comment.save()
+    // CASE 1: статус тот же — ничего не меняем
+    if (existingLike && existingLike.status === likeStatus) {
       return { status: ResultStatus.NoContent, data: null, extensions: [] }
     }
 
-    // ====== CASE 2: статус тот же ======
-    if (existingLike.status === likeStatus) {
+    // CASE 2: новый лайк
+    if (!existingLike && likeStatus !== LikeStatus.None) {
+      await LikeModel.create({ userId, commentId, status: likeStatus });
+
+      if (likeStatus === LikeStatus.Like) comment.likesInfo.likesCount += 1;
+      if (likeStatus === LikeStatus.Dislike) comment.likesInfo.dislikesCount += 1;
+
+      await comment.save();
       return { status: ResultStatus.NoContent, data: null, extensions: [] }
     }
 
-    // ====== CASE 3: удаление лайка (None) ======
-    if (likeStatus === LikeStatus.None) {
+    // CASE 3: удаление лайка (None)
+    if (existingLike && likeStatus === LikeStatus.None) {
+      if (existingLike.status === LikeStatus.Like) comment.likesInfo.likesCount -= 1;
+      if (existingLike.status === LikeStatus.Dislike) comment.likesInfo.dislikesCount -= 1;
 
-      if (existingLike.status === LikeStatus.Like) {
-        comment.likesInfo.likesCount -= 1
-      }
-
-      if (existingLike.status === LikeStatus.Dislike) {
-        comment.likesInfo.dislikesCount -= 1
-      }
-
-      await existingLike.deleteOne()
-      await comment.save()
-
+      await existingLike.deleteOne();
+      await comment.save();
       return { status: ResultStatus.NoContent, data: null, extensions: [] }
     }
 
-    // ====== CASE 4: смена Like ↔ Dislike ======
-    if (existingLike.status === LikeStatus.Like) {
-      comment.likesInfo.likesCount -= 1
-    }
+    // CASE 4: смена Like ↔ Dislike
+    if (existingLike && likeStatus !== LikeStatus.None) {
+      if (existingLike.status === LikeStatus.Like) comment.likesInfo.likesCount -= 1;
+      if (existingLike.status === LikeStatus.Dislike) comment.likesInfo.dislikesCount -= 1;
 
-    if (existingLike.status === LikeStatus.Dislike) {
-      comment.likesInfo.dislikesCount -= 1
-    }
+      if (likeStatus === LikeStatus.Like) comment.likesInfo.likesCount += 1;
+      if (likeStatus === LikeStatus.Dislike) comment.likesInfo.dislikesCount += 1;
 
-    if (likeStatus === LikeStatus.Like) {
-      comment.likesInfo.likesCount += 1
-    }
+      existingLike.status = likeStatus;
+      await existingLike.save();
+      await comment.save();
 
-    if (likeStatus === LikeStatus.Dislike) {
-      comment.likesInfo.dislikesCount += 1
+      return { status: ResultStatus.NoContent, data: null, extensions: [] }
     }
-
-    existingLike.status = likeStatus
-    await existingLike.save()
-    await comment.save()
 
     return { status: ResultStatus.NoContent, data: null, extensions: [] }
   }

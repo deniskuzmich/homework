@@ -12,17 +12,17 @@ export class GetCommentByIdHandler {
   }
 
   async getCommentById(req: Request, res: Response) {
-    const userId = req.user!.userId
+    const userId = req.user?.userId ?? null
 
-    if(!userId) {
-      const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
-
-      if (!comment) {
-        return res.sendStatus(HttpStatuses.NotFound)
-      }
-
-      return res.status(HttpStatuses.Success).send(comment);
-    }
+    // if(!userId) {
+    //   const comment = await this.commentsQueryRepository.getCommentById(req.params.id);
+    //
+    //   if (!comment) {
+    //     return res.sendStatus(HttpStatuses.NotFound)
+    //   }
+    //
+    //   return res.status(HttpStatuses.Success).send(comment);
+    // }
 
     const commentWithLike = await this.commentsQueryRepository.getCommentWithLike(req.params.id, userId);
 
