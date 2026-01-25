@@ -36,21 +36,7 @@ export class UsersService {
 
     const passwordHash = await this.bcryptService.generateHash(queryDto.password);
 
-    const newUser = new UserModel({
-      login: queryDto.login,
-      email: queryDto.email,
-      passwordHash,
-      createdAt: new Date(),
-      passwordRecovery: {
-        recoveryCode: null,
-        expirationDate: null,
-      },
-      emailConfirmation: {
-        confirmationCode: '',
-        expirationDate: new Date(),
-        isConfirmed: true,
-      }
-    })
+    const newUser = UserModel.createUserBySuperAdmin(queryDto, passwordHash);
 
     return await this.usersRepository.save(newUser);
   }
@@ -62,7 +48,7 @@ export class UsersService {
   }
 
   async deleteUser(id: string): Promise<void> {
-    const deletedUser = await this.usersRepository.deleteUser(id);
+    return await this.usersRepository.deleteUser(id);
   }
 }
 

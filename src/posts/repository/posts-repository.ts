@@ -3,8 +3,8 @@ import {PostDocument, PostModel} from "../../entity/posts.entity";
 
 @injectable()
 export class PostsRepository {
-  async save(post: PostDocument) {
-    await post.save();
+  async save(post: PostDocument): Promise<PostDocument> {
+    return await post.save();
   }
 
   async getPostById(id: string): Promise<PostDocument | null> {

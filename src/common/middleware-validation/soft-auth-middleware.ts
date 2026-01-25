@@ -1,7 +1,6 @@
 import {NextFunction, Request, Response} from "express";
 import {JwtService} from "../services/jwtService";
 
-
 export const softAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
   const jwtService = new JwtService();
   const authHeader = req.headers.authorization;
@@ -15,13 +14,11 @@ export const softAuthMiddleware = async (req: Request, res: Response, next: Next
     return next();
   }
 
-  // 1. ДОБАВЛЕН await
-  // 2. Предполагаем, что метод возвращает объект с полем userId
   const userInfo = await jwtService.getUserInfoByToken(token);
 
   if (userInfo && userInfo.userId) {
     req.user = {
-      userId: userInfo.userId.toString(), // Достаем именно поле userId
+      userId: userInfo.userId.toString(),
       login: userInfo.login || '',
       email: userInfo.email || ''
     };

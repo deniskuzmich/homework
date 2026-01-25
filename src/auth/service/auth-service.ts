@@ -52,24 +52,8 @@ export class AuthService {
 
     const passwordHash = await this.bcryptService.generateHash(password)
 
-    const newUser = new UserModel({
-      login,
-      email,
-      passwordHash,
-      createdAt: new Date(),
-      passwordRecovery: {
-        recoveryCode: null,
-        expirationDate: null,
-      },
-      emailConfirmation: {
-        confirmationCode: randomUUID(),
-        expirationDate: add(new Date(), {
-          hours: 3,
-          minutes: 30,
-        }),
-        isConfirmed: false,
-      }
-    })
+    const newUser = UserModel.createUser(login, email, passwordHash)
+
     await this.usersRepository.save(newUser)
 
     try {

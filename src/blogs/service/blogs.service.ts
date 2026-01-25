@@ -21,15 +21,10 @@ export class BlogsService {
   }
 
   async createBlog(newData: BlogInputDto): Promise<string> {
-    const newBlog = new BlogModel()
-    newBlog.name = newData.name,
-      newBlog.description = newData.description,
-      newBlog.websiteUrl = newData.websiteUrl,
-      newBlog.createdAt = new Date().toISOString(),
-      newBlog.isMembership = false
+    const newBlog = BlogModel.createBlog(newData);
 
-    await this.blogsRepository.save(newBlog);
-    return newBlog.id
+   const createdBlog = await this.blogsRepository.save(newBlog);
+    return createdBlog.id
   }
 
   async updateBlog(id: string, newData: BlogInputDto): Promise<boolean> {
@@ -37,25 +32,18 @@ export class BlogsService {
     if (!blog) {
       return false
     }
-      blog.name = newData.name,
-      blog.description = newData.description,
-      blog.websiteUrl = newData.websiteUrl
+    blog.updateBlog(newData)
 
     await this.blogsRepository.save(blog);
     return true
   }
 
   async createPostForBlog(blog: BlogDocument, inputInfo: PostInputDtoForBlog): Promise<string> {
-    const newPostByBlogId = new PostModel({
-      title: inputInfo.title,
-      shortDescription: inputInfo.shortDescription,
-      content: inputInfo.content,
-      blogId: blog._id,
-      blogName: blog.name,
-      createdAt: new Date().toISOString(),
-    })
-    await this.postsRepository.save(newPostByBlogId)
-    return newPostByBlogId.id
+    const newPostByBlogId = PostModel.createPostForBlog(blog, inputInfo);
+
+    const createdPost = await this.postsRepository.save(newPostByBlogId)
+
+    return createdPost.id
   }
 
   async deleteBlog(id: string): Promise<void> {

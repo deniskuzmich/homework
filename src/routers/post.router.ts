@@ -28,10 +28,12 @@ const authMiddleware = container.get(AuthMiddleWare);
 export const postRouter = Router();
 postRouter
   .get("",
+    softAuthMiddleware,
     paginationValidation,
     getPostListHandler.getPostList.bind(getPostListHandler))
 
   .get("/:id",
+    softAuthMiddleware,
     idValidation,
     inputValidationResultMiddleware, getPostHandler.getPost.bind(getPostHandler))
 

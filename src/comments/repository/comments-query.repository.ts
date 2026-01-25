@@ -1,6 +1,5 @@
 import {mapToCommentViewModel} from "../mapper/map-to-comment-view-model";
 import {CommentOutput} from "../types/main-types/comment-output.type";
-import {finalCommentMapper} from "../mapper/final-comment-mapper";
 import {OutputTypeWithPagination} from "../../common/types/output-with-pagintaion.type";
 import {InputPaginationForRepo} from "../../common/types/input/input-pagination-for-repo.type";
 import {injectable} from "inversify";
@@ -9,27 +8,12 @@ import {LikeStatus} from "../enum/like-enum";
 import {LikeModel} from "../../entity/likes.entity";
 
 
-export type CommentWithLikesOutput = {
-  id: string
-  content: string
-  commentatorInfo: {
-    userId: string
-    userLogin: string
-  }
-  createdAt: Date
-  likesInfo: {
-    likesCount: number
-    dislikesCount: number
-    myStatus: LikeStatus
-  }
-}
-
 @injectable()
 export class CommentsQueryRepository {
   async getCommentWithLike(
     commentId: string,
     userId: string | null
-  ): Promise<CommentWithLikesOutput | null> {
+  ): Promise<CommentOutput | null> {
     const comment = await CommentModel.findById(commentId);
     if (!comment) return null;
 
@@ -59,7 +43,7 @@ export class CommentsQueryRepository {
     return mapToCommentViewModel(comment)
   }
 
-  async getCommentByPostIdWithPagination(postId: string, query: InputPaginationForRepo, userId: string | null): Promise<OutputTypeWithPagination<CommentWithLikesOutput>> {
+  async getCommentByPostIdWithPagination(postId: string, query: InputPaginationForRepo, userId: string | null): Promise<OutputTypeWithPagination<CommentOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
 
     const sort = {[query.sortBy]: query.sortDirection}
@@ -88,7 +72,7 @@ export class CommentsQueryRepository {
       });
     }
 
-    const commentsForFront: CommentWithLikesOutput[] = comments.map(comment => ({
+    const commentsForFront: CommentOutput[] = comments.map(comment => ({
       id: comment._id.toString(),
       content: comment.content,
       commentatorInfo: comment.commentatorInfo,

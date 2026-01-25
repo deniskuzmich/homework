@@ -4,7 +4,7 @@ import {BlogOutput} from "../types/main-types/blog-output.type";
 import {mapToBlogViewModel} from "../mapper/map-to-blog-view-model";
 import {finalBlogMapper} from "../mapper/final-blog-map";
 import {injectable} from "inversify";
-import {BlogModel} from "../../entity/blogs.entity";
+import {BlogDocument, BlogModel} from "../../entity/blogs.entity";
 
 @injectable()
 export class BlogsQueryRepository {
@@ -20,11 +20,12 @@ export class BlogsQueryRepository {
         }
       }: {} //если строка поиска пустая - возвращаем все блоги
 
-    const items = await BlogModel //запрос в db
+    const items = await BlogModel
       .find(searchFilter)
       .skip(skip)
       .limit(queryDto.pageSize)
       .sort({[queryDto.sortBy]: queryDto.sortDirection})
+
 
 
     const totalCount = await BlogModel.countDocuments(searchFilter) //общее кол-во элементов

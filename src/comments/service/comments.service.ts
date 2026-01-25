@@ -41,19 +41,7 @@ export class CommentsService {
       }
     }
 
-    const newCommentForPost = new CommentModel({
-      postId,
-      content,
-      commentatorInfo: {
-        userId: user.userId.toString(),
-        userLogin: user.login,
-      },
-      createdAt: new Date().toISOString(),
-      likesInfo: {
-        likesCount: 0,
-        dislikesCount: 0,
-      }
-    })
+    const newCommentForPost = CommentModel.createComment(user, content, postId)
 
     const createdComment = await this.commentsRepository.save(newCommentForPost)
 
@@ -95,6 +83,7 @@ export class CommentsService {
     comment.content = newContent;
 
     const updatedComment = await this.commentsRepository.save(comment);
+
     if (!updatedComment) {
       return {
         status: ResultStatus.BadRequest,

@@ -4,8 +4,7 @@ import {UserDocument, UserModel} from "../../entity/users.entity";
 @injectable()
 export class UsersRepository {
   async save(user: UserDocument): Promise<UserDocument> {
-    await user.save()
-    return user
+   return await user.save()
   }
 
   async getUserById(id: string): Promise<UserDocument | null> {

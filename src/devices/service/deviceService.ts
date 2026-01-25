@@ -27,18 +27,11 @@ export class DeviceService {
     }
     const {deviceId, iat, eat} = payload;
 
-    const session = new SessionModel({
-      userId,
-      deviceId,
-      deviceName,
-      refreshToken,
-      ip,
-      iat,
-      eat
-    })
+    const session = SessionModel.createSession(userId, deviceId, deviceName, refreshToken, ip, iat, eat)
 
-    await this.devicesRepository.save(session)
-    return session
+    const newSession = await this.devicesRepository.save(session)
+
+    return newSession
   }
 
   async updateSession(ip: string | undefined, deviceName: string, refreshToken: string) {
@@ -47,14 +40,23 @@ export class DeviceService {
       return null
     }
 
-    const updatedSession = new SessionModel({
-      deviceId: payload.deviceId,
+    const {deviceId, iat, eat} = payload;
+
+    const session = await this.devicesRepository.findSession(payload.deviceId)
+
+    if (!session) {
+      return null
+    }
+
+    const updatedSession = session.updateSession(
+      deviceId,
       deviceName,
       refreshToken,
-      ip,
-      iat: payload.iat,
-      eat: payload.eat,
-    })
+      ip!,
+      iat,
+      eat
+    )
+
     await this.devicesRepository.save(updatedSession)
     return
   }
