@@ -15,26 +15,57 @@ export class PostsQueryRepository {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
     const sort = { [query.sortBy]: query.sortDirection };
 
+    // 1. Получаем посты с пагинацией и сортировкой
     const posts = await PostModel.find().skip(skip).limit(query.pageSize).sort(sort);
     const totalCount = await PostModel.countDocuments();
 
-    // 1. Собираем ID всех постов на странице
     const postIds = posts.map(p => p._id.toString());
 
-    // 2. Получаем статусы лайков текущего юзера для этих постов одним запросом
-    let likesMap = new Map<string, LikeStatus>();
+    // 2. Получаем лайки текущего пользователя для всех постов на странице
+    const likesMap = new Map<string, LikeStatus>();
     if (userId) {
-      const likes = await LikeForPostModel.find({
+      const userLikes = await LikeForPostModel.find({
         userId,
-        postId: { $in: postIds }
+        postId: { $in: postIds },
       });
-      likes.forEach(l => likesMap.set(l.postId, l.status));
+      userLikes.forEach(like => likesMap.set(like.postId, like.status));
     }
 
-    // 3. Мапим посты, прокидывая статус
-    const postsForFront = posts.map(p => {
+    // 3. Получаем топ-3 newestLikes для всех постов
+    const newestLikesMap = new Map<string, { addedAt: string; userId: string; login: string }[]>();
+    const allLikes = await LikeForPostModel.find({
+      postId: { $in: postIds },
+      status: LikeStatus.Like,
+    }).sort({ addedAt: -1 });
+
+    for (const like of allLikes) {
+      if (!newestLikesMap.has(like.postId)) newestLikesMap.set(like.postId, []);
+      const arr = newestLikesMap.get(like.postId)!;
+      if (arr.length < 3) {
+        arr.push({ addedAt: like.addedAt, userId: like.userId, login: like.login });
+      }
+    }
+
+    // 4. Мапим посты на фронт
+    const postsForFront: PostOutput[] = posts.map(p => {
       const myStatus = likesMap.get(p._id.toString()) ?? LikeStatus.None;
-      return mapToPostViewModel(p, myStatus);
+      const newestLikes = newestLikesMap.get(p._id.toString()) ?? [];
+
+      return {
+        id: p._id.toString(),
+        title: p.title,
+        shortDescription: p.shortDescription,
+        content: p.content,
+        blogId: p.blogId,
+        blogName: p.blogName,
+        createdAt: p.createdAt,
+        extendedLikesInfo: {
+          likesCount: p.extendedLikesInfo.likesCount,
+          dislikesCount: p.extendedLikesInfo.dislikesCount,
+          myStatus,
+          newestLikes,
+        },
+      };
     });
 
     return {
@@ -42,14 +73,9 @@ export class PostsQueryRepository {
       page: query.pageNumber,
       pageSize: query.pageSize,
       totalCount,
-      items: postsForFront
+      items: postsForFront,
     };
   }
-  // async getPostById(id: string): Promise<PostOutput | null> {
-  //   const post = await PostModel.findOne({_id: id});
-  //   if (!post) return null
-  //   return  mapToPostViewModel(post)
-  // }
 
   async getPostById(postId: string, userId: string | null): Promise<PostOutput | null> {
     const post = await PostModel.findById(postId);
