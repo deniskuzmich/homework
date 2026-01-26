@@ -52,6 +52,15 @@ export class PostsService {
     userLogin: string,
     likeStatus: LikeStatus
   ): Promise<ResultType> {
+
+    if (!Object.values(LikeStatus).includes(likeStatus as LikeStatus)) {
+      return {
+        status: ResultStatus.BadRequest,
+        data: null,
+        extensions: [{ field: "likeStatus", message: "Invalid likeStatus" }]
+      };
+    }
+
     const post = await this.postsRepository.getPostById(postId);
     if (!post) return { status: ResultStatus.NotFound, data: null, extensions: [] };
 

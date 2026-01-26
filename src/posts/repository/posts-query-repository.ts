@@ -124,40 +124,72 @@ export class PostsQueryRepository {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
     const sort = { [query.sortBy]: query.sortDirection };
 
-    // 1. Ищем посты конкретного блога
+    // 1. Получаем посты конкретного блога с пагинацией
     const posts = await PostModel
-      .find({ blogId: blogId })
+      .find({ blogId })
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort);
 
-    const totalCount = await PostModel.countDocuments({ blogId: blogId });
+    const totalCount = await PostModel.countDocuments({ blogId });
 
-    // 2. Оптимизация: получаем статусы лайков юзера для всех найденных постов
     const postIds = posts.map(p => p._id.toString());
-    let likesMap = new Map<string, LikeStatus>();
 
+    // 2. Получаем лайки текущего пользователя для этих постов
+    const likesMap = new Map<string, LikeStatus>();
     if (userId && postIds.length > 0) {
-      const likes = await LikeForPostModel.find({
+      const userLikes = await LikeForPostModel.find({
         userId,
-        postId: { $in: postIds }
+        postId: { $in: postIds },
       });
-      likes.forEach(l => likesMap.set(l.postId, l.status));
+      userLikes.forEach(like => likesMap.set(like.postId, like.status));
     }
 
-    // 3. Мапим посты с учетом myStatus
-    const postsForFront = posts.map(p => {
+    // 3. Получаем топ-3 newestLikes для каждого поста
+    const newestLikesMap = new Map<string, { addedAt: string; userId: string; login: string }[]>();
+    if (postIds.length > 0) {
+      const allLikes = await LikeForPostModel.find({
+        postId: { $in: postIds },
+        status: LikeStatus.Like,
+      }).sort({ addedAt: -1 });
+
+      for (const like of allLikes) {
+        if (!newestLikesMap.has(like.postId)) newestLikesMap.set(like.postId, []);
+        const arr = newestLikesMap.get(like.postId)!;
+        if (arr.length < 3) {
+          arr.push({ addedAt: like.addedAt, userId: like.userId, login: like.login });
+        }
+      }
+    }
+
+    // 4. Мапим посты на фронт
+    const postsForFront: PostOutput[] = posts.map(p => {
       const myStatus = likesMap.get(p._id.toString()) ?? LikeStatus.None;
-      return mapToPostViewModel(p, myStatus);
+      const newestLikes = newestLikesMap.get(p._id.toString()) ?? [];
+
+      return {
+        id: p._id.toString(),
+        title: p.title,
+        shortDescription: p.shortDescription,
+        content: p.content,
+        blogId: p.blogId,
+        blogName: p.blogName,
+        createdAt: p.createdAt,
+        extendedLikesInfo: {
+          likesCount: p.extendedLikesInfo.likesCount,
+          dislikesCount: p.extendedLikesInfo.dislikesCount,
+          myStatus,
+          newestLikes,
+        },
+      };
     });
 
-    // 4. Возвращаем результат (убираем лишние переменные для чистоты)
     return {
       pagesCount: Math.ceil(totalCount / query.pageSize),
       page: query.pageNumber,
       pageSize: query.pageSize,
-      totalCount: totalCount,
-      items: postsForFront
+      totalCount,
+      items: postsForFront,
     };
   }
 };

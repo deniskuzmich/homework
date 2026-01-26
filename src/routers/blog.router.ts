@@ -53,8 +53,17 @@ blogRouter
     deleteBlogHandler.delete.bind(deleteBlogHandler),
   )
 
-  .get("/:id/posts",idValidation,inputValidationResultMiddleware,paginationValidation, getPostByBlogIdHandler.getPost.bind(getPostByBlogIdHandler))
-  .post("/:id/posts", superAdminGuardMiddleware,postInputDtoValidation,inputValidationResultMiddleware, createPostForBlogHandler.createPost.bind(createPostForBlogHandler))
+  .get("/:id/posts",
+    idValidation,
+    inputValidationResultMiddleware,
+    paginationValidation,
+    getPostByBlogIdHandler.getPost.bind(getPostByBlogIdHandler))
+
+  .post("/:id/posts",
+    superAdminGuardMiddleware,
+    postInputDtoValidation,
+    inputValidationResultMiddleware,
+    createPostForBlogHandler.createPost.bind(createPostForBlogHandler))
 
 
 
