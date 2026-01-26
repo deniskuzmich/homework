@@ -50,7 +50,7 @@ postRouter
   )
 
   .put(
-    '/:postId/like-status',
+    '/:id/like-status',
     authMiddleware.authMiddleWare.bind(authMiddleware),
     idValidation,
     inputValidationResultMiddleware,
