@@ -11,12 +11,14 @@ export class GetPostListHandler {
 
   constructor(
     @inject(PostsQueryRepository)
-    public postsQueryRepository: PostsQueryRepository) {}
+    public postsQueryRepository: PostsQueryRepository) {
+  }
 
-  async getPostList (req: Request, res: Response) {
+  async getPostList(req: Request, res: Response) {
     const queryInput = valuesPaginationMaper(req.query)
+    const userId = req.user?.userId
 
-    const foundPosts: OutputTypeWithPagination<PostOutput> = await this.postsQueryRepository.findPosts(queryInput);
+    const foundPosts: OutputTypeWithPagination<PostOutput> = await this.postsQueryRepository.findPosts(queryInput, userId!);
 
     res.status(HttpStatuses.Success).send(foundPosts);
   }

@@ -17,13 +17,14 @@ export class GetPostByBlogIdHandler {
 
   async getPost(req: Request, res: Response) {
     const query = valuesPaginationMaper(req.query);
+    const userId = req.user?.userId
 
     const blog = await this.blogsService.getBlogById(req.params.id);
     if (!blog) {
       return res.sendStatus(HttpStatuses.NotFound)
     }
 
-    const post = await this.postsQueryRepository.getPostByBlogId(blog.id, query)
+    const post = await this.postsQueryRepository.getPostByBlogId(blog.id, query, userId!)
     if (!post) {
       return res.sendStatus(HttpStatuses.NotFound)
     }

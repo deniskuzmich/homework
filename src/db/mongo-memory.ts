@@ -1,5 +1,4 @@
 import {Db, MongoClient} from "mongodb";
-import {appConfig} from "../common/config/config";
 import {UserDbType} from "../users/types/main-types/user-db-type";
 
 export const db = {

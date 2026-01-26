@@ -25,5 +25,5 @@ type LikeForPost = Model<LikeForPostType>
 
 export type LikeDocument = HydratedDocument<LikeForPostType>
 
-export const LikeForPostModel = model<LikeForPostType, LikeForPost>('likes', LikesForPostSchema)
+export const LikeForPostModel = model<LikeForPostType, LikeForPost>('likesForPosts', LikesForPostSchema)
 
