@@ -5,24 +5,25 @@ import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToH
 import {PostsService} from "../service/posts.service";
 
 @injectable()
-export class LikeHandler {
+export class LikeForPostHandler {
 
   constructor(
     @inject(PostsService)
     public postsService: PostsService) {
   }
 
-  // async updateLikeStatus(req: Request, res: Response) {
-  //   const postId = req.params.postId;
-  //   const likeStatus = req.body.likeStatus;
-  //   const userId = req.user!.userId;
-  //
-  //   const result = await this.postsService.updateLikeForPost(postId,userId, likeStatus)
-  //
-  //   if(result.status === ResultStatus.Success)  {
-  //     return res.status(mapResultCodeToHttpExtension(result.status)).send(result.extensions)
-  //   }
-  //
-  //   return res.sendStatus(mapResultCodeToHttpExtension(result.status))
-  // }
+  async updateLikeStatus(req: Request, res: Response) {
+    const postId = req.params.postId;
+    const likeStatus = req.body.likeStatus;
+    const userId = req.user!.userId;
+    const login = req.body.login;
+
+    const result = await this.postsService.updateLikeForPost(postId,userId, likeStatus, login)
+
+    if(result.status === ResultStatus.Success)  {
+      return res.status(mapResultCodeToHttpExtension(result.status)).send(result.extensions)
+    }
+
+    return res.sendStatus(mapResultCodeToHttpExtension(result.status))
+  }
 }

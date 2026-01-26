@@ -5,7 +5,7 @@ import {InputPaginationForRepo} from "../../common/types/input/input-pagination-
 import {injectable} from "inversify";
 import {CommentModel} from "../../entity/comments.entity";
 import {LikeStatus} from "../enum/like-enum";
-import {LikeModel} from "../../entity/likes.entity";
+import {LikeModel} from "../../entity/likes-for-comments.entity";
 
 
 @injectable()
@@ -91,15 +91,6 @@ export class CommentsQueryRepository {
       totalCount,
       items: commentsForFront
     }
-
-    // const paramsForFront = {
-    //   pagesCount: Math.ceil(totalCount / query.pageSize),
-    //   page: query.pageNumber,
-    //   pageSize: query.pageSize,
-    //   totalCount: totalCount,
-    // }
-    // const commentsForFront = comments.map(mapToCommentViewModel)
-    // return finalCommentMapper(commentsForFront, paramsForFront);
   }
 }
 

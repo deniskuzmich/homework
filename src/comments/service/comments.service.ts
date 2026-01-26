@@ -7,7 +7,7 @@ import {inject, injectable} from "inversify";
 import {CommentDocument, CommentModel} from "../../entity/comments.entity";
 import {UsersRepository} from "../../users/repository/usersRepository";
 import {LikeStatus} from "../enum/like-enum";
-import {LikeModel} from "../../entity/likes.entity";
+import {LikeModel} from "../../entity/likes-for-comments.entity";
 
 @injectable()
 export class CommentsService {

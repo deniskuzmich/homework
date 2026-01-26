@@ -66,12 +66,12 @@ class PostEntity {
     newPost.blogName = blog.name;
     newPost.createdAt = new Date().toISOString();
     newPost.extendedLikesInfo = {
-      likesCount: 0,
+        likesCount: 0,
         dislikesCount: 0,
         newestLikes: [{
-        addedAt: new Date().toISOString(),
-        userId: newData.userId!,
-        login: newData.login!
+          addedAt: new Date().toISOString(),
+          userId: newData.userId!,
+          login: newData.login!
       }]
     }
 
@@ -95,6 +95,15 @@ class PostEntity {
       blogId: blog._id,
       blogName: blog.name,
       createdAt: new Date().toISOString(),
+      extendedLikesInfo: {
+        likesCount: 0,
+        dislikesCount: 0,
+        newestLikes: [{
+          addedAt: new Date().toISOString(),
+          userId: inputInfo.userId,
+          login: inputInfo.login
+        }]
+      }
     })
 
     return newPostByBlogId

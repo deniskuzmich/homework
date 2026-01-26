@@ -15,6 +15,7 @@ import {GetCommentForPostHandler} from "../comments/handler/get-comment-for-post
 import {CreateCommentForPostHandler} from "../comments/handler/create-comment-for-post.handler";
 import {AuthMiddleWare} from "../auth/middleware/auth.middleware";
 import {softAuthMiddleware} from "../common/middleware-validation/soft-auth-middleware";
+import {LikeForPostHandler} from "../posts/handlers/like-for-post";
 
 const getPostListHandler = container.get(GetPostListHandler);
 const getPostHandler = container.get(GetPostHandler);
@@ -24,6 +25,7 @@ const deletePostHandler = container.get(DeletePostHandler);
 const getCommentForPostHandler = container.get(GetCommentForPostHandler);
 const createCommentForPostHandler = container.get(CreateCommentForPostHandler);
 const authMiddleware = container.get(AuthMiddleWare);
+const likeForPostHandler = container.get(LikeForPostHandler);
 
 export const postRouter = Router();
 postRouter
@@ -35,7 +37,8 @@ postRouter
   .get("/:id",
     softAuthMiddleware,
     idValidation,
-    inputValidationResultMiddleware, getPostHandler.getPost.bind(getPostHandler))
+    inputValidationResultMiddleware,
+    getPostHandler.getPost.bind(getPostHandler))
 
   .put(
     "/:id",
@@ -44,6 +47,14 @@ postRouter
     postInputValidation,
     inputValidationResultMiddleware,
     updatePostHandler.updatePost.bind(updatePostHandler),
+  )
+
+  .put(
+    '/:postId/like-status',
+    softAuthMiddleware,
+    idValidation,
+    inputValidationResultMiddleware,
+    likeForPostHandler.updateLikeStatus.bind(LikeForPostHandler),
   )
 
   .post(

@@ -53,6 +53,7 @@ import {DeleteAllDevicesHandler} from "../../devices/handler/delete-all-devices.
 import {DeleteOneDeviceHandler} from "../../devices/handler/delete-one-device.handler";
 import {AuthMiddleWare} from "../../auth/middleware/auth.middleware";
 import {LikeHandler} from "../../comments/handler/like.handler";
+import {LikeForPostHandler} from "../../posts/handlers/like-for-post";
 
 export const container = new Container();
 
@@ -82,6 +83,7 @@ container.bind(CreatePostsHandler).to(CreatePostsHandler)
 container.bind(DeletePostHandler).to(DeletePostHandler)
 container.bind(GetCommentForPostHandler).to(GetCommentForPostHandler)
 container.bind(CreateCommentForPostHandler).to(CreateCommentForPostHandler)
+container.bind(LikeForPostHandler).to(LikeForPostHandler)
 
 container.bind(CommentsQueryRepository).to(CommentsQueryRepository)
 container.bind(CommentsRepository).to(CommentsRepository)
