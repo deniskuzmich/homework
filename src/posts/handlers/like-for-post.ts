@@ -21,7 +21,7 @@ export class LikeForPostHandler {
 
     const result = await this.postsService.updateLikeForPost(postId, userId, login, likeStatus)
 
-    if (result.status === ResultStatus.Success) {
+    if (result.status !== ResultStatus.Success) {
       return res.status(mapResultCodeToHttpExtension(result.status)).send({errorsMessages: result.extensions})
     }
 

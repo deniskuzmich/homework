@@ -13,6 +13,7 @@ import {CreateBlogHandler} from "../blogs/handlers/create-blog.hanlder";
 import {DeleteBlogHandler} from "../blogs/handlers/delete-blog.hanlder";
 import {GetPostByBlogIdHandler} from "../posts/handlers/get-post-by-blog";
 import {CreatePostForBlogHandler} from "../posts/handlers/create-post-for-blog.handler";
+import {softAuthMiddleware} from "../common/middleware-validation/soft-auth-middleware";
 
 const getBlogsListHandler = container.get(GetBlogsListHandler);
 const getBlogHandler = container.get(GetBlogHandler);
@@ -54,9 +55,10 @@ blogRouter
   )
 
   .get("/:id/posts",
+    softAuthMiddleware,
     idValidation,
-    inputValidationResultMiddleware,
     paginationValidation,
+    inputValidationResultMiddleware,
     getPostByBlogIdHandler.getPost.bind(getPostByBlogIdHandler))
 
   .post("/:id/posts",
