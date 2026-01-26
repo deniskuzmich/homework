@@ -13,7 +13,7 @@ import {LikeForPostModel} from "../../entity/likes-for-posts.entity";
 export class PostsQueryRepository {
   async findPosts(query: InputPaginationForRepo, userId: string | null): Promise<OutputTypeWithPagination<PostOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
-    const sort = { [query.sortBy]: query.sortDirection };
+    const sort = {[query.sortBy]: query.sortDirection};
 
     // 1. Получаем посты с пагинацией и сортировкой
     const posts = await PostModel.find().skip(skip).limit(query.pageSize).sort(sort);
@@ -26,7 +26,7 @@ export class PostsQueryRepository {
     if (userId) {
       const userLikes = await LikeForPostModel.find({
         userId,
-        postId: { $in: postIds },
+        postId: {$in: postIds},
       });
       userLikes.forEach(like => likesMap.set(like.postId, like.status));
     }
@@ -34,15 +34,15 @@ export class PostsQueryRepository {
     // 3. Получаем топ-3 newestLikes для всех постов
     const newestLikesMap = new Map<string, { addedAt: string; userId: string; login: string }[]>();
     const allLikes = await LikeForPostModel.find({
-      postId: { $in: postIds },
+      postId: {$in: postIds},
       status: LikeStatus.Like,
-    }).sort({ addedAt: -1 });
+    }).sort({addedAt: -1});
 
     for (const like of allLikes) {
       if (!newestLikesMap.has(like.postId)) newestLikesMap.set(like.postId, []);
       const arr = newestLikesMap.get(like.postId)!;
       if (arr.length < 3) {
-        arr.push({ addedAt: like.addedAt, userId: like.userId, login: like.login });
+        arr.push({addedAt: like.addedAt, userId: like.userId, login: like.login});
       }
     }
 
@@ -83,14 +83,14 @@ export class PostsQueryRepository {
 
     let myStatus = LikeStatus.None;
     if (userId) {
-      const like = await LikeForPostModel.findOne({ userId, postId });
+      const like = await LikeForPostModel.findOne({userId, postId});
       myStatus = like ? like.status : LikeStatus.None;
     }
 
     // Получаем 3 последних лайка
     const newestLikes = await LikeForPostModel
-      .find({ postId, status: LikeStatus.Like })
-      .sort({ addedAt: -1 })
+      .find({postId, status: LikeStatus.Like})
+      .sort({addedAt: -1})
       .limit(3)
 
 
@@ -122,17 +122,16 @@ export class PostsQueryRepository {
   ): Promise<OutputTypeWithPagination<PostOutput>> {
 
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
-    const sort = { [query.sortBy]: query.sortDirection };
+    const sort = {[query.sortBy]: query.sortDirection};
 
-    // 1. Получаем посты конкретного блога с пагинацией
+// 1. Получаем посты конкретного блога с пагинацией
     const posts = await PostModel
-      .find({ blogId })
+      .find({blogId})
       .skip(skip)
       .limit(query.pageSize)
       .sort(sort);
 
-    const totalCount = await PostModel.countDocuments({ blogId });
-
+    const totalCount = await PostModel.countDocuments({blogId});
     const postIds = posts.map(p => p._id.toString());
 
     // 2. Получаем лайки текущего пользователя для этих постов
@@ -140,24 +139,24 @@ export class PostsQueryRepository {
     if (userId && postIds.length > 0) {
       const userLikes = await LikeForPostModel.find({
         userId,
-        postId: { $in: postIds },
+        postId: {$in: postIds},
       });
       userLikes.forEach(like => likesMap.set(like.postId, like.status));
     }
 
-    // 3. Получаем топ-3 newestLikes для каждого поста
+    // 3. Получаем newestLikes для каждого поста (топ-3, сортировка descending)
     const newestLikesMap = new Map<string, { addedAt: string; userId: string; login: string }[]>();
     if (postIds.length > 0) {
       const allLikes = await LikeForPostModel.find({
-        postId: { $in: postIds },
-        status: LikeStatus.Like,
-      }).sort({ addedAt: -1 });
+        postId: {$in: postIds},
+        status: LikeStatus.Like
+      }).sort({addedAt: -1}); // сортировка по newest
 
       for (const like of allLikes) {
         if (!newestLikesMap.has(like.postId)) newestLikesMap.set(like.postId, []);
         const arr = newestLikesMap.get(like.postId)!;
-        if (arr.length < 3) {
-          arr.push({ addedAt: like.addedAt, userId: like.userId, login: like.login });
+        if (arr.length < 3) { // только топ-3
+          arr.push({addedAt: like.addedAt, userId: like.userId, login: like.login});
         }
       }
     }
@@ -179,7 +178,7 @@ export class PostsQueryRepository {
           likesCount: p.extendedLikesInfo.likesCount,
           dislikesCount: p.extendedLikesInfo.dislikesCount,
           myStatus,
-          newestLikes,
+          newestLikes
         },
       };
     });
@@ -191,9 +190,8 @@ export class PostsQueryRepository {
       totalCount,
       items: postsForFront,
     };
-  }
-};
-
+  };
+}
 
 
 
