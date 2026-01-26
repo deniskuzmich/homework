@@ -54,7 +54,7 @@ postRouter
     authMiddleware.authMiddleWare.bind(authMiddleware),
     idValidation,
     inputValidationResultMiddleware,
-    likeForPostHandler.updateLikeStatus.bind(LikeForPostHandler),
+    likeForPostHandler.updateLikeStatus.bind(likeForPostHandler),
   )
 
   .post(
