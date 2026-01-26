@@ -3,6 +3,7 @@ import {inject, injectable} from "inversify";
 import {ResultStatus} from "../../common/types/result.status";
 import {mapResultCodeToHttpExtension} from "../../common/mapper/mapResultCodeToHttpExtention";
 import {PostsService} from "../service/posts.service";
+import {HttpStatuses} from "../../common/types/http-statuses";
 
 @injectable()
 export class LikeForPostHandler {
@@ -14,6 +15,10 @@ export class LikeForPostHandler {
 
   async updateLikeStatus(req: Request, res: Response) {
     const postId = req.params.postId;
+
+    if (!postId) {
+      return res.sendStatus(HttpStatuses.NotFound);
+    }
     const likeStatus = req.body.likeStatus;
     const userId = req.user!.userId;
     const login = req.body.login;
