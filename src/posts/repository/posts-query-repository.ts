@@ -11,31 +11,40 @@ import {LikeForPostModel} from "../../entity/likes-for-posts.entity";
 
 @injectable()
 export class PostsQueryRepository {
-  async findPosts(query: InputPaginationForRepo): Promise<OutputTypeWithPagination<PostOutput>> {
-
+  async findPosts(query: InputPaginationForRepo, userId: string | null): Promise<OutputTypeWithPagination<PostOutput>> {
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
+    const sort = { [query.sortBy]: query.sortDirection };
 
-    const sort = {[query.sortBy]: query.sortDirection}
-
-    const posts = await PostModel
-      .find()
-      .skip(skip)
-      .limit(query.pageSize)
-      .sort(sort)
-
+    const posts = await PostModel.find().skip(skip).limit(query.pageSize).sort(sort);
     const totalCount = await PostModel.countDocuments();
 
-    const paramsForFront = { //мазоль, которая идет во фронт
+    // 1. Собираем ID всех постов на странице
+    const postIds = posts.map(p => p._id.toString());
+
+    // 2. Получаем статусы лайков текущего юзера для этих постов одним запросом
+    let likesMap = new Map<string, LikeStatus>();
+    if (userId) {
+      const likes = await LikeForPostModel.find({
+        userId,
+        postId: { $in: postIds }
+      });
+      likes.forEach(l => likesMap.set(l.postId, l.status));
+    }
+
+    // 3. Мапим посты, прокидывая статус
+    const postsForFront = posts.map(p => {
+      const myStatus = likesMap.get(p._id.toString()) ?? LikeStatus.None;
+      return mapToPostViewModel(p, myStatus);
+    });
+
+    return {
       pagesCount: Math.ceil(totalCount / query.pageSize),
       page: query.pageNumber,
       pageSize: query.pageSize,
-      totalCount: totalCount,
-    }
-
-    const postsForFront = posts.map(mapToPostViewModel)
-    return finalPostMapper(postsForFront, paramsForFront);
+      totalCount,
+      items: postsForFront
+    };
   }
-
   // async getPostById(id: string): Promise<PostOutput | null> {
   //   const post = await PostModel.findOne({_id: id});
   //   if (!post) return null
@@ -80,29 +89,50 @@ export class PostsQueryRepository {
     };
   }
 
-  async getPostByBlogId(id: string, query: InputWithoutSearch): Promise<OutputTypeWithPagination<PostOutput>> {
+  async getPostByBlogId(
+    blogId: string,
+    query: InputWithoutSearch,
+    userId: string | null // Добавили userId
+  ): Promise<OutputTypeWithPagination<PostOutput>> {
 
     const skip = (query.pageSize * query.pageNumber) - query.pageSize;
+    const sort = { [query.sortBy]: query.sortDirection };
 
-    const sort = {[query.sortBy]: query.sortDirection}
-
+    // 1. Ищем посты конкретного блога
     const posts = await PostModel
-      .find({blogId: id})
+      .find({ blogId: blogId })
       .skip(skip)
       .limit(query.pageSize)
-      .sort(sort)
+      .sort(sort);
 
+    const totalCount = await PostModel.countDocuments({ blogId: blogId });
 
-    const totalCount = await PostModel.countDocuments({blogId: id});
+    // 2. Оптимизация: получаем статусы лайков юзера для всех найденных постов
+    const postIds = posts.map(p => p._id.toString());
+    let likesMap = new Map<string, LikeStatus>();
 
-    const paramsForFront = { //мазоль, которая идет во фронт
+    if (userId && postIds.length > 0) {
+      const likes = await LikeForPostModel.find({
+        userId,
+        postId: { $in: postIds }
+      });
+      likes.forEach(l => likesMap.set(l.postId, l.status));
+    }
+
+    // 3. Мапим посты с учетом myStatus
+    const postsForFront = posts.map(p => {
+      const myStatus = likesMap.get(p._id.toString()) ?? LikeStatus.None;
+      return mapToPostViewModel(p, myStatus);
+    });
+
+    // 4. Возвращаем результат (убираем лишние переменные для чистоты)
+    return {
       pagesCount: Math.ceil(totalCount / query.pageSize),
       page: query.pageNumber,
       pageSize: query.pageSize,
       totalCount: totalCount,
-    }
-    const postsForFront = posts.map(mapToPostViewModel)
-    return finalPostMapper(postsForFront, paramsForFront);
+      items: postsForFront
+    };
   }
 };
 

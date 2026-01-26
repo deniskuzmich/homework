@@ -12,8 +12,9 @@ export class GetPostHandler {
   }
 
   async getPost(req: Request, res: Response) {
+    const userId = req.user?.userId
     try {
-      const post = await this.postsQueryRepository.getPostById(req.params.id);
+      const post = await this.postsQueryRepository.getPostById(req.params.id, userId!);
       if (!post) {
         return res.sendStatus(HttpStatuses.NotFound);
       }

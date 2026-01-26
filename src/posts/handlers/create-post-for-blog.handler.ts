@@ -16,6 +16,7 @@ export class CreatePostForBlogHandler {
 
   async createPost(req: Request<{ id: string }>, res: Response) {
     const blogId = req.params.id;
+    const userId = req.user?.userId
 
     const blog = await this.blogsService.getBlogById(blogId);
     if (!blog) {
@@ -24,7 +25,7 @@ export class CreatePostForBlogHandler {
 
     const createdPostId = await this.blogsService.createPostForBlog(blog, req.body);
 
-    const postForBlog = await this.postsQueryRepository.getPostById(createdPostId)
+    const postForBlog = await this.postsQueryRepository.getPostById(createdPostId, userId!)
 
     return res.status(HttpStatuses.Created).send(postForBlog);
   }
