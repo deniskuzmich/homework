@@ -17,7 +17,7 @@ export class LikeForPostHandler {
     const postId = req.params.id;
     const likeStatus = req.body.likeStatus;
     const userId = req.user!.userId;
-    const login = req.body.login;
+    const login = req.user!.login;
 
     const result = await this.postsService.updateLikeForPost(postId, userId, login, likeStatus)
 
