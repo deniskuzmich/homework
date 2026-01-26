@@ -51,7 +51,7 @@ postRouter
 
   .put(
     '/:postId/like-status',
-    softAuthMiddleware,
+    authMiddleware.authMiddleWare.bind(authMiddleware),
     idValidation,
     inputValidationResultMiddleware,
     likeForPostHandler.updateLikeStatus.bind(LikeForPostHandler),
