@@ -32,6 +32,7 @@ postRouter
   .get("",
     softAuthMiddleware,
     paginationValidation,
+    inputValidationResultMiddleware,
     getPostListHandler.getPostList.bind(getPostListHandler))
 
   .get("/:id",
