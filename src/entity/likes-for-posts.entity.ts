@@ -13,6 +13,7 @@ type LikeForPostType = {
 const LikesForPostSchema = new mongoose.Schema<LikeForPostType> ({
   userId: {type: String, required: true},
   postId: {type: String, required: true},
+  login: { type: String, required: true },
   status: {
     type: String,
     enum: Object.values(LikeStatus),

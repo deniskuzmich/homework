@@ -66,7 +66,7 @@ export class PostsQueryRepository {
       .find({ postId, status: LikeStatus.Like })
       .sort({ addedAt: -1 })
       .limit(3)
-      .lean();
+
 
     return {
       id: post._id.toString(),
