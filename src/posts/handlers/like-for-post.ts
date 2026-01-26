@@ -15,17 +15,13 @@ export class LikeForPostHandler {
 
   async updateLikeStatus(req: Request, res: Response) {
     const postId = req.params.postId;
-
-    if (!postId) {
-      return res.sendStatus(HttpStatuses.NotFound);
-    }
     const likeStatus = req.body.likeStatus;
     const userId = req.user!.userId;
     const login = req.body.login;
 
-    const result = await this.postsService.updateLikeForPost(postId,userId, likeStatus, login)
+    const result = await this.postsService.updateLikeForPost(postId, userId, login, likeStatus)
 
-    if(result.status === ResultStatus.Success)  {
+    if (result.status === ResultStatus.Success) {
       return res.status(mapResultCodeToHttpExtension(result.status)).send(result.extensions)
     }
 
